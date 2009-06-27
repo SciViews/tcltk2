@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# With R < 2.9.0, the package dir is in ${DPKG} (*undocumented variable*)!
+# Starting from R 2.9.0, it is ${R_PACKAGE_DIR}, and it is documented!
+if test -z "${R_PACKAGE_DIR}"; then
+	cp src/Winico06.dll "${DPKG}/tklibs/winico0.6/Winico06.dll"
+else
+	cp src/Winico06.dll "${R_PACKAGE_DIR}/tklibs/winico0.6/Winico06.dll"
+fi
+
+rm -R -f inst/tklibs/winico0.6
+rm -R -f src

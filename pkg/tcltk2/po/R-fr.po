@@ -1,0 +1,116 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: tcltk2\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-01-03 09:47+0100\n"
+"Last-Translator: Philippe Grosjean <phgrosjean@sciviews.org>\n"
+"Language-Team: Ph. Grosjean <phgrosjean@sciviews.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+
+msgid "'f' must be a function!"
+msgstr "'f' doit être une fonction !"
+
+msgid "The function used cannot (yet) have arguments!"
+msgstr "La fonction utilisée ne peut pas (encore) avoir d'arguments !"
+
+msgid "'name' must be a character string!"
+msgstr "'name' doit être une chaîne de caractères !"
+
+msgid "'name' must be a character!"
+msgstr "'name' doit être une chaîne de caractères !"
+
+msgid "Error when getting the value in the '%s' Tcl variable"
+msgstr "Erreur lors de la récupération de la valeur contenue dans la variable Tcl '%s'"
+
+msgid "Error when changing the value of the '%s' Tcl variable"
+msgstr "Erreur lors de la modification de la valeur contenue dans la variable Tcl '%s'"
+
+msgid "This is a Windows-specific function!"
+msgstr "Ceci est une fonction spécifique à Windows !"
+
+msgid "This version of R cannot use Tcl/Tk!"
+msgstr "Cette version de R n'utilise pas Tcl/Tk !"
+
+msgid "Unable to find the 'dde' Tcl/tk package!"
+msgstr "Impossible de trouver le package Tcl/Tk 'dde' !"
+
+msgid "'topic' must be a non null character string!"
+msgstr "'topic' doit être une chaîne de caractères non nulle !"
+
+msgid "'service', 'topic' and 'command' must be character strings!"
+msgstr "'service', 'topic' et 'command' doivent être des chaînes de caractères !"
+
+msgid "'service' and 'topic' must be character strings!"
+msgstr "'service' et 'topic' doivent être des chaînes de caractères !"
+
+msgid "'item' must be character strings!"
+msgstr "'item' doit contenir des chaînes de caractères !"
+
+msgid "'iconfile' must be of length one!"
+msgstr "'iconfile' doit être de longueur unitaire !"
+
+msgid "File '%s' not found!"
+msgstr "Fichier '%s' introuvable !"
+
+msgid "Error creating the icon resource; probably wrong 'iconfile'"
+msgstr "Erreur lors de la création de la ressource d'icône ; 'iconfile' est probablement corrompu ou incorrect "
+
+msgid "'icon' is not a \"tclIcon\" object!"
+msgstr "'icon' n'est pas un objet \"tclIcon\" !"
+
+msgid "Error getting the icon handle for a \"tclIcon\" object!"
+msgstr "Erreur lors de la récupération du pointeur d'icône pour un objet \"tclIcon\" !"
+
+msgid "Impossible to retrieve icon resource information!"
+msgstr "Impossible de récupérer l'information de la ressource d'icône !"
+
+msgid "'file' must be of length one!"
+msgstr "'file' doit être de longueur unitaire !"
+
+msgid "'res' must be of length one!"
+msgstr "'res' doit être de longueur unitaire !"
+
+msgid "Unable to load the icon resource, 'file' or 'res' is wrong!"
+msgstr "Incapable de charger la ressource d'icône, 'file' ou 'res' est erronné !"
+
+msgid "'value' must be numeric and of length one!"
+msgstr "'value' doit être numérique et de longueur unitaire !"
+
+msgid "Error while changing default position of the icon!"
+msgstr "Erreur lors du changement de la position par défaut de l'icône !"
+
+msgid "'win' is not a \"tkwin\" object, or an integer (Window handle)!"
+msgstr "'win' n'est pas un objet \"tkwin\", ou un entier (handle de fenêtre) !"
+
+msgid "'pos' must be numeric and of length one, or NULL!"
+msgstr "'pos' doit être numérique et de longueur unitaire, ou NULL !"
+
+msgid "'leftmenu' must be a \"tkwin\" object or NULL!"
+msgstr "'leftmenu' doit être un objet \"tkwin\" ou NULL !"
+
+msgid "'rightmenu' must be a \"tkwin\" object or NULL!"
+msgstr "'rightmenu' doit être un objet \"tkwin\" ou NULL !"
+
+msgid "Error while creating the callback for this icon!"
+msgstr "Erreur lors de la création du callback pour cette icône !"
+
+msgid "Error getting the text associated with an icon!"
+msgstr "Erreur lors de la lecture du texte associé à cette icône !"
+
+msgid "'value' must not be empty or NULL!"
+msgstr "'value' ne peut être vide ou NULL !"
+
+msgid "Error while changing text of the icon!"
+msgstr "Erreur lors de la modification du texte associé à cette icône !"
+
+msgid "Unable to find the 'registry' Tcl/tk package!"
+msgstr "Incapable de trouver la package Tcl/Tk 'registry' !"
+
+msgid "Unrecognized 'type'!"
+msgstr "'type' non reconnu !"
+

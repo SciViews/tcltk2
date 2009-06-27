@@ -1,0 +1,21 @@
+citHeader("To cite the tcltk2 package:")
+
+citEntry(entry="Manual",
+         title = "tcltk2: additional Tcl/Tk widgets and commands for R",
+         author = person(last="Philippe Grosjean"),
+         organization = "SciViews",
+         address      = "Belgium",
+         year         = version$year,
+         url          = "http://www.sciviews.org/SciViews-R",
+
+         textVersion =
+         paste("Ph. Grosjean (", version$year, "). ",
+               "tcltk2: additional Tcl/Tk widgets and commands for R. ",
+               "see: http://www.sciviews.org/SciViews-R.",
+               sep="")
+         )
+
+citFooter("We have invested a lot of time and effort in creating ",
+          "this package. Please, use it for building your R GUIs.",
+          "See also", sQuote("citation(\"pkgname\")"),
+          "for citing other R packages.")

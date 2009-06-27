@@ -1,0 +1,2 @@
+PKG_CPPFLAGS = -I${R_HOME}/Tcl/include
+PKG_LIBS = -L${R_HOME}/Tcl/bin -ltcl85 -ltk85 -lgdi32 -luser32 -o Winico06.dll

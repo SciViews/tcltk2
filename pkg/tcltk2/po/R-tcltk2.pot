@@ -1,0 +1,114 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: R 2.3.0\n"
+"Report-Msgid-Bugs-To: bugs@r-project.org\n"
+"POT-Creation-Date: 2007-01-03 09:55\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+msgid "'f' must be a function!"
+msgstr ""
+
+msgid "The function used cannot (yet) have arguments!"
+msgstr ""
+
+msgid "'name' must be a character string!"
+msgstr ""
+
+msgid "'name' must be a character!"
+msgstr ""
+
+msgid "Error when getting the value in the '%s' Tcl variable"
+msgstr ""
+
+msgid "Error when changing the value of the '%s' Tcl variable"
+msgstr ""
+
+msgid "This is a Windows-specific function!"
+msgstr ""
+
+msgid "This version of R cannot use Tcl/Tk!"
+msgstr ""
+
+msgid "Unable to find the 'dde' Tcl/tk package!"
+msgstr ""
+
+msgid "'topic' must be a non null character string!"
+msgstr ""
+
+msgid "'service', 'topic' and 'command' must be character strings!"
+msgstr ""
+
+msgid "'service' and 'topic' must be character strings!"
+msgstr ""
+
+msgid "'item' must be character strings!"
+msgstr ""
+
+msgid "'iconfile' must be of length one!"
+msgstr ""
+
+msgid "File '%s' not found!"
+msgstr ""
+
+msgid "Error creating the icon resource; probably wrong 'iconfile'"
+msgstr ""
+
+msgid "'icon' is not a \"tclIcon\" object!"
+msgstr ""
+
+msgid "Error getting the icon handle for a \"tclIcon\" object!"
+msgstr ""
+
+msgid "Impossible to retrieve icon resource information!"
+msgstr ""
+
+msgid "'file' must be of length one!"
+msgstr ""
+
+msgid "'res' must be of length one!"
+msgstr ""
+
+msgid "Unable to load the icon resource, 'file' or 'res' is wrong!"
+msgstr ""
+
+msgid "'value' must be numeric and of length one!"
+msgstr ""
+
+msgid "Error while changing default position of the icon!"
+msgstr ""
+
+msgid "'win' is not a \"tkwin\" object, or an integer (Window handle)!"
+msgstr ""
+
+msgid "'pos' must be numeric and of length one, or NULL!"
+msgstr ""
+
+msgid "'leftmenu' must be a \"tkwin\" object or NULL!"
+msgstr ""
+
+msgid "'rightmenu' must be a \"tkwin\" object or NULL!"
+msgstr ""
+
+msgid "Error while creating the callback for this icon!"
+msgstr ""
+
+msgid "Error getting the text associated with an icon!"
+msgstr ""
+
+msgid "'value' must not be empty or NULL!"
+msgstr ""
+
+msgid "Error while changing text of the icon!"
+msgstr ""
+
+msgid "Unable to find the 'registry' Tcl/tk package!"
+msgstr ""
+
+msgid "Unrecognized 'type'!"
+msgstr ""

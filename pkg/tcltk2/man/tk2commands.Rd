@@ -1,0 +1,125 @@
+\name{tk2commands}
+\alias{tk2commands}
+\alias{tk2column}
+\alias{tk2insert.multi}
+\alias{tk2list.delete}
+\alias{tk2list.get}
+\alias{tk2list.insert}
+\alias{tk2list.set}
+\alias{tk2list.size}
+\alias{tk2notetraverse}
+\alias{tk2notetab}
+\alias{tk2notetab.select}
+\alias{tk2notetab.text}
+\alias{tk2state.set}
+\alias{is.tk}
+\alias{is.tile}
+\alias{tile.load}
+\alias{tile.use}
+\alias{tk2theme.elements}
+\alias{tk2theme.list}
+\alias{tk2theme}
+
+\title{ Tk commands associated with the tk2XXX widgets }
+\description{
+  These commands supplement those available in the tcltk package to ease
+  manipulation of tk2XXX widgets.
+}
+\usage{
+tk2column(widget, action = c("add", "configure", "delete", "names", "cget",
+    "nearest"), ...)
+tk2insert.multi(widget, where = "end", items)
+tk2list.delete(widget, first, last = first)
+tk2list.get(widget, first = 0, last = "end")
+tk2list.insert(widget, index = "end", ...)
+tk2list.set(widget, items)
+tk2list.size(widget)
+tk2notetraverse(nb)
+tk2notetab(nb, tab)
+tk2notetab.select(nb, tab)
+tk2notetab.text(nb)
+tk2state.set(widget, state = c("normal", "disabled", "readonly"))
+is.tk()
+is.tile()
+tile.load(warn = TRUE)
+tile.use(use.it = TRUE)
+tk2theme.elements()
+tk2theme.list()
+tk2theme(theme = NULL)
+}
+
+\arguments{
+  \item{widget}{ The widget to which these actions apply }
+  \item{action}{ Which kind of action? }
+  \item{where}{ Where are these item added in the list (by default, at the end) }
+  \item{items}{ The items to add (either a vector for a single line, or a matrix
+    for more items) }
+  \item{\dots}{ Further arguments to the action }
+  \item{first}{ The 0-based first index to consider in the list }
+  \item{last}{ The 0-based last index to consider in the list, or \code{"end"}
+    for using the last element of the list }
+  \item{index}{ The 0-based index where to insert items in the list }
+  \item{nb}{ A tk2notebook or ttk2notebook widget (\"tclObj\" object) }
+  \item{tab}{ The name (text) of a tab in a notebook }
+  \item{state}{ The new state of the widget }
+  \item{warn}{ Do the function issue a warning in case of fealure? }
+  \item{use.it}{ Do we use tile, or not (even if it is loaded!) }
+  \item{theme}{ A theme to use (character string) }  
+}
+
+\details{
+  \code{tk2column()} manipulate columns of a tk2mclistbox widget,
+  \code{tk2insert.multi()} is used to insert multiple field entries in a
+    tk2mclistbox widget,
+  \code{is.tk()} determines if the tk package is loaded (on some platforms
+    it is possible to load the tcltk package without tk, for instance, in
+	batch mode)
+  \code{tile.load()} is the right way to load the tile Tcl package. It also
+    cares of other stuff like system fonts and correct settings of
+    \code{options(tcltk2.tile = TRUE/FALSE)}. Test if tile is loaded by using
+    \code{is.tile()}. Changing your mind (i.e., you do not want to use tile
+    for further Tcl widgets, even if it is loaded, you should use
+	\code{tile.use(FALSE)} instead of changing \code{options(tcltk2.tile = FALSE)}.
+	That way, a global Tcl variable \"tile\_use\" is also created/updated, and
+	compatible Tcl code could detect it. 
+}
+
+\note{
+	Under Windows, tile should be always available (the binaries are included
+	in the tcltk2 package). Under other system, it depends on your particular
+	installation of Tcl/Tk, which needs installed binaires of the tile Tcl
+	package (see http://sourceforge.net/projects/tktable to get tile and Tktable).
+	
+	By default, tile is loaded and available as soon as you load the tcltk2
+	package (providing, of course, that it is installed on your system). If
+	you don't want to use tile, despite it is installed, you could issue
+	\code{options(tcltk2.tile = FALSE)} before loading the tcltk2 package. In
+	this case, tile will not be used, even if it is installed. You can still
+	load and use it without restarting R by issuing \code{tile.load()} at any
+	time.
+	
+	All \code{tk2XXX()} widgets and dialog boxes provided in the tcltk2 package
+	have two forms: one with tile widgets, and another one with conventional
+	Tk widgets, plus a series of additional pure Tcl widgets. That way, you should
+	be able to use them transparently, no mather if you have installed tile or
+	not on your system.
+	
+	In comparison with traditional Tk widgets, tile proposes an advances mechanism
+	for styling the widgets with \"themes\". By default, it adapts to the current
+	platform (for instance, under Windows XP with XP theme, all widgets take the
+	appearance of XP themed widgets (even with custom themes applied!). Usual Tk
+	widgets are ALWAYS displayed in old-looking fashion under Windows XP. If you
+	want, you can switch dynamically to a different theme among those avaiable
+	(list them using \code{tk2theme.list()}, and switch to another one with
+	\code{tk2theme(newtheme)}. This is most useful to see how your GUI elements
+	and dialog boxes look like on foreign systems. If you prefer, let's say, a
+	Unix look of the R GUI elements under Windows, these functions are also
+	useful. If you are more advanturous, you can even design your own themes (see
+	the tile documentation).
+}
+
+\author{ Philippe Grosjean }
+
+\seealso{ \code{\link{tk2widgets}}, \code{\link{tk2tip}} }
+
+\keyword{ utilities }

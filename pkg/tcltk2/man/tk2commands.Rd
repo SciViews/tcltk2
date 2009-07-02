@@ -13,9 +13,7 @@
 \alias{tk2notetab.text}
 \alias{tk2state.set}
 \alias{is.tk}
-\alias{is.tile}
-\alias{tile.load}
-\alias{tile.use}
+\alias{is.ttk}
 \alias{tk2theme.elements}
 \alias{tk2theme.list}
 \alias{tk2theme}
@@ -40,9 +38,7 @@ tk2notetab.select(nb, tab)
 tk2notetab.text(nb)
 tk2state.set(widget, state = c("normal", "disabled", "readonly"))
 is.tk()
-is.tile()
-tile.load(warn = TRUE)
-tile.use(use.it = TRUE)
+is.ttk()
 tk2theme.elements()
 tk2theme.list()
 tk2theme(theme = NULL)
@@ -62,9 +58,7 @@ tk2theme(theme = NULL)
   \item{nb}{ A tk2notebook or ttk2notebook widget (\"tclObj\" object) }
   \item{tab}{ The name (text) of a tab in a notebook }
   \item{state}{ The new state of the widget }
-  \item{warn}{ Do the function issue a warning in case of fealure? }
-  \item{use.it}{ Do we use tile, or not (even if it is loaded!) }
-  \item{theme}{ A theme to use (character string) }  
+  \item{theme}{ A theme to use (character string) }
 }
 
 \details{
@@ -73,38 +67,12 @@ tk2theme(theme = NULL)
     tk2mclistbox widget,
   \code{is.tk()} determines if the tk package is loaded (on some platforms
     it is possible to load the tcltk package without tk, for instance, in
-	batch mode)
-  \code{tile.load()} is the right way to load the tile Tcl package. It also
-    cares of other stuff like system fonts and correct settings of
-    \code{options(tcltk2.tile = TRUE/FALSE)}. Test if tile is loaded by using
-    \code{is.tile()}. Changing your mind (i.e., you do not want to use tile
-    for further Tcl widgets, even if it is loaded, you should use
-	\code{tile.use(FALSE)} instead of changing \code{options(tcltk2.tile = FALSE)}.
-	That way, a global Tcl variable \"tile\_use\" is also created/updated, and
-	compatible Tcl code could detect it. 
+	batch mode). \code{is.ttk()} determines if 'ttk' widgets (styled widgets)
+	used by the \code{tk2XXX()} functions are available (you need Tk >= 8.5).
 }
 
 \note{
-	Under Windows, tile should be always available (the binaries are included
-	in the tcltk2 package). Under other system, it depends on your particular
-	installation of Tcl/Tk, which needs installed binaires of the tile Tcl
-	package (see http://sourceforge.net/projects/tktable to get tile and Tktable).
-	
-	By default, tile is loaded and available as soon as you load the tcltk2
-	package (providing, of course, that it is installed on your system). If
-	you don't want to use tile, despite it is installed, you could issue
-	\code{options(tcltk2.tile = FALSE)} before loading the tcltk2 package. In
-	this case, tile will not be used, even if it is installed. You can still
-	load and use it without restarting R by issuing \code{tile.load()} at any
-	time.
-	
-	All \code{tk2XXX()} widgets and dialog boxes provided in the tcltk2 package
-	have two forms: one with tile widgets, and another one with conventional
-	Tk widgets, plus a series of additional pure Tcl widgets. That way, you should
-	be able to use them transparently, no mather if you have installed tile or
-	not on your system.
-	
-	In comparison with traditional Tk widgets, tile proposes an advances mechanism
+	In comparison with traditional Tk widgets, ttk proposes an advances mechanism
 	for styling the widgets with \"themes\". By default, it adapts to the current
 	platform (for instance, under Windows XP with XP theme, all widgets take the
 	appearance of XP themed widgets (even with custom themes applied!). Usual Tk
@@ -115,7 +83,7 @@ tk2theme(theme = NULL)
 	and dialog boxes look like on foreign systems. If you prefer, let's say, a
 	Unix look of the R GUI elements under Windows, these functions are also
 	useful. If you are more advanturous, you can even design your own themes (see
-	the tile documentation).
+	the tile documentation on the Tcl wiki).
 }
 
 \author{ Philippe Grosjean }

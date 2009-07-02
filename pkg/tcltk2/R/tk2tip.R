@@ -10,10 +10,15 @@
 
 "tk2tip" <- function(widget, message) {
 	if (!is.tk()) stop("Package Tk is required but not loaded")
-	tcl("set_balloon", widget, message)
+	#tcl("set_balloon", widget, message)
+	res <- tclRequire("tooltip")
+	if (inherits(res, "tclObj")) {
+		res <- tcl("tooltip::tooltip", widget, message)
+	} else stop("cannot find tcl package 'tooltip'")
+	return(invisible(res))
 }
 
 "tk2killtip" <- function() {
 	if (!is.tk()) stop("Package Tk is required but not loaded")
-	tcl("kill_balloon")
+	return(invisible(tcl("tooltip::hide")))
 }

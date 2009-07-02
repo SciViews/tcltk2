@@ -29,8 +29,6 @@ getLanguage()
 \note{ You need the msgcat Tcl package to use this (but it is provided with all
   recent distributions of Tcl/Tk by default) }
 
-\seealso{ \code{\link{is.tile}}, \code{\link{tile.load}} }
-
 \examples{
 # Determine which language is currently in use in R
 oldlang <- getLanguage()
@@ -44,9 +42,9 @@ if (oldlang != "") {
 	# Switch to Italian and test a command that issues a warning
 	if (setLanguage("it_IT")) 1:3 + 1:2
 	# Etc..
-	
+
 	# Restore previous language
-	setLanguage(oldlang) 
+	setLanguage(oldlang)
 }
 }
 

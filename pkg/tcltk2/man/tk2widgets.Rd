@@ -26,53 +26,43 @@
 \alias{tk2ctext}
 \alias{tk2tree}
 
-\title{ A series of versatile using either themable (tile) or plain Tk widgets }
+\title{ A series of versatile using either themable ttk widgets }
 \description{
   A series of widgets you can use in your Tk windows/dialog boxes.
 }
 \usage{
-tk2button(parent, tip = "", use.tile = is.tile(), ...)
-tk2canvas(parent, tip = "", use.tile = is.tile(), ...)
-tk2checkbutton(parent, tip = "", use.tile = is.tile(), ...)
-tk2combobox(parent, tip = "", use.tile = is.tile(), ...)
-tk2entry(parent, tip = "", use.tile = is.tile(), ...)
-tk2frame(parent, use.tile = is.tile(), ...)
-tk2label(parent, tip = "", use.tile = is.tile(), ...)
-tk2labelframe(parent, use.tile = is.tile(), ...)
+tk2button(parent, tip = "", ...)
+tk2canvas(parent, tip = "", ...)
+tk2checkbutton(parent, tip = "", ...)
+tk2combobox(parent, tip = "", ...)
+tk2entry(parent, tip = "", ...)
+tk2frame(parent, ...)
+tk2label(parent, tip = "", ...)
+tk2labelframe(parent, ...)
 tk2listbox(parent, selectmode = c("single", "browse", "multiple", "extended"),
-    tip = "", use.tile = is.tile(), ...)
-tk2mclistbox(parent, tip ="", use.tile = is.tile(), ...)
-tk2menu(parent, use.tile = is.tile(), ...)
-tk2menubutton(parent, tip = "", use.tile = is.tile(), ...)
+    tip = "", ...)
+tk2mclistbox(parent, tip ="", ...)
+tk2menu(parent, ...)
+tk2menubutton(parent, tip = "", ...)
 tk2message(parent, text = "", justify = c("left", "center", "right"),
-    width = -1, aspect = 150, tip = "", use.tile = is.tile(), ...)
-tk2notebook(parent, tabs, use.tile = is.tile(), ...)
-tk2panedwindow(parent, orientation = c("horizontal", "vertical"),
-    use.tile = is.tile(), ...)
-tk2progress(parent, orientation = c("horizontal", "vertical"),
-    tip = "", use.tile = is.tile(), ...)
-tk2radiobutton(parent, tip = "", use.tile = is.tile(), ...)
-tk2scale(parent, orientation = c("horizontal", "vertical"),
-    tip = "", use.tile = is.tile(), ...)
-tk2scrollbar(parent, orientation = c("horizontal", "vertical"),
-    use.tile = is.tile(), ...)
-tk2separator(parent, orientation = c("horizontal", "vertical"),
-    use.tile = is.tile(), ...)
-tk2spinbox(parent, tip = "", use.tile = is.tile(), ...)
-tk2table(parent, use.tile = is.tile(), ...)
-tk2text(parent, tip = "", use.tile = is.tile(), ...)
-tk2ctext(parent, tip = "", use.tile = is.tile(), ...)
-tk2tree(parent, tip = "", use.tile = is.tile(), ...)
+    width = -1, aspect = 150, tip = "", ...)
+tk2notebook(parent, tabs, ...)
+tk2panedwindow(parent, orientation = c("horizontal", "vertical"), ...)
+tk2progress(parent, orientation = c("horizontal", "vertical"), tip = "", ...)
+tk2radiobutton(parent, tip = "", ...)
+tk2scale(parent, orientation = c("horizontal", "vertical"), tip = "", ...)
+tk2scrollbar(parent, orientation = c("horizontal", "vertical"), ...)
+tk2separator(parent, orientation = c("horizontal", "vertical"), ...)
+tk2spinbox(parent, tip = "", ...)
+tk2table(parent, ...)
+tk2text(parent, tip = "", ...)
+tk2ctext(parent, tip = "", ...)
+tk2tree(parent, tip = "", ...)
 }
 
 \arguments{
   \item{parent}{ The parent window }
   \item{tip}{ A tooltip to display for this widget }
-  \item{use.tile}{ Do we use the tile version of this widget? Normally, you do
-    not have to change this value, except in very specific cases. If you want
-    to use tile version, make sure that tile is loaded (\code{tile.load()} if
-    needed). Once tile is loaded, it cannot be unloaded, but you can force using
-    the non-tile version by setting \code{options(tcltk2.tile = FALSE)}. }
   \item{selectmode}{ The selection mode for this widget }
   \item{text}{ The text to display in the widget }
   \item{justify}{ How text is justified? }
@@ -89,11 +79,9 @@ tk2tree(parent, tip = "", use.tile = is.tile(), ...)
 }
 
 \author{ Philippe Grosjean }
-\note{ You need tile 0.7.2 or above to use the tile version of these widgets.
-  The required library is autoamtically installed with the tcltk2 package under
-  Windows, but for other platforms, you must make sure Tile => 0.7.2 is available. }
+\note{ You need Tk 8.5 or above to use these widgets. }
 
-\seealso{ \code{\link{tile.load}}, \code{\link{is.tile}} }
+\seealso{ \code{\link{is.ttk}} }
 
 \examples{
 \dontrun{

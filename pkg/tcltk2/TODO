@@ -1,10 +1,10 @@
-= tcltk2 - To do
+= tcltk2 To Do list
 
 * A bug appeared with mclistbox: selecting an item causes a Tcl error -state
   not defined.
 
-* Despite I changed ::msgcat::mclocale to de, tk2chooseFont() is still in English (but it
-  works for fr... why
+* Despite I changed ::msgcat::mclocale to de, tk2chooseFont() is still in
+  English (but it works for fr... why?)
 
 * tile.use(FALSE) after loading tile does not work with tk2chooseFont()
 
@@ -20,30 +20,30 @@
 * The package vignette
 
 * Tcl/Tk features to add:
-** info/winfo
-** update Idle tasks (update idletasks)
-** bgerror
-** correct handling of catch result => procedure for that
-** error to generate tcl errors
-** exit to end the application?
-** see if there is no 'file' stuff that could be useful for R
-** interp and after for delayed execution of code
-** memory
-** package
-** pkg_mkIndex
-** puts: write code from Tcl to the R console
-** functions to manipulate Macintosh resources
-** tclvars
-** unknown
-** A function to display the Tcl/Tk help and additional package help from R
-** Use of the msgcat Tcl package
-** easier definition and retrieval of bindings (+ keysyms) and events
-** bitmap (2 colors) and image (+ IMG package? PPM/PGM and GIF by default)
-** cursors
-** experiment with focus -force! + lower/raise
-** font manipulation functions + homogeneity of fonts between R and Tk
-** styles must be handled with option! + tk_setPalette?
-** GUI designer for fixed place of widgets
-** tk/tkvars to retrieve various tk information
+  info/winfo
+  update Idle tasks (update idletasks)
+  bgerror
+  correct handling of catch result => procedure for that
+  error to generate tcl errors
+  exit to end the application?
+  see if there is no 'file' stuff that could be useful for R
+  interp and after for delayed execution of code
+  memory
+  package
+  pkg_mkIndex
+  puts: write code from Tcl to the R console
+  functions to manipulate Macintosh resources
+  tclvars
+  unknown
+  A function to display the Tcl/Tk help and additional package help from R
+  Use of the msgcat Tcl package
+  easier definition and retrieval of bindings (+ keysyms) and events
+  bitmap (2 colors) and image (+ IMG package? PPM/PGM and GIF by default)
+  cursors
+  experiment with focus -force! + lower/raise
+  font manipulation functions + homogeneity of fonts between R and Tk
+  styles must be handled with option! + tk_setPalette?
+  GUI designer for fixed place of widgets
+  tk/tkvars to retrieve various tk information
 
 * Make a demo section

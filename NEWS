@@ -1,29 +1,31 @@
 = tcltk2 news
 
 == Version 1.1-0
+
 * Several Tcl packages are added, or upgraded:
-** autoscroll 1.1 (added)
-** ctext 3.2 (upgraded from 3.1)
-** cursor 0.2 (upgraded from 0.1)
-** datefiled 0.2 (added)
-** Diagrams 0.2 (added)
-** getstring 0.1 (added)
-** history 0.1 (added)
-** ico 0.1 (added, in partial replacement of Winico 0.6 )
-** ipentry 0.3 (added)
-** khim 1.0 (added)
-** ntext 0.81 (added)
-** snit 1.0 (added, and required by widget)
-** swaplist 0.2 (added)
-** tablelist 4.10 (added)
-** tooltip 1.4 (added and in replacement of the buggy balloon 1.2)
-** widget 3.0 (added)
+  autoscroll 1.1 (added)
+  ctext 3.2 (upgraded from 3.1)
+  cursor 0.2 (upgraded from 0.1)
+  datefiled 0.2 (added)
+  Diagrams 0.2 (added)
+  getstring 0.1 (added)
+  history 0.1 (added)
+  ico 0.1 (added, in partial replacement of Winico 0.6 )
+  ipentry 0.3 (added)
+  khim 1.0 (added)
+  ntext 0.81 (added)
+  snit 1.0 (added, and required by widget)
+  swaplist 0.2 (added)
+  tablelist 4.10 (added)
+  tooltip 1.4 (added and in replacement of the buggy balloon 1.2)
+  widget 3.0 (added)
 
 * There are new tclAfterXxx() and tclTaskXxx() functions to schedule tasks to
   be executed later in R (using the Tcl 'after' function)
 
 
 == Version 1.0-9
+
 * tile and Tktable Tcl packages are eliminated. tcltk2 now uses ttk widgets that
   come with Tk 8.5. You are supposed to install Tktable yourself (optional) if
   you need it. Note that recent R (version >= 2.9.0) install both Tcl/Tk 8.5 and
@@ -42,6 +44,7 @@
 
 
 == Version 1.0-8
+
 * Most windows executables were removed. The rest is in /win and a configure.win
   / cleanup mechanism is used to install them under Windows only.
 
@@ -59,13 +62,16 @@
 
 
 == Version 1.0-7
-* Detection of systme fonts used under Windows.
+
+* Detection of system fonts used under Windows.
 
 
 == Version 1.0-6
+
 * Complete rewrite of the package using tile and a larger series of additional
   tk widgets.
 
 
 == Version 0.9-5
+
 * First version distributed on CRAN

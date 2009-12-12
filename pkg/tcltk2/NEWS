@@ -1,5 +1,12 @@
 = tcltk2 news
 
+== Version 1.1-1
+
+* A bug in tk2mclistbox, clailing for missing -state argument when selecting
+  an item in the box is corrected, thanks to a patch provided by Christiane
+  Raemsch (and slightly modified).
+  
+
 == Version 1.1-0
 
 * Several Tcl packages are added, or upgraded:

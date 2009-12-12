@@ -58,6 +58,30 @@ function(libname, pkgname) {
 #				tk2font.setstyle(system = TRUE, default.styles = TRUE, text = TRUE)
 				### TODO: reflect possible changes to other graphical toolkits (how?)
 				### TODO: homogenize R console, R graph, SciTe fonts with these fonts
+		} else {	# There is a bug in mclistbox with Tcl/Tk 8.5
+			# Patch by Christiane Raemsch, slightly modified by Ph. Grosjean
+			# This is essentially the listbox procedure, but with an additional
+			# focus argument required by mclistbox
+			.Tcl('proc ::tk::ListboxBeginSelect {w el {focus 0}} {
+				variable ::tk::Priv
+				if {[$w cget -selectmode] eq "multiple"} {
+					if {[$w selection includes $el]} {
+						$w selection clear $el
+					} else {
+						$w selection set $el
+					}
+				} else {
+					$w selection clear 0 end
+					$w selection set $el
+					$w selection anchor $el
+					set Priv(listboxSelection) {}
+					set Priv(listboxPrev) $el
+				}
+				event generate $w <<ListboxSelect>>
+				if {$focus && [winfo exists $w]} {
+					focus $w
+				}
+			}')
 		}
 	}
 	# Windows only

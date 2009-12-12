@@ -1,8 +1,5 @@
 = tcltk2 To Do list
 
-* A bug appeared with mclistbox: selecting an item causes a Tcl error -state
-  not defined.
-
 * Despite I changed ::msgcat::mclocale to de, tk2chooseFont() is still in
   English (but it works for fr... why?)
 

@@ -1,5 +1,11 @@
 = tcltk2 news
 
+== Version 1.1-2
+
+* Patch to .onload() and to source code of Winico0.6.c submitted by Prof. Brian
+  Ripley to make tcltk2 working on 64-bit Windows. Thanks.
+
+
 == Version 1.1-1
 
 * A bug in tk2mclistbox, clailing for missing -state argument when selecting

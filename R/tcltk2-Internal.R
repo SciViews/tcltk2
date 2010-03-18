@@ -89,11 +89,10 @@ function(libname, pkgname) {
 		tclRequire("dde")       # Version 1.2.2
         # Not loaded automatically!
         #tclRequire("registry")  # Version 1.1.3
-        ### Don't work!? tclRequire("winico")
-        ### TODO: I cannot place the compiled dll in the right directory
-		### => I use the default value provided at the end of package compilation!
-		#tcl("load", file.path(libdir, "winico0.6", "Winico06.dll"))
-        tcl("load", file.path(libname, pkgname, "libs", "Winico06.dll"))
+        if (nzchar(r_arch <- .Platform$r_arch))
+			tcl("load", file.path(libname, pkgname, "libs", r_arch, "Winico06.dll"))
+		else
+			tcl("load", file.path(libname, pkgname, "libs", "Winico06.dll"))
 		# Also register the DDE server as TclEval|R
         tk2dde("R")
     }

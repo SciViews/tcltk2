@@ -34,6 +34,10 @@
 #include <windows.h>
 #include <shellapi.h>
 
+#ifndef GCL_HICON
+#define GCL_HICON(-14)
+#endif
+
 #include <tk.h>
 #include <tkPlatDecls.h>
 

@@ -1,5 +1,11 @@
 = tcltk2 news
 
+== Version 1.1-3
+
+* New /win/src/Makevars to make it compatible with the double compilation for
+  Windows 32bit and 64bit. Thanks Prof. Brian Ripley.
+
+
 == Version 1.1-2
 
 * Patch to .onload() and to source code of Winico0.6.c submitted by Prof. Brian

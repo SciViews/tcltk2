@@ -1020,7 +1020,7 @@ FreeIcoPtr(Tcl_Interp *interp, IcoInfo *icoPtr)
     }
     ckfree((char *) icoPtr);
 }
-static IcoInfo* GetIcoPtr(Tcl_Interp* interp,char* string){
+static IcoInfo* GetIcoPtr(Tcl_Interp* interp, char* string){
     IcoInfo *icoPtr;
     int id;
     char *end;

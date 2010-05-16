@@ -15,3 +15,4 @@ Maintainer: Philippe Grosjean <phgrosjean@sciviews.org>
 License: file LICENSE
 LazyLoad: yes
 URL: http://www.sciviews.org/SciViews-R
+BugReports: https://r-forge.r-project.org/tracker/?group_id=194

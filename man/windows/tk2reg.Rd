@@ -79,8 +79,8 @@ tk2reg.values(keyname)
 ## Examples of tk2reg - registry manipulation under Windows
 # Rem: HKEY_LOCAL_MACHINE, HKEY_USERS, HKEY_CLASSES_ROOT, HKEY_CURRENT_USER,
 #      HKEY_CURRENT_CONFIG, HKEY_PERFORMANCE_DATA, HKEY_DYN_DATA
-Rkey <- "HKEY_LOCAL_MACHINE\\\\Software\\\\R-core\\\\R"   # The R key
-Rkey <- paste(RKkey, "\\\\", R.version$major, ".", R.version$minor, sep = "")
+Rkey <- "HKEY_CURRENT_USER\\\\Software\\\\R-core\\\\R"   # The R key
+Rkey <- paste(Rkey, "\\\\", R.version$major, ".", R.version$minor, sep = "")
 Rsubkey <- paste(Rkey, "subkey", sep = "\\\\")        # A subkey
 
 # Get all subkeys for Software in the local machine

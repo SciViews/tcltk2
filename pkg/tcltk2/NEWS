@@ -4,6 +4,8 @@
 
 * New /win/src/Makevars to make it compatible with the double compilation for
   Windows 32bit and 64bit. Thanks Prof. Brian Ripley.
+  
+* Correction of the example in ?tk2reg. Thanks Tony Plate.
 
 
 == Version 1.1-2

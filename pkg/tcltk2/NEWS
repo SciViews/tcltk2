@@ -1,11 +1,21 @@
 = tcltk2 news
 
+== Version 1.1-4
+
+* Winico.c modified to compile on Windows 64-bit (but still not OK?).
+
+* Added ttk themes plastik, keramik and keramik_alt. Ttk theme plastik is now
+  used by default on other platforms than Windows.
+
+
 == Version 1.1-3
 
 * New /win/src/Makevars to make it compatible with the double compilation for
   Windows 32bit and 64bit. Thanks Prof. Brian Ripley.
   
 * Correction of the example in ?tk2reg. Thanks Tony Plate.
+
+* .onload() now works inside SciViews.
 
 
 == Version 1.1-2

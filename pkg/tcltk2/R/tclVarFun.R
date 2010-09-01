@@ -25,6 +25,7 @@ function(names, unique = FALSE) {
     return(names)
 }
 
+### TODO: change this to use closure functions instead!!!
 "tclFun" <-
 function(f, name = deparse(substitute(f))) {
     # Register a simple R function (without arguments) as a callback in Tcl,

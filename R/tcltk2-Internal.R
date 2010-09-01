@@ -1,11 +1,5 @@
 # tcltk2-Internal.R - Hidden functions for tcltk2
 # Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
-# Licensed under LGPL 3 or above
-#
-# Changes:
-# - 2009-07-02: tcltk2_1.1-0, added .Last.lib(), .TempEnv, .assignTemp() and
-#   getTemp() and renamed from zzz.R to tcltk2-Internal.R
-# - 2007-01-01: first version (for tcltk2_1.0-0)
 #
 # TODO:
 # - Rework the tile stuff
@@ -15,6 +9,15 @@
 function(libname, pkgname) {
 	libdir <- file.path(libname, pkgname, "tklibs")
 
+	# A slightly modified version of addTclPath() that works also within SciViews
+	addTclPath <- function (path = ".") {
+		if (.Platform$OS.type == "windows") 
+		    path <- gsub("\\\\", "/", path)
+		a <- tclvalue(tcl("set", "::auto_path"))
+		paths <- strsplit(a, " ", fixed = TRUE)[[1L]]
+		if (!path %in% paths) 
+		    tcl("lappend", "::auto_path", path)
+	}
     res <- addTclPath(libdir)	# extend the Tcl/Tk path
     ### TODO: add path to bin!
     ### TODO: get windowing system with .Tcl("tk windowingsystem")
@@ -48,7 +51,7 @@ function(libname, pkgname) {
 	    tcl("source", file.path(libdir, "tree1.7", "tree.tcl"))
 
 		# Do we try to load the tile widgets? (only if Tcl./Tk < 8.5)
-		if (as.numeric(.Tcl("set tcl_version")) < 8.5) {
+		if (as.numeric(.Tcl("set ::tcl_version")) < 8.5) {
 #				tcl("source", file.path(libdir, "fonts.tcl"))
 				# Define fonts used in Tk (note: must be done AFTER loading tile!)
 				## Default values for system fonts are calculated by tile...
@@ -84,6 +87,11 @@ function(libname, pkgname) {
 			}')
 		}
 	}
+	# Try loading addtional ttk themes
+	try(tclRequire("ttk::theme::plastik"), silent = TRUE)
+	try(tclRequire("ttk::theme::keramik"), silent = TRUE)
+	try(tclRequire("ttk::theme::keramik_alt"), silent = TRUE)
+	
 	# Windows only
     if (.Platform$OS.type == "windows") {
 		tclRequire("dde")       # Version 1.2.2
@@ -95,7 +103,10 @@ function(libname, pkgname) {
 			tcl("load", file.path(libname, pkgname, "libs", "Winico06.dll"))
 		# Also register the DDE server as TclEval|R
         tk2dde("R")
-    }
+    } else {
+		# Use plastik theme by default
+		try(tk2theme("plastik"), silent = TRUE)
+	}
 }
 
 ### TO DO: .onUnload() that close downloaded tk items (or unload Tcl completely?)

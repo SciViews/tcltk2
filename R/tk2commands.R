@@ -200,6 +200,14 @@ function(nb) {
     }
     return(res)
 }
+# Note: to change a style element: .Tcl('ttk::style configure TButton -font "helvetica 24"')
+# Create a derived style: ttk::style configure Emergency.TButton -font "helvetica 24" -foreground red -padding 10
+# Changing different states:
+#ttk::style map TButton \ 
+#	-background [list disabled #d9d9d9  active #ececec] \ 
+#	-foreground [list disabled #a3a3a3] \ 
+#	-relief [list {pressed !disabled} sunken] \ 
+#	;
 
 "setLanguage" <- function(lang) {
 	# Change locale for both R and Tcl/Tk
@@ -232,6 +240,6 @@ function() {
 "is.ttk" <-
 function ()
 {
-	res <- is.tk() && as.numeric(tcl("set", "tk_version")) >= 8.5
+	res <- is.tk() && as.numeric(tcl("set", "::tk_version")) >= 8.5
 	return(res)
 }

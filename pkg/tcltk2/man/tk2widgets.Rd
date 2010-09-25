@@ -61,17 +61,17 @@ tk2tree(parent, tip = "", ...)
 }
 
 \arguments{
-  \item{parent}{ The parent window }
-  \item{tip}{ A tooltip to display for this widget }
-  \item{selectmode}{ The selection mode for this widget }
-  \item{text}{ The text to display in the widget }
-  \item{justify}{ How text is justified? }
-  \item{tabs}{ The tabs to create in the notebook widget }
-  \item{width}{ The desired width. Use a negative value to use \code{aspect} instead }
-  \item{aspect}{ Sets the aspect ratio of the widget (100 = square, 200 =
-    twice large, 50 = twice taller). Only used if \code{width} is negative }
-  \item{orientation}{ Either \code{"horizontal"} or \code{"vertical"} }
-  \item{\dots}{ Further arguments passed to the widget }
+  \item{parent}{ the parent window. }
+  \item{tip}{ a tooltip to display for this widget. }
+  \item{selectmode}{ the selection mode for this widget. }
+  \item{text}{ the text to display in the widget. }
+  \item{justify}{ how text is justified? }
+  \item{tabs}{ the tabs to create in the notebook widget. }
+  \item{width}{ the desired width. Use a negative value to use \code{aspect} instead. }
+  \item{aspect}{ sets the aspect ratio of the widget (100 = square, 200 = twice as large,
+    50 = twice as tall). Only used if \code{width} is negative. }
+  \item{orientation}{ either \code{"horizontal"} or \code{"vertical"}. }
+  \item{\dots}{ further arguments passed to the widget. }
 }
 
 \value{
@@ -101,7 +101,7 @@ tkgrid(but)
 tk2notetab.select(nb, "Button")
 tk2notetab.text(nb) # Text of the currently selected tab
 
-## A simple tk2panedwindow example
+### A simple tk2panedwindow example
 tt2 <- tktoplevel()
 pw <- tk2panedwindow(tt2, orient = "vertical")
 lpw.1 <- tk2text(pw)
@@ -112,23 +112,23 @@ but <- tk2button(tt2, text = "OK", width = 10,
     command = function() tkdestroy(tt2))
 tkpack(pw, fill = "both", expand = "yes")
 tkpack(but)
-# Resize the window and move the panel separator with the mouse
+## Resize the window and move the panel separator with the mouse
 
-## A tk2combobox example
+### A tk2combobox example
 tt2 <- tktoplevel()
 cb <- tk2combobox(tt2)
 tkgrid(cb)
-# Fill the combobox list
+## Fill the combobox list
 fruits <- c("Apple", "Orange", "Banana")
 tk2list.set(cb, fruits)
 tk2list.insert(cb, "end", "Scoubidou", "Pear")
 tk2list.delete(cb, 3)   # 0-based index!
 tk2list.size(cb)
 tk2list.get(cb)   # All items
-# Link current selection to a variable
+## Link current selection to a variable
 Fruit <- tclVar("Pear")
 tkconfigure(cb, textvariable = Fruit)
-# Create a button to get the content of the combobox
+## Create a button to get the content of the combobox
 but <- tk2button(tt2, text = "OK", width = 10,
     command = function() {tkdestroy(tt2); cat(tclvalue(Fruit), "\n")})
 tkgrid(but)
@@ -145,41 +145,41 @@ tbut <- tk2button(tt2, text = "OK", width = 10,
     command = function() tkdestroy(tt2))
 tkgrid(tbut)
 
-## A tk2mclistbox example
+### A tk2mclistbox example
 tt2 <- tktoplevel()
 mlb <- tk2mclistbox(tt2, width = 55, resizablecolumns = TRUE)
-# Define the columns
+## Define the columns
 tk2column(mlb, "add", "name", label = "First name", width = 20)
 tk2column(mlb, "add", "lastname", label = "Last name", width = 20)
 tk2column(mlb, "add", "org", label = "Organisation", width = 15)
 tkgrid(mlb)
-# Fill the multicolumn list (we can use a vector, or a matrix of character strings)
+## Fill the multicolumn list (we can use a vector, or a matrix of character strings)
 item1 <- c("Bryan", "Oackley", "ChannelPoint")
-items <- matrix(c("John", "Ousterhout", "Scriptics",
-    "Steve", "Miller", "TclTk inc."), ncol = 3, byrow = TRUE)
+items <- matrix(c("John", "Ousterhout", "Scriptics", "Steve", "Miller", "TclTk inc."),
+    ncol = 3, byrow = TRUE)
 tk2insert.multi(mlb, "end", item1)
 tk2insert.multi(mlb, "end", items)
-#### TO DO: bind events
-# Ex: .listbox label bind date <ButtonPress-1> "sortByDate %W"
-# See the example.tcl in .\libs\mclistbox1.02 for a more complex example
-# Create a button to close the dialog box
+#### TODO: bind events
+### Ex: .listbox label bind date <ButtonPress-1> "sortByDate %W"
+### See the example.tcl in .\libs\mclistbox1.02 for a more complex example
+### Create a button to close the dialog box
 but <- tk2button(tt2, text = "OK", width = 10,
     command = function() tkdestroy(tt2))
 tkgrid(but)
 
 ### A simple tk2table example (Tktable is required here!)
-myRarray <- c("Animal", "\"sphinx moth\"", "oyster",
-    "Type", "insect", "mollusk")
+myRarray <- c("Animal", "\"sphinx moth\"", "oyster", "Type", "insect", "mollusk")
 dim(myRarray) <- c(3, 2)
 for (i in (0:2))
     for (j in (0:1))
         .Tcl(paste("set tclarray(", i, ",", j, ") ", myRarray[i+1, j+1], sep = ""))
 tt2 <- tktoplevel()
-table1 <- tk2table(tt2, variable = "tclarray", rows = "3",
-    cols = "2", titlerows = "1", selectmode = "extended", colwidth = "25",
-    background = "white")
+table1 <- tk2table(tt2, variable = "tclarray", rows = "3", cols = "2",
+    titlerows = "1", selectmode = "extended", colwidth = "25", background = "white")
 tkpack(table1)
 }
 }
 
 \keyword{ utilities }
+
+\concept{ Tcl/Tk widgets notebook, combobox, paned window, progress bar, text area, tree }

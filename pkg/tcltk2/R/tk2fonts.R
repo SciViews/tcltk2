@@ -1,19 +1,20 @@
-# tk2Fonts.R - Manage Tk fonts
-# Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
-# Licensed under LGPL 3 or above
-#
-# Changes:
-# - 2009-04-23: fix of a bug in fntl$family, $ operator not allowed (thanks Brian Ripley)
-# - 2007-01-11: fisrt version (for tcltk2_1.0-0)
-#
-# To do:
-# -
+### tk2Fonts.R - Manage Tk fonts
+### Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
+### Licensed under LGPL 3 or above
+###
+### Changes:
+### - 2009-04-23: fix of a bug in fntl$family, $ operator not allowed (thanks Brian Ripley)
+### - 2007-01-11: fisrt version (for tcltk2_1.0-0)
+###
+### To do:
+### -
 
-"tk2font.get" <- function(font, what = c("family", "size", "bold", "italic")) {
-	# font is the TkFont name to use, in case of several items, other ones
-	# are secondary, tertiary, ... options
-	# what indicate what characteristic of the font to report in the list
-	# 'family', 'size', 'bold', 'italic', 'underline', 'overstrike' (last two rarely used)
+tk2font.get <- function (font, what = c("family", "size", "bold", "italic"))
+{
+	## font is the TkFont name to use, in case of several items, other ones
+	## are secondary, tertiary, ... options
+	## what indicate what characteristic of the font to report in the list
+	## 'family', 'size', 'bold', 'italic', 'underline', 'overstrike' (last two rarely used)
 	if (!is.tk()) return("")
 	allTkFonts <- as.character(tkfont.names())
 	for (fnt in font) {
@@ -21,11 +22,11 @@
 	}
 	if (!fnt %in% allTkFonts) {
 		return("")
-		#if (length(font) == 1) {
-		#	stop("'", font, "' is not currently defined in Tk")
-		#} else {
-		#	stop("'", paste(font, collapse = "', '"), "' are not currently defined in Tk")
-		#}
+		##if (length(font) == 1) {
+		##	stop("'", font, "' is not currently defined in Tk")
+		##} else {
+		##	stop("'", paste(font, collapse = "', '"), "' are not currently defined in Tk")
+		##}
 	}
 	fontspec <- as.character(tkfont.configure(fnt))
 	res <- list()
@@ -39,19 +40,20 @@
 	return(res)
 }
 
-"tk2font.set" <- function(font, settings) {
-	### TODO: allow for multiple fonts specifications => take first one available
-	# font is the name of the TkFont to create/change
-	# settings is a list with font characteristics
+tk2font.set  <- function (font, settings)
+{
+### TODO: allow for multiple fonts specifications => take first one available
+	## font is the name of the TkFont to create/change
+	## settings is a list with font characteristics
 	if (!is.tk()) return(NULL)
 	font <- as.character(font)
 	l <- length(font)
 	if (!is.list(settings) && !is.character(settings))
 		stop("'settings' must be a list or a character string")
-	# If settings is a character string,
-	# it is assumed to be a text description of a Tk font
+	## If settings is a character string,
+	## it is assumed to be a text description of a Tk font
 	if (is.character(settings)) {
-		# Do not recycle... make sure that lengths match
+		## Do not recycle... make sure that lengths match
 		if (length(settings) != l)
 			stop("length of 'font' and 'settings' do not match")
 		for (i in 1:l) {
@@ -59,28 +61,28 @@
 			.Tcl(paste("catch {font configure ", font[i], " ", settings[i], "}",
 				sep = ""))
 		}
-	} else {	# This is a list of font characteristics
-		# Do not recycle... make sure that lengths match
+	} else {  # This is a list of font characteristics
+		## Do not recycle... make sure that lengths match
 		if (l > 1) {
 			if (length(settings) != l)
 				stop("length of 'font' and 'settings' do not match")
-		} else {	# Is it the list of characteristics, or a lit containing it?
+		} else {  # Is it the list of characteristics, or a lit containing it?
 			if (any(names(settings) %in%
 				c("family", "size", "bold", "italic", "underline", "overstrike")))
 				settings <- list(settings)
 		}
 		fntfamilies <- as.character(tkfont.families())
 		for (i in 1:l) {
-			# Construct the font descriptor
+			## Construct the font descriptor
 			fntl <- as.list(settings[[i]])
 			fnt <- " "
 			if (!is.null(fntl$family)) {
-				# Look for the first font family provided that is available
+				## Look for the first font family provided that is available
 				fntfamily <- fntl$family
 				if (length(fntfamily) > 1) {
 					fntexists <- fntfamily %in% fntfamilies
 					if (any(fntexists)) fntfamily <- fntfamily[fntexists][1] else
-						fntfamily <- fntfamily[1]	# No fonts found... take first one
+						fntfamily <- fntfamily[1]  # No fonts found... take first one
 				}
 			 	fnt <- paste(fnt, "-family {", fntfamily, "}", sep = "")
 			}
@@ -97,7 +99,7 @@
 				as.numeric(fntl$underline == TRUE))
 			if (!is.null(fntl$overstrike)) fnt <- paste(fnt, "-overstrike",
 				as.numeric(fntl$overstrike == TRUE))
-			# Possibly create the font in Tk
+			## Possibly create the font in Tk
 			.Tcl(paste("catch {font create ", font[i], "}", sep = ""))
 			if (fnt != " ")
 				.Tcl(paste("catch {font configure ", font[i], fnt, "}", sep = ""))
@@ -108,18 +110,19 @@
 	return(res)
 }
 
-"tk2font.setstyle" <- function(text = TRUE, system = FALSE, default.styles = FALSE) {
-	# Set default fonts according to currently defined style
-	# .SystemFonts and .Fonts must be defined in TempEnv!
+tk2font.setstyle <- function (text = TRUE, system = FALSE, default.styles = FALSE)
+{
+	## Set default fonts according to currently defined style
+	## .SystemFonts and .Fonts must be defined in TempEnv!
 
 	if (!is.tk()) {
 		warning("Package Tk is required but not loaded")
 		return(NULL)
 	}
 
-	# This is a copy of assignTemp(), getTemp() and existsTemp() functions from
-	# svMisc, so that we do not link to this package
-	TempEnv <- function() {
+	## This is a copy of assignTemp(), getTemp() and existsTemp() functions from
+	## svMisc, so that we do not link to this package
+	TempEnv <- function () {
 	    pos <-  match("TempEnv", search())
 	    if (is.na(pos)) { # Must create it
 	        TempEnv <- list()
@@ -129,21 +132,24 @@
 	    }
 	    return(pos.to.env(pos))
 	}
-	assignTemp <- function(x, value, replace.existing = TRUE)
+	
+	assignTemp <- function (x, value, replace.existing = TRUE)
 	    if (replace.existing || !exists(x, envir = TempEnv(), mode = "any", inherits = FALSE))
 	        assign(x, value, envir = TempEnv())
-	existsTemp <- function(x, mode = "any")
+	
+	existsTemp <- function (x, mode = "any")
 	    exists(x, envir = TempEnv(), mode = mode, inherits = FALSE)
-	getTemp <- function(x, default = NULL, mode="any") {
+	
+	getTemp <- function (x, default = NULL, mode="any") {
 	    if  (exists(x, envir = TempEnv(), mode = mode, inherits = FALSE)) {
 	        return(get(x, envir = TempEnv(), mode = mode, inherits = FALSE))
-	    } else { # Variable not found, return the default value
+	    } else {  # Variable not found, return the default value
 	        return(default)
 	    }
 	}
 
-	if (system) {	# Set system fonts
-		# We collect back system fonts settings (other values may be imposed by Tk)
+	if (system) {  # Set system fonts
+		## We collect back system fonts settings (other values may be imposed by Tk)
 		sysfonts <- list(
 			defaultclassic = tk2font.get("TkClassicDefaultFont"),
 			default = tk2font.get("TkDefaultFont"),
@@ -155,11 +161,11 @@
 			heading = tk2font.get("TkHeadingFont"),
 			icon = tk2font.get(c("TkIconFont", "TkDefaultFont"))
 		)
-		# Make sure these are correctly defined
+		## Make sure these are correctly defined
 		assignTemp(".SystemFonts", sysfonts)
 	} else res <- character(0)
 
-	if (default.styles) {	# Define default styles
+	if (default.styles) {  # Define default styles
 		## These are the four default Font themes one can use
 		assignTemp(".FontsStyleClassic", list(
 			Text = list(family = c("Times New Roman", "Times"), size = -12),
@@ -199,15 +205,15 @@
 		))
 	}
 
-	if (text) {	# Set text, titles and fixed fonts
-		# Determine which font style we currently use
+	if (text) {  # Set text, titles and fixed fonts
+		## Determine which font style we currently use
 		curStyle <- getTemp(".FontsStyle", default = "Classic", mode = "character")
 		curSFonts <- getTemp(paste(".FontsStyle", curStyle, sep = ""),
 			default = getTemp(".FontsStyleClassic"))
 		assignTemp(".Fonts", curSFonts)
 
-		# Create corresponding fonts in Tk (note, we create bold, italic, and
-		# bolditalic equivalents for TkTextFont and TkFixedFont
+		## Create corresponding fonts in Tk (note, we create bold, italic, and
+		## bolditalic equivalents for TkTextFont and TkFixedFont
 		Fonts <- list()
 		Fonts$Text <- curSFonts$Text
 		Fonts$Text$bold <- FALSE
@@ -235,7 +241,7 @@
 			"TkFixedBoldFont", "TkFixedItalicFont", "TkFixedBoldItalicFont")
 		res <- c(res, tk2font.set(FNames, Fonts))
 	}
-	# Check the results
+	## Check the results
 	if (system && any(!res))
 		warning("One or several Tk fonts not set: '",
 			paste(names(res)[!res], collapse = "', '", "'"))

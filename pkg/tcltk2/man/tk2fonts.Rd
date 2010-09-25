@@ -16,23 +16,23 @@ tk2font.setstyle(text = TRUE, system = FALSE, default.styles = FALSE)
 }
 
 \arguments{
-  \item{font}{ The name of one or several cached Tk font }
-  \item{what}{ A list of font characteristics to get: 'family', 'size', 'bold',
+  \item{font}{ the name of one or several cached Tk font. }
+  \item{what}{ a list of font characteristics to get: 'family', 'size', 'bold',
     'italic', 'underline' and/or 'overstrike'. By default, everything except
-	'underline' and 'overstrike' }
-  \item{settings}{ Settings of fonts. There are two forms possibles: (1) a vector
+    'underline' and 'overstrike'. }
+  \item{settings}{ settings of fonts. There are two forms possibles: (1) a vector
     of character strings of same length as font with Tk fonts description like
-	'-family Times -size 12 -weight bold', for instance, or (2) a list of
-	font characteristics (list with components 'family', 'size', 'bold', 'italic',
-	'underline' and 'overstrike') }
-  \item{text}{ Do we synchronise text Tk fonts (text, titles, and fixed-font text)
+    '-family Times -size 12 -weight bold', for instance, or (2) a list of
+    font characteristics (list with components 'family', 'size', 'bold', 'italic',
+    'underline' and 'overstrike'). }
+  \item{text}{ do we synchronise text Tk fonts (text, titles, and fixed-font text)
     with current settings, as in '.Fonts' in TempEnv? }
-  \item{system}{ Do we synchronise system Tk fonts (widgets, window caption,
+  \item{system}{ do we synchronise system Tk fonts (widgets, window caption,
     menus, tooltips, ...) with current system configuration? This is highly
     platform dependent. Currently, system settings are gathered only under Windows,
-    thanks to the winSystemFonts() function }
-  \item{default.styles}{ Do we add .fontsStyleXXX in TempEnv, where XXX is one
-    of the four default styles: 'Classic', 'Alternate', 'Presentation' or 'Fancy' }
+    thanks to the winSystemFonts() function. }
+  \item{default.styles}{ do we add .fontsStyleXXX in TempEnv, where XXX is one
+    of the four default styles: 'Classic', 'Alternate', 'Presentation' or 'Fancy'. }
 }
 
 \value{
@@ -50,11 +50,13 @@ tk2font.setstyle(text = TRUE, system = FALSE, default.styles = FALSE)
 \dontrun{
 ## These cannot be run by examples() but should be OK when pasted
 ## into an interactive R session with the tcltk package loaded
-# Refresh both text and system Tk fonts
+## Refresh both text and system Tk fonts
 tk2font.setstyle(system = TRUE)
-# Get characteristics of the default font
+## Get characteristics of the default font
 tk2font.get("TkDefaultFont")
-  }
+}
 }
 
 \keyword{ utilities }
+
+\concept{ Tcl/Tk fonts }

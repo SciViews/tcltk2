@@ -38,28 +38,28 @@ tk2ico.taskbar.modify(icon, pos = NULL, text = NULL)
 }
 
 \arguments{
-  \item{file}{ A file having icon resources (.exe, or .dll) }
-  \item{res}{ The name of the resource from where the icon should be extracted }  
-  \item{iconfile}{ A file with a .ico extension, containing one or more Windows
+  \item{file}{ a file having icon resources (.exe, or .dll) }
+  \item{res}{ the name of the resource from where the icon should be extracted }  
+  \item{iconfile}{ a file with a .ico extension, containing one or more Windows
     icons }
-  \item{icon}{ An icon object }
-  \item{convert}{ Do we convert the result into a data.frame? }
-  \item{win}{ A tk window, or an integer representing the handle (HWND) of a
+  \item{icon}{ an icon object. }
+  \item{convert}{ do we convert the result into a data.frame? }
+  \item{win}{ a tk window, or an integer representing the handle (HWND) of a
     foreign window whose icon will be changed (take care, the function returns
 	\code{TRUE} even if the handle is wrong! }
-  \item{pos}{ A position (starting from 0) pointing to an icon in a multi-icon
+  \item{pos}{ a position (starting from 0) pointing to an icon in a multi-icon
     object. Note that \code{pos} is not used in \code{tk2ico.set()} if
 	\code{type = "all"} (in this case, best icons matching both \"small\" and
-	\"large\" sizes are searched in the \code{icon} resource }
-  \item{type}{ Do we change only the small, the large, or both icons? }
-  \item{value}{ A string with the new text for the icon in
+	\"large\" sizes are searched in the \code{icon} resource. }
+  \item{type}{ do we change only the small, the large, or both icons? }
+  \item{value}{ a string with the new text for the icon in
     \code{tk2ico.text()} or a numerical value indicating the new default
-	position in the icon resource for \code{tk2ico.pos()} }
-  \item{text}{ Change a text for an icon }
-  \item{leftmenu}{ A \"tkwin\" object to display when the user left-clicks on
-    the taskbar icon (usually, a Tk popup menu), or \code{NULL} for nothing }
-  \item{rightmenu}{ Idem as \'lefmenu\' but for a right-click on the taskbar
-    icon }
+	position in the icon resource for \code{tk2ico.pos()}. }
+  \item{text}{ change a text for an icon. }
+  \item{leftmenu}{ a \"tkwin\" object to display when the user left-clicks on
+    the taskbar icon (usually, a Tk popup menu), or \code{NULL} for nothing. }
+  \item{rightmenu}{ idem as \'lefmenu\' but for a right-click on the taskbar
+    icon. }
 }
 
 \value{
@@ -85,64 +85,65 @@ tk2ico.taskbar.modify(icon, pos = NULL, text = NULL)
 ## These cannot be run by examples() but should be OK when pasted
 ## into an interactive R session with the tcltk package loaded
 
-## Examples of tk2ico - icon manipulation under Windows
+### Examples of tk2ico - icon manipulation under Windows
 tt2 <- tktoplevel()
-# Load a system icon (there are: "application", "asterisk", "error",
-# "exclamation", "hand", "question", "information", "warning", and "winlogo".
+## Load a system icon (there are: "application", "asterisk", "error",
+## "exclamation", "hand", "question", "information", "warning", and "winlogo".
 Warn <- tk2ico.load(res = "warning")
 tk2ico.info(Warn)
-# Change the text
+## Change the text
 tk2ico.text(Warn)
 tk2ico.text(Warn) <- "Warning icon"
 tk2ico.text(Warn)
-# Get hicon
+## Get hicon
 tk2ico.hicon(Warn)
-# Change the icon of my window tt2
+## Change the icon of my window tt2
 tk2ico.set(tt2, Warn)
-# Do not forget to destroy icon to free resource when not needed any more
+## Do not forget to destroy icon to free resource when not needed any more
 tk2ico.destroy(Warn)
 rm(Warn)
-# Load an icon from the resource section of an exe, or dll
+## Load an icon from the resource section of an exe, or dll
 Rico <- tk2ico.load(file.path(Sys.getenv("R_HOME"), "bin", "R.exe"), res = "R")
 tk2ico.info(Rico)
 tk2ico.set(tt2, Rico)
 tk2ico.destroy(Rico)
 rm(Rico)
 
-# Load one or several icons from an .ico file
+### Load one or several icons from an .ico file
 libdir <- file.path(.path.package(package = "tcltk2")[1], "gui")
 SVico <- tk2ico.create(file.path(libdir, "SciViews.ico"))
-# The various resolution icons created from this file
+## The various resolution icons created from this file
 tk2ico.info(SVico)
-# Change the default position to 1 (the second icon)
+## Change the default position to 1 (the second icon)
 tk2ico.pos(SVico) <- 1
-# Change only the small icon (use Alt-Tab to see the large one)
+## Change only the small icon (use Alt-Tab to see the large one)
 tk2ico.set(tt2, SVico, type = "small")
-# Get the handle of the R Console window and change its icon
-tk2ico.set(getWindowsHandle("Console"), SVico)
 
-# Set a taskbar icon, with both a left and right-click menu
+## Set a taskbar icon, with both a left and right-click menu
 lmenu <- tkmenu(.TkRoot, tearoff = FALSE)
 tkadd(lmenu, "command", label = "Say hello",
-	command = function() cat("Hello from taskbar!\n"))
+    command = function() cat("Hello from taskbar!\n"))
 rmenu <- tkmenu(.TkRoot, tearoff = FALSE)
 tkadd(rmenu, "command", label = "Say hello again",
-	command = function() cat("Hello again from taskbar!\n"))
+    command = function() cat("Hello again from taskbar!\n"))
 tk2ico.taskbar.add(SVico, pos = 1, text = "my R taskbar icon",
-	leftmenu = lmenu, rightmenu = rmenu)
-# Try left and right-click on the taskbar icon...
-# Change its text...
+    leftmenu = lmenu, rightmenu = rmenu)
+## Try left and right-click on the taskbar icon...
+## Change its text...
 tk2ico.taskbar.modify(SVico,  pos = 1, text = "text changed!")
-#... and delete it
+##... and delete it
 tk2ico.taskbar.delete(SVico)
 
-# Destroy the icons
+## Destroy the icons
 tk2ico.destroy(SVico)
 rm(SVico)
 
-# When done, dispose of the window and clean the workspace
+## When done, dispose of the window and clean the workspace
 tkdestroy(tt2)
 rm(list = c("libdir", "lmenu", "rmenu", "tt2"))
 }
 }
+
 \keyword{ utilities }
+
+\concept{ icons, windows and taskbar }

@@ -1,17 +1,16 @@
-# tk2widgets.R - Support for the tile Tk widgets
-# Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
-# Licensed under LGPL 3 or above
-#
-# Changes:
-# - 2009-06-30: only use ttk (no tile or plain widgets)
-#
-# - 2007-01-01: fisrt version (for tcltk2_1.0-0)
-#
-# To do:
-# - Rework all this and add new widgets like sizegrip, tkplot, ...
+### tk2widgets.R - Support for the tile Tk widgets
+### Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
+### Licensed under LGPL 3 or above
+###
+### Changes:
+### - 2009-06-30: only use ttk (no tile or plain widgets)
+###
+### - 2007-01-01: fisrt version (for tcltk2_1.0-0)
+###
+### To do:
+### - Rework all this and add new widgets like sizegrip, tkplot, ...
 
-"tk2button" <-
-function (parent, tip = "", ...)
+tk2button <- function (parent, tip = "", ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "ttk::button", ...)
@@ -20,21 +19,19 @@ function (parent, tip = "", ...)
 	return(w)
 }
 
-"tk2canvas" <-
-function (parent, tip = "", ...)
+tk2canvas <- function (parent, tip = "", ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
-	# TODO: use autoscroll here!
+### TODO: use autoscroll here!
 	w <- tkwidget(parent, "canvas", ...)
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2canvas", "tk2widget", class(w))
 	return(w)
 }
 
-"tk2checkbutton" <-
-function (parent, tip = "", ...)
+tk2checkbutton <- function (parent, tip = "", ...)
 {
-	# TODO: associate with a variable and set both states values
+### TODO: associate with a variable and set both states values
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <-tkwidget(parent, "ttk::checkbutton", ...)
 	if (tip != "") tk2tip(w, tip)
@@ -42,10 +39,9 @@ function (parent, tip = "", ...)
 	return(w)
 }
 
-"tk2combobox" <-
-function (parent, tip = "", ...)
+tk2combobox <- function (parent, tip = "", ...)
 {
-	# TODO: associate the list and results with a variable and intialize the widget
+### TODO: associate the list and results with a variable and intialize the widget
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "ttk::combobox", ...)
 	if (tip != "") tk2tip(w, tip)
@@ -54,10 +50,9 @@ function (parent, tip = "", ...)
 }
 
 ### TODO: a centry widget
-"tk2entry" <-
-function (parent, tip = "", ...)
+tk2entry <- function (parent, tip = "", ...)
 {
-	### TODO: add cut/copy/paste/select all/clear context menu
+### TODO: add cut/copy/paste/select all/clear context menu
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "ttk::entry", cursor = "xterm", ...)
 	if (tip != "") tk2tip(w, tip)
@@ -65,8 +60,7 @@ function (parent, tip = "", ...)
 	return(w)
 }
 
-"tk2frame" <-
-function (parent, ...)
+tk2frame <- function (parent, ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "ttk::frame", ...)
@@ -74,8 +68,7 @@ function (parent, ...)
 	return(w)
 }
 
-"tk2label" <-
-function (parent, tip = "", ...)
+tk2label <- function (parent, tip = "", ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "ttk::label", ...)
@@ -84,8 +77,7 @@ function (parent, tip = "", ...)
 	return(w)
 }
 
-"tk2labelframe" <-
-function (parent, ...)
+tk2labelframe <- function (parent, ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "ttk::labelframe", ...)
@@ -93,12 +85,11 @@ function (parent, ...)
 	return(w)
 }
 
-"tk2listbox" <-
-function (parent, selectmode = c("single", "browse", "multiple", "extended"),
+tk2listbox <- function (parent, selectmode = c("single", "browse", "multiple", "extended"),
 tip = "", ...)
 {
-	### TODO: associate list and selection with a variable and configure the list
-	### TODO: autohiding scrollbars
+### TODO: associate list and selection with a variable and configure the list
+### TODO: autohiding scrollbars
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	selectmode <- as.character(selectmode[1])
 	w <- tkwidget(parent, "listbox", font = "TkDefaultFont",
@@ -108,11 +99,10 @@ tip = "", ...)
 	return(w)
 }
 
-"tk2mclistbox" <-
-function (parent, tip ="", ...)
+tk2mclistbox <- function (parent, tip ="", ...)
 {
-	### TODO: a tile equivalent of this widget
-	### TODO: or adjust the header: font, color and frame
+### TODO: a tile equivalent of this widget
+### TODO: or adjust the header: font, color and frame
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	res <- tclRequire("mclistbox")
 	if (!inherits(res, "tclObj"))
@@ -124,8 +114,7 @@ function (parent, tip ="", ...)
 	return(w)
 }
 
-"tk2menu" <-
-function (parent, ...)
+tk2menu <- function (parent, ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "menu", ...)
@@ -133,8 +122,7 @@ function (parent, ...)
 	return(w)
 }
 
-"tk2menubutton" <-
-function (parent, tip = "", ...)
+tk2menubutton <- function (parent, tip = "", ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "ttk::menubutton", ...)
@@ -143,8 +131,7 @@ function (parent, tip = "", ...)
 	return(w)
 }
 
-"tk2message" <-
-function (parent, text = "", justify = c("left", "center", "right"),
+tk2message <- function (parent, text = "", justify = c("left", "center", "right"),
 width = -1, aspect = 150, tip = "", ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
@@ -156,24 +143,22 @@ width = -1, aspect = 150, tip = "", ...)
 	return(w)
 }
 
-"tk2notebook" <-
-function (parent, tabs, ...)
+tk2notebook <- function (parent, tabs, ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "ttk::notebook", ...)
-	# Add pages
+	## Add pages
 	tabs <- as.character(tabs)
 	for (tab in tabs) {
 		tframe <- tk2frame(w)
 		tkadd(w, tframe, text = tab, sticky = "nsew")
 	}
-	tk2notetraverse(w)	# Enable keyboard traversal for this notebook
+	tk2notetraverse(w)  # Enable keyboard traversal for this notebook
 	class(w) <- c("tk2notebook", "tk2widget", class(w))
 	return(w)
 }
 
-"tk2panedwindow" <-
-function (parent, orientation = c("horizontal", "vertical"), ...)
+tk2panedwindow <- function (parent, orientation = c("horizontal", "vertical"), ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	orientation <- as.character(orientation[1])
@@ -182,8 +167,8 @@ function (parent, orientation = c("horizontal", "vertical"), ...)
 	return(w)
 }
 
-"tk2progress" <-
-function (parent, orientation = c("horizontal", "vertical"), tip = "", ...)
+tk2progress <- function (parent, orientation = c("horizontal", "vertical"),
+tip = "", ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	orientation <- as.character(orientation[1])
@@ -193,10 +178,9 @@ function (parent, orientation = c("horizontal", "vertical"), tip = "", ...)
 	return(w)
 }
 
-"tk2radiobutton" <-
-function (parent, tip = "", ...)
+tk2radiobutton <- function (parent, tip = "", ...)
 {
-	# TODO: associate with a variable and set both states values
+### TODO: associate with a variable and set both states values
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <-tkwidget(parent, "ttk::radiobutton", ...)
 	if (tip != "") tk2tip(w, tip)
@@ -204,8 +188,8 @@ function (parent, tip = "", ...)
 	return(w)
 }
 
-"tk2scale" <-
-function (parent, orientation = c("horizontal", "vertical"), tip = "", ...)
+tk2scale <- function (parent, orientation = c("horizontal", "vertical"),
+tip = "", ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	orientation <- as.character(orientation[1])
@@ -215,8 +199,7 @@ function (parent, orientation = c("horizontal", "vertical"), tip = "", ...)
 	return(w)
 }
 
-"tk2scrollbar" <-
-function (parent, orientation = c("horizontal", "vertical"), ...)
+tk2scrollbar <- function (parent, orientation = c("horizontal", "vertical"), ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	orientation <- as.character(orientation[1])
@@ -225,8 +208,7 @@ function (parent, orientation = c("horizontal", "vertical"), ...)
 	return(w)
 }
 
-"tk2separator" <-
-function (parent, orientation = c("horizontal", "vertical"), ...)
+tk2separator <- function (parent, orientation = c("horizontal", "vertical"), ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	orientation <- as.character(orientation[1])
@@ -235,8 +217,7 @@ function (parent, orientation = c("horizontal", "vertical"), ...)
 	return(w)
 }
 
-"tk2spinbox" <-
-function (parent, tip = "", ...)
+tk2spinbox <- function (parent, tip = "", ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "spinbox", font = "TkDefaultFont",
@@ -246,11 +227,10 @@ function (parent, tip = "", ...)
 	return(w)
 }
 
-"tk2table" <-
-function (parent, ...)
+tk2table <- function (parent, ...)
 {
-	### TODO: a pure Tcl equivalent
-	### TODO: a tile equivalent (some customization, if possible)
+### TODO: a pure Tcl equivalent
+### TODO: a tile equivalent (some customization, if possible)
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	if (inherits(tclRequire("Tktable", warn = FALSE), "tclObj")) {
 		w <- tkwidget(parent, "table", font = "TkDefaultFont", ...)
@@ -259,10 +239,9 @@ function (parent, ...)
 	} else stop("Tcl package 'Tktable' must be installed first")
 }
 
-"tk2text" <-
-function (parent, tip = "", ...)
+tk2text <- function (parent, tip = "", ...)
 {
-	### TODO: autohide scrollbars
+### TODO: autohide scrollbars
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "text", font = "TkTextFont", ...)
 	tkconfigure(w, relief = "flat")
@@ -271,10 +250,9 @@ function (parent, tip = "", ...)
 	return(w)
 }
 
-"tk2ctext" <-
-function (parent, tip = "", ...)
+tk2ctext <- function (parent, tip = "", ...)
 {
-	### TODO: autohide scrollbars
+### TODO: autohide scrollbars
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	tclRequire("ctext")
 	w <- tkwidget(parent, "ctext", font = "TkFixedFont", ...)
@@ -285,11 +263,10 @@ function (parent, tip = "", ...)
 }
 
 ### TODO: rework this, using ttk::treeview
-"tk2tree" <-
-function (parent, tip = "", ...)
+tk2tree <- function (parent, tip = "", ...)
 {
-	### TODO: better icons!
-	# Reasonable default icons for files and folders
+### TODO: better icons!
+	## Reasonable default icons for files and folders
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	images <- as.character(tcl("image", "names"))
 	if (!"Tree:dir" %in% images)
@@ -297,8 +274,8 @@ function (parent, tip = "", ...)
 	if (!"Tree:file" %in% images)
 		.Tcl("image create photo Tree:file -data {R0lGODdhEAAQAPIAAAAAAHh4eLi4uPj4+P///wAAAAAAAAAAACwAAAAAEAAQAAADPkixzPODyADrWE8qC8WN0+BZAmBq1GMOqwigXFXCrGk/cxjjr27fLtout6n9eMIYMTXsFZsogXRKJf6uP0kCADv/}")
 
-	### TODO: correct support of font
-	w <- tkwidget(parent, "Tree:create") #, font = "TkDefaultFont", ...)
+### TODO: correct support of font
+	w <- tkwidget(parent, "Tree:create")  #, font = "TkDefaultFont", ...)
 	tkconfigure(w, relief = "flat")
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2tree", "tk2widget", class(w))

@@ -7,8 +7,8 @@ SystemRequirements: Tcl/Tk (>= 8.5), Tktable (>= 2.9, optional)
 Description: A series of additional Tcl commands and Tk widgets with style
   and various functions (under Windows: DDE exchange, access to the
   registry and icon manipulation) to supplement the tcltk package
-Version: 1.1-4
-Date: 2010-09-31
+Version: 1.1-5
+Date: 2010-09-24
 Author: Philippe Grosjean
 Maintainer: Philippe Grosjean <phgrosjean@sciviews.org>
 License: file LICENSE

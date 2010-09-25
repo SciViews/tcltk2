@@ -16,8 +16,8 @@ Additions to the tcltk package: more Tk widgets and Tcl/Tk commands.
 \tabular{ll}{
 Package: \tab tcltk2\cr
 Type: \tab Package\cr
-Version: \tab 1.0-9\cr
-Date: \tab 2009-06-27\cr
+Version: \tab 1.1-5\cr
+Date: \tab 2010-09-24\cr
 License: \tab see LICENSE file\cr
 LazyLoad: \tab yes\cr
 }
@@ -37,3 +37,5 @@ Maintainer: Philippe Grosjean \email{phgrosjean@sciviews.org}
 \seealso{ \code{\link{tk2widgets}}, \code{\link{tclFun}} }
 
 \keyword{ package }
+
+\concept{ more Tcl/Tk commands and widgets }

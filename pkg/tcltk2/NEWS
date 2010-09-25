@@ -1,5 +1,11 @@
 = tcltk2 news
 
+== Version 1.1-5
+
+* Little correction in Winico.c that prevented it to compile correctly on all
+  Windows architectures (thanks Prof. B. Ripley for the patch).
+  
+
 == Version 1.1-4
 
 * Winico.c modified to compile on Windows 64-bit (but still not OK?).

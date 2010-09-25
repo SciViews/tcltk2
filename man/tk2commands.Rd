@@ -23,6 +23,7 @@
   These commands supplement those available in the tcltk package to ease
   manipulation of tk2XXX widgets.
 }
+
 \usage{
 tk2column(widget, action = c("add", "configure", "delete", "names", "cget",
     "nearest"), ...)
@@ -45,20 +46,20 @@ tk2theme(theme = NULL)
 }
 
 \arguments{
-  \item{widget}{ The widget to which these actions apply }
-  \item{action}{ Which kind of action? }
-  \item{where}{ Where are these item added in the list (by default, at the end) }
-  \item{items}{ The items to add (either a vector for a single line, or a matrix
-    for more items) }
-  \item{\dots}{ Further arguments to the action }
-  \item{first}{ The 0-based first index to consider in the list }
-  \item{last}{ The 0-based last index to consider in the list, or \code{"end"}
-    for using the last element of the list }
-  \item{index}{ The 0-based index where to insert items in the list }
-  \item{nb}{ A tk2notebook or ttk2notebook widget (\"tclObj\" object) }
-  \item{tab}{ The name (text) of a tab in a notebook }
-  \item{state}{ The new state of the widget }
-  \item{theme}{ A theme to use (character string) }
+  \item{widget}{ the widget to which these actions apply. }
+  \item{action}{ which kind of action? }
+  \item{where}{ where are these item added in the list (by default, at the end). }
+  \item{items}{ the items to add (either a vector for a single line, or a matrix
+    for more items). }
+  \item{\dots}{ further arguments to the action. }
+  \item{first}{ the 0-based first index to consider in the list. }
+  \item{last}{ the 0-based last index to consider in the list, or \code{"end"}
+    for using the last element of the list. }
+  \item{index}{ the 0-based index where to insert items in the list. }
+  \item{nb}{ a tk2notebook or ttk2notebook widget (\"tclObj\" object). }
+  \item{tab}{ the name (text) of a tab in a notebook. }
+  \item{state}{ the new state of the widget. }
+  \item{theme}{ a theme to use (character string). }
 }
 
 \details{
@@ -67,23 +68,23 @@ tk2theme(theme = NULL)
     tk2mclistbox widget,
   \code{is.tk()} determines if the tk package is loaded (on some platforms
     it is possible to load the tcltk package without tk, for instance, in
-	batch mode). \code{is.ttk()} determines if 'ttk' widgets (styled widgets)
-	used by the \code{tk2XXX()} functions are available (you need Tk >= 8.5).
+    batch mode). \code{is.ttk()} determines if 'ttk' widgets (styled widgets)
+    used by the \code{tk2XXX()} functions are available (you need Tk >= 8.5).
 }
 
 \note{
-	In comparison with traditional Tk widgets, ttk proposes an advances mechanism
-	for styling the widgets with \"themes\". By default, it adapts to the current
-	platform (for instance, under Windows XP with XP theme, all widgets take the
-	appearance of XP themed widgets (even with custom themes applied!). Usual Tk
-	widgets are ALWAYS displayed in old-looking fashion under Windows XP. If you
-	want, you can switch dynamically to a different theme among those avaiable
-	(list them using \code{tk2theme.list()}, and switch to another one with
-	\code{tk2theme(newtheme)}. This is most useful to see how your GUI elements
-	and dialog boxes look like on foreign systems. If you prefer, let's say, a
-	Unix look of the R GUI elements under Windows, these functions are also
-	useful. If you are more advanturous, you can even design your own themes (see
-	the tile documentation on the Tcl wiki).
+  In comparison with traditional Tk widgets, ttk proposes an advances mechanism
+  for styling the widgets with \"themes\". By default, it adapts to the current
+  platform (for instance, under Windows XP with XP theme, all widgets take the
+  appearance of XP themed widgets (even with custom themes applied!). Usual Tk
+  widgets are ALWAYS displayed in old-looking fashion under Windows XP. If you
+  want, you can switch dynamically to a different theme among those avaiable
+  (list them using \code{tk2theme.list()}, and switch to another one with
+  \code{tk2theme(newtheme)}. This is most useful to see how your GUI elements
+  and dialog boxes look like on foreign systems. If you prefer, let's say, a
+  Unix look of the R GUI elements under Windows, these functions are also
+  useful. If you are more advanturous, you can even design your own themes (see
+  the tile documentation on the Tcl wiki).
 }
 
 \author{ Philippe Grosjean }
@@ -91,3 +92,5 @@ tk2theme(theme = NULL)
 \seealso{ \code{\link{tk2widgets}}, \code{\link{tk2tip}} }
 
 \keyword{ utilities }
+
+\concept{ Tcl/Tk widgets commands }

@@ -1,6 +1,6 @@
-# tcltk2 examples
+### tcltk2 examples
 
-# autoscroll
+### autoscroll
 tclRequire("autoscroll")
 tt <- tktoplevel()
 scrl <- tkscrollbar(tt, orient = "v", command = function(...) tkyview(txt, ...))
@@ -10,25 +10,23 @@ tkpack(txt, side = "left", fill = "both", expand = 1)
 tcl("::autoscroll::autoscroll", scrl)
 
 
-# combobox: to eliminate!
+### combobox: to eliminate!
 
-# choosefont
+### choosefont
 ### TODO
 
 
-# ctext
+### ctext
 ### TODO
 
 
-# cursor
+### cursor
 ### TODO
 
 
-# swaplist
+### swaplist
 tclRequire("swaplist")
 tt <- tktoplevel()
 opts <- tclVar()
 sl <- tcl("swaplist::swaplist", tt, opts, 1:9, c(1, 3, 5))
 cat("You choose:", tclvalue(opts))
-
-

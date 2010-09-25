@@ -38,28 +38,28 @@ tk2ico.taskbar.modify(icon, pos = NULL, text = NULL)
 }
 
 \arguments{
-  \item{file}{ A file having icon resources (.exe, or .dll) }
-  \item{res}{ The name of the resource from where the icon should be extracted }  
-  \item{iconfile}{ A file with a .ico extension, containing one or more Windows
-    icons }
-  \item{icon}{ An icon object }
-  \item{convert}{ Do we convert the result into a data.frame? }
-  \item{win}{ A tk window, or an integer representing the handle (HWND) of a
+  \item{file}{ a file having icon resources (.exe, or .dll). }
+  \item{res}{ the name of the resource from where the icon should be extracted. }  
+  \item{iconfile}{ a file with a .ico extension, containing one or more Windows
+    icons. }
+  \item{icon}{ an icon object. }
+  \item{convert}{ do we convert the result into a data.frame? }
+  \item{win}{ a tk window, or an integer representing the handle (HWND) of a
     foreign window whose icon will be changed (take care, the function returns
 	\code{TRUE} even if the handle is wrong! }
-  \item{pos}{ A position (starting from 0) pointing to an icon in a multi-icon
+  \item{pos}{ a position (starting from 0) pointing to an icon in a multi-icon
     object. Note that \code{pos} is not used in \code{tk2ico.set()} if
 	\code{type = "all"} (in this case, best icons matching both \"small\" and
-	\"large\" sizes are searched in the \code{icon} resource }
-  \item{type}{ Do we change only the small, the large, or both icons? }
-  \item{value}{ A string with the new text for the icon in
+	\"large\" sizes are searched in the \code{icon} resource. }
+  \item{type}{ do we change only the small, the large, or both icons? }
+  \item{value}{ a string with the new text for the icon in
     \code{tk2ico.text()} or a numerical value indicating the new default
 	position in the icon resource for \code{tk2ico.pos()} }
-  \item{text}{ Change a text for an icon }
-  \item{leftmenu}{ A \"tkwin\" object to display when the user left-clicks on
-    the taskbar icon (usually, a Tk popup menu), or \code{NULL} for nothing }
-  \item{rightmenu}{ Idem as \'lefmenu\' but for a right-click on the taskbar
-    icon }
+  \item{text}{ change a text for an icon. }
+  \item{leftmenu}{ a \"tkwin\" object to display when the user left-clicks on
+    the taskbar icon (usually, a Tk popup menu), or \code{NULL} for nothing. }
+  \item{rightmenu}{ idem as \'lefmenu\' but for a right-click on the taskbar
+    icon. }
 }
 
 \value{
@@ -70,3 +70,5 @@ tk2ico.taskbar.modify(icon, pos = NULL, text = NULL)
 \author{ Philippe Grosjean }
 
 \keyword{ utilities }
+
+\concept{ icons, windows and taskbar }

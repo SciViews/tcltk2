@@ -10,7 +10,7 @@ tk2chooseFont(...)
 }
 
 \arguments{
-  \item{\dots}{ Further arguments passed to the dialog box }
+  \item{\dots}{ further arguments passed to the dialog box. }
 }
 
 \value{
@@ -29,10 +29,12 @@ tk2chooseFont(...)
 ## into an interactive R session with the tcltk package loaded
 tk2chooseFont()
 tk2chooseFont(font = "{courier} 9", title = "Choose a fixed font",
-  fonttype = "fixed", style = 4, sizetype = "all")
+    fonttype = "fixed", style = 4, sizetype = "all")
 tk2chooseFont(font = "Verdana 12 bold italic underline overstrike",
     fonttype = "prop", style = 2, sizetype = "point")
 }
 }
 
 \keyword{ utilities }
+
+\concept{ More Tcl/Tk dialog boxes, font and color selection }

@@ -14,8 +14,8 @@ tk2killtip()
 }
 
 \arguments{
-  \item{widget}{ The widget to which a tooltip is attached }
-  \item{message}{ The message of the tooltip ("" to remove the tooltip) }
+  \item{widget}{ the widget to which a tooltip is attached. }
+  \item{message}{ the message of the tooltip ("" to remove the tooltip). }
 }
 
 \author{ Philippe Grosjean }
@@ -29,11 +29,10 @@ tk2killtip()
 ## These cannot be run by examples() but should be OK when pasted
 ## into an interactive R session with the tcltk package loaded
 
-# Using plain Tcl/Tk label and button (tk2XXX equivalent have built-in
-# tooltip features)
+## Using plain Tcl/Tk label and button (tk2XXX equivalent have built-in
+## tooltip features)
 tt2 <- tktoplevel()
-lb <- tklabel(tt2,
-	text = "Move mouse over me, or over the button to see tooltip")
+lb <- tklabel(tt2, text = "Move mouse over me, or over the button to see tooltip")
 tkgrid(lb)
 tk2tip(lb, "A tooltip for the label \ndisplayed on two lines")
 but <- tkbutton(tt2, text = "Exit", width = 10,
@@ -41,10 +40,13 @@ but <- tkbutton(tt2, text = "Exit", width = 10,
 tkgrid(but)
 tk2tip(but, "Exit from this dialog box")
     
-# To test tk2killtip(), move mouse on top of a widget
-# so that the tip is visible, and force killing it manually using:
+## To test tk2killtip(), move mouse on top of a widget
+## so that the tip is visible, and force killing it manually using:
 tk2killtip()
-# Move again to the widget: the tip is displayed again. 
+## Move again to the widget: the tip is displayed again. 
 }
 }
+
 \keyword{ utilities }
+
+\concept{ Tcl/Tk widget tooltip }

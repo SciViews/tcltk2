@@ -32,11 +32,11 @@ tk2reg.values(keyname)
 }
 
 \arguments{
-  \item{keyname}{ The name of the key. }
-  \item{valuename}{ A value in this key. }
-  \item{data}{ The data to place in the value. }
-  \item{type}{ The type of value in the registry. By default, it is 'sz', that
-     is, an atomic string. }
+  \item{keyname}{ the name of the key. }
+  \item{valuename}{ a value in this key. }
+  \item{data}{ the data to place in the value. }
+  \item{type}{ the type of value in the registry. By default, it is 'sz', that
+    is, an atomic string. }
 }
 
 \value{
@@ -76,59 +76,62 @@ tk2reg.values(keyname)
 ## These cannot be run by examples() but should be OK when pasted
 ## into an interactive R session with the tcltk package loaded
 
-## Examples of tk2reg - registry manipulation under Windows
-# Rem: HKEY_LOCAL_MACHINE, HKEY_USERS, HKEY_CLASSES_ROOT, HKEY_CURRENT_USER,
-#      HKEY_CURRENT_CONFIG, HKEY_PERFORMANCE_DATA, HKEY_DYN_DATA
+### Examples of tk2reg - registry manipulation under Windows
+## Rem: HKEY_LOCAL_MACHINE, HKEY_USERS, HKEY_CLASSES_ROOT, HKEY_CURRENT_USER,
+##      HKEY_CURRENT_CONFIG, HKEY_PERFORMANCE_DATA, HKEY_DYN_DATA
 Rkey <- "HKEY_CURRENT_USER\\\\Software\\\\R-core\\\\R"   # The R key
 Rkey <- paste(Rkey, "\\\\", R.version$major, ".", R.version$minor, sep = "")
 Rsubkey <- paste(Rkey, "subkey", sep = "\\\\")        # A subkey
 
-# Get all subkeys for Software in the local machine
+## Get all subkeys for Software in the local machine
 tk2reg.keys("HKEY_LOCAL_MACHINE\\\\Software")
 
-# Get all names in the R key
+## Get all names in the R key
 tk2reg.values(Rkey)
 
-# Get the path for the current R version
+## Get the path for the current R version
 tk2reg.get(Rkey, "InstallPath")
 
-# Create a subkey (explore the registry with regedit.exe to see it)
+## Create a subkey (explore the registry with regedit.exe to see it)
 tk2reg.setkey(Rsubkey)
-# Add a couple of keys in it
+## Add a couple of keys in it
 tk2reg.set(Rsubkey, "test", "a key added in the registry!", type = "sz")
 tk2reg.set(Rsubkey, "test exp", "\%SystemRoot\%\\\\system32", type = "expand_sz")
 tk2reg.set(Rsubkey, "test multi", LETTERS[1:5], type = "multi_sz")
 tk2reg.set(Rsubkey, "test dword", 1024, type = "dword")
 tk2reg.set(Rsubkey, "test big end", 1024, type = "dword_big_endian")
 
-# Get the type of a value
+## Get the type of a value
 tk2reg.type(Rsubkey, "test")
 tk2reg.type(Rsubkey, "test exp")
 tk2reg.type(Rsubkey, "test multi")
 tk2reg.type(Rsubkey, "test dword")
 tk2reg.type(Rsubkey, "test big end")
 
-# Get a value in a key
+## Get a value in a key
 tk2reg.get(Rsubkey, "test")
 tk2reg.get(Rsubkey, "test exp")
 tk2reg.get(Rsubkey, "test multi")
 tk2reg.get(Rsubkey, "test dword")
 tk2reg.get(Rsubkey, "test big end")
 
-# Delete a name in a key (take care: dangerous!)
+## Delete a name in a key (take care: dangerous!)
 tk2reg.delete(Rsubkey, "test")
-# Delete a whole key (take care: very dangerous!)
+## Delete a whole key (take care: very dangerous!)
 tk2reg.deletekey(Rsubkey)
 
-# An alternate way to get the path
+## An alternate way to get the path
 tk2reg.get(paste("HKEY_LOCAL_MACHINE", "SYSTEM", "CurrentControlSet",
-	"Control", "Session Manager", "Environment", sep = "\\\\"), "path")
+    "Control", "Session Manager", "Environment", sep = "\\\\"), "path")
 
-# Make sure that currently running apps are warned of your changes in the registry
+## Make sure that currently running apps are warned of your changes in the registry
 tk2reg.broadcast()
 
-# Delete temporary variables
+## Delete temporary variables
 rm(list = c("Rkey", "Rsubkey"))
 }
 }
+
 \keyword{ utilities }
+
+\concept{ Windows registry, keys, hives, permanent storage of configuration parameters }

@@ -35,11 +35,11 @@
 #include <shellapi.h>
 
 #ifndef GCL_HICON
-#define GCL_HICON(-14)
+#define GCL_HICON (-14)
 #endif
 
 #ifndef GCLP_HICON
-#define GCLP_HICON(-14)
+#define GCLP_HICON (-14)
 #endif
 
 #include <tk.h>

@@ -7,18 +7,18 @@
   can edit entries, add or delete rows and columns, ....
 }
 \usage{
-  tk2edit(x, title = "Matrix Editor", header = NULL,
-	  maxHeight = 600, maxWidth = 800, fontsize = 9, ...) 
+tk2edit(x, title = "Matrix Editor", header = NULL,
+    maxHeight = 600, maxWidth = 800, fontsize = 9, ...) 
 }
 
 \arguments{
-  \item{x}{ A matrix or data frame to edit }
-  \item{title}{ The title of the editor window }
-  \item{header}{ Do we display a header? }
-  \item{maxHeight}{ The maximum height of the editor window }
-  \item{maxWidth}{ The maximum width of the editor window }
-  \item{fontsize}{ The size of the font to use in the editor window }
-  \item{\dots}{ Further arguments to pass to the function }
+  \item{x}{ a matrix or data frame to edit. }
+  \item{title}{ the title of the editor window. }
+  \item{header}{ do we display a header? }
+  \item{maxHeight}{ the maximum height of the editor window. }
+  \item{maxWidth}{ the maximum width of the editor window. }
+  \item{fontsize}{ the size of the font to use in the editor window. }
+  \item{\dots}{ further arguments to pass to the function. }
 }
 
 \value{
@@ -37,7 +37,9 @@
 ## into an interactive R session with the tcltk package loaded
 data(iris)
 tk2edit(iris)	
-  }
+}
 }
 
 \keyword{ utilities }
+
+\concept{ Tcl/Tk data frame editor }

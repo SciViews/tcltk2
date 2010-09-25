@@ -28,14 +28,14 @@ tclVarName(name, init = "", keep.existing = TRUE)
 }
 
 \arguments{
-  \item{names}{ Transform names so that they are valid for variables in tcl }
-  \item{unique}{ Should these names be unique in the vector? }
-  \item{f}{ An R function. currently, do no support functions with arguments. }
-  \item{name}{ The name of a variable }
-  \item{value}{ The value to place in a variable }
-  \item{pattern}{ A pattern to search for }
-  \item{init}{ Initial value to use when creating the variable }
-  \item{keep.existing}{ If the tcl variable already exist, should we keep its content?  }
+  \item{names}{ transform names so that they are valid for variables in Tcl. }
+  \item{unique}{ should these names be unique in the vector? }
+  \item{f}{ an R function. currently, do no support functions with arguments. }
+  \item{name}{ the name of a variable. }
+  \item{value}{ The value to place in a variable. }
+  \item{pattern}{ a pattern to search for. }
+  \item{init}{ initial value to use when creating the variable. }
+  \item{keep.existing}{ if the tcl variable already exist, should we keep its content? }
 }
 
 \details{
@@ -63,28 +63,31 @@ tclVarExists("tcl_version")
 tclVarExists("probably_non_existant")
 tclVarFind("tcl*")
 
-# Using tclVarName() and tclGetValue()...
-# intented for better match between R and Tcl variables
+## Using tclVarName() and tclGetValue()...
+## intented for better match between R and Tcl variables
 Test <- tclVarName("Test", "this is a test!")
-# Now 'Test' exist both in R and in Tcl... In R, you need to use
+## Now 'Test' exist both in R and in Tcl... In R, you need to use
 tclvalue(Test) # to retrieve its content
-# If a variable already exists in Tcl, its content is preserved using
-# keep.existing = TRUE
+## If a variable already exists in Tcl, its content is preserved using
+## keep.existing = TRUE
 	
-# Create a variable in Tcl and assign "just a test..." to it
+## Create a variable in Tcl and assign "just a test..." to it
 tclSetValue("A_Variable", "just to test...")
-# Create the dual variable with same name
+## Create the dual variable with same name
 A_Variable <- tclVarName("A_Variable", "something else?")
 tclvalue(A_Variable) # Content of the variable is not changed!
 
-# If you want to retrieve the content of a Tcl variable,
-# but do not want to create a reference to it in R, use:
+## If you want to retrieve the content of a Tcl variable,
+## but do not want to create a reference to it in R, use:
     
-# Create a Tcl variable, not visible from R
+## Create a Tcl variable, not visible from R
 tclSetValue("Another_Variable", 1:5)
 tclGetValue("Another_Variable") # Get its content in R (no conversion!)
 tclSetValue("Another_Variable", paste("Am I", c("happy", "sad"), "?"))
 tclGetValue("Another_Variable") # Get its content in R (no conversion!)
 }
 }
+
 \keyword{ utilities }
+
+\concept{ Tcl/Tk variables and proc, function callback }

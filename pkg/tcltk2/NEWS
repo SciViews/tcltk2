@@ -1,5 +1,11 @@
 = tcltk2 news
 
+== Version 1.1-6
+
+* When setting options(scipen = -5) or lower, is.tk() returned FALSE, even if
+  Tk package was installed. Corrected.
+
+
 == Version 1.1-5
 
 * Little correction in Winico.c that prevented it to compile correctly on all

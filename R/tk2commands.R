@@ -236,7 +236,7 @@ getLanguage <- function ()
 }
 
 is.tk <- function ()
-	return(tclvalue(.Tcl("catch { package present Tk }")) == 0)
+	return(tclvalue(.Tcl("catch { package present Tk }")) == "0")
 
 is.ttk <- function ()
 {

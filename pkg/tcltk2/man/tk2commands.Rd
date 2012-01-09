@@ -17,6 +17,9 @@
 \alias{tk2theme.elements}
 \alias{tk2theme.list}
 \alias{tk2theme}
+\alias{tk2style}
+\alias{tk2dataList}
+\alias{tk2configList}
 
 \title{ Tk commands associated with the tk2XXX widgets }
 \description{
@@ -43,6 +46,11 @@ is.ttk()
 tk2theme.elements()
 tk2theme.list()
 tk2theme(theme = NULL)
+tk2style(class, style, state = c("default", "active", "disabled", "focus",
+    "!focus", "pressed", "selected", "background", "readonly", "alternate",
+    "invalid", "hover", "all"), default = NULL)
+tk2dataList(x)
+tk2configList(x)
 }
 
 \arguments{
@@ -58,8 +66,14 @@ tk2theme(theme = NULL)
   \item{index}{ the 0-based index where to insert items in the list. }
   \item{nb}{ a tk2notebook or ttk2notebook widget (\"tclObj\" object). }
   \item{tab}{ the name (text) of a tab in a notebook. }
-  \item{state}{ the new state of the widget. }
+  \item{state}{ the new state of the widget, or the state to inquiry. }
   \item{theme}{ a theme to use (character string). }
+  \item{class}{ the class of the tk2widget (either the Tk class, like
+    \code{TButton}, or the name of the function that creates it, like
+    \code{tk2button}) }
+  \item{style}{ a character string with the name of the style to retrieve }
+  \item{default}{ the default value to return in case this style is not found }
+  \item{x}{ either a tk2widget object, or a character string with its class name. }
 }
 
 \details{

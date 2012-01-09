@@ -1,9 +1,5 @@
 ### tcltk2-Internal.R - Hidden functions for tcltk2
 ### Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
-###
-### TODO:
-### - Rework the tile stuff
-### - .onUnload() function (unload DLLs etc. but there are no DLLs any more!?)
 
 .onLoad <- function(libname, pkgname) {
 	libdir <- file.path(libname, pkgname, "tklibs")
@@ -18,16 +14,6 @@
 		    tcl("lappend", "::auto_path", path)
 	}
     res <- addTclPath(libdir)	# extend the Tcl/Tk path
-### TODO: add path to bin!
-### TODO: get windowing system with .Tcl("tk windowingsystem")
-    ## Yes, .Platform$OS == "unix" in Mac. However, perhaps you're not
-	## interested in the OS type, though, but you're interested  in  the type
-	## of GUI. .Platform$GUI which is "AQUA" if you run R in the usual
-	## graphical UI window, but "X11" if you run R in X11 terminal or bash
-	## terminal window (and these really are different beasts GUI-wise).
-	## Further, .Platform$pkgType == "mac.binary" in CRAN releases of Mac R
-	## (but may be different if users have built R from the source).
-	## Function install.packages() uses .Platform$pkgType to detect the platform.
 
     ## Make sure that Tcl/Tk locale is the same one as current R locale
 	lang <- getLanguage()
@@ -37,12 +23,18 @@
 	}
 
     if (is.tk()) {
-		## Here is how we could install the supplementary material in Tcl
-		##tclRequire("combobox")    		# Version 2.3
-		##tclRequire("choosefont")       # Version 0.2
+		## Here is how we could install the supplementary material in Tcl/Tk
+	
+		## This is for a better management of scrollbars in listbox, text, canvas
+		tclRequire("autoscroll") # Version 1.1
+		tcl("source", file.path(libdir, "scrolledWidget.tcl"))
+		
+		##tclRequire("choosefont")      # Version 0.2
 		##tclRequire("ctext")			# Version 3.1
 		##tclRequire("cursor")       	# Version 0.1
 		##tclRequire("mclistbox")    	# Version 1.2
+		##tclRequire("swaplist")    	# Version 0.2
+		##tclRequire("tablelist")    	# Version 5.5
 		##Not provided any more -> tclRequire("Tktable")   		# Version 2.9
 
 		## The following code is not implemented as Tcl package... just source it
@@ -54,12 +46,11 @@
 ###				tcl("source", file.path(libdir, "fonts.tcl"))
 				## Define fonts used in Tk (note: must be done AFTER loading tile!)
 				## Default values for system fonts are calculated by tile...
-				## but they should be computer from the system, actually
+				## but they should be computed from the system, actually
 				## We collect back those values calculated by tile and possibly override
 				## them with better values
 ###				tk2font.setstyle(system = TRUE, default.styles = TRUE, text = TRUE)
 				### TODO: reflect possible changes to other graphical toolkits (how?)
-				### TODO: homogenize R console, R graph, SciTe fonts with these fonts
 		} else {	# There is a bug in mclistbox with Tcl/Tk 8.5
 			## Patch by Christiane Raemsch, slightly modified by Ph. Grosjean
 			## This is essentially the listbox procedure, but with an additional
@@ -86,10 +77,6 @@
 			}')
 		}
 	}
-	## Try loading addtional ttk themes
-	try(tclRequire("ttk::theme::plastik"), silent = TRUE)
-	try(tclRequire("ttk::theme::keramik"), silent = TRUE)
-	try(tclRequire("ttk::theme::keramik_alt"), silent = TRUE)
 	
 	## Windows only
     if (.Platform$OS.type == "windows") {
@@ -102,20 +89,180 @@
 			tcl("load", file.path(libname, pkgname, "libs", "Winico06.dll"))
 		## Also register the DDE server as TclEval|R
         tk2dde("R")
-    } else {
-		## Use plastik theme by default
-		try(tk2theme("plastik"), silent = TRUE)
+    }
+	
+	## Load additional ttk themes
+	try(tclRequire("ttk::theme::plastik"), silent = TRUE)
+	try(tclRequire("ttk::theme::keramik"), silent = TRUE)
+	try(tclRequire("ttk::theme::keramik_alt"), silent = TRUE)
+	try(tclRequire("ttk::theme::clearlooks"), silent = TRUE)
+	try(tclRequire("ttk::theme::radiance"), silent = TRUE)
+	
+	## Which ttk theme should we use?
+	## If the user specified a default theme, use it
+	isUbuntu <- .isUbuntu()
+	if (!.loadTheme()) {
+		## ...otherwise, try to guess the best default value
+		themes <- tk2theme.list()
+		if ("aqua" %in% themes) { # This must be aquaTk on a Mac
+			try(tk2theme("aqua"), silent = TRUE)
+		} else if ("vista" %in% themes) { # This must be Vista or Win 7
+			try(tk2theme("vista"), silent = TRUE)
+		} else if ("xpnative" %in% themes) { # This must be XP
+			try(tk2theme("xpnative"), silent = TRUE)
+		} else if ("winnative" %in% themes) { # This must be a pre-XP windows
+			try(tk2theme("winnative"), silent = TRUE)
+		} else if (isUbuntu) {
+			try(tk2theme("radiance"), silent = TRUE)
+		} else { # A modern "default" theme that fit not too bad in many situations
+			try(tk2theme("clearlooks"), silent = TRUE)
+		}
+	}
+	## Special treatment for Ubuntu: change fonts to Ubuntu and Ubuntu mono
+	## and use white text on black for tooltips
+	if (isUbuntu && is.tk()) {
+		tkfont.configure("TkDefaultFont", family = "Ubuntu", size = 11)
+		tkfont.configure("TkMenuFont", family = "Ubuntu", size = 11)
+		tkfont.configure("TkCaptionFont", family = "Ubuntu", size = 10)
+		tkfont.configure("TkSmallCaptionFont", family = "Ubuntu", size = 9)
+		tkfont.configure("TkTooltipFont", family = "Ubuntu", size = 9)
+		tkfont.configure("TkMenuFont", family = "Ubuntu", size = 11)
+		tkfont.configure("TkHeadingFont", family = "Ubuntu", size = 12)
+		tkfont.configure("TkIconFont", family = "Ubuntu", size = 11)
+		tkfont.configure("TkTextFont", family = "Ubuntu", size = 11)
+		tkfont.configure("TkFixedFont", family = "Ubuntu Mono", size = 11)
+		res <- tclRequire("tooltip")
+		if (inherits(res, "tclObj")) {
+			.Tcl(paste("set ::tooltip::labelOpts [list -highlightthickness 0",
+				"-relief solid -bd 1 -background black -fg white]"))
+		}
 	}
 }
-
-### TODO: .onUnload() that close downloaded tk items (or unload Tcl completely?)
-### Use package forget and change auto_path, ... or leave like this to avoid
-### breaking Tcl?
 
 .Last.lib <- function (libpath)
 {
     ## Remove all currently scheduled tasks
 	tclTaskDelete(id = NULL)
+}
+
+.saveTheme <- function ()
+	cat(tk2theme(), "\n", sep = "", file = "~/.Rtk2theme")
+	
+.loadTheme <- function () {
+	if (file.exists("~/.Rtk2theme")) {
+		theme <- try(readLines("~/.Rtk2theme")[1], silent = TRUE)
+		if (inherits(theme, 'try-error')) return(FALSE)
+		## Try changing the tk2theme according to this value
+		res <- try(tk2theme(theme), silent = TRUE)
+		return(!inherits(res, "try-error"))
+	} else return(FALSE)
+}
+
+.isUbuntu <- function ()
+	return(grepl("^Ubuntu", suppressWarnings(system("cat /etc/issue",
+		intern = TRUE, ignore.stderr = TRUE))[1]))
+
+.mergeList <- function (l1, l2)
+{
+	## For named lists, overwrite items of l1 present in l2
+	nms <- names(l2)
+	## Deal with named items
+	if (length(nms)) {
+		named <- nms != ""
+		if (any(named)) {
+			l2n <- l2[named]
+			nmsn <- nms[named]
+			for (i in 1:length(nmsn)) l1[[nmsn[i]]] <- l2n[[nmsn[i]]]
+		}
+		## Keep only non named items in l2
+		l2 <- l2[!named]
+	}
+	## Deal with non named items in l2
+	if (length(l2)) { # Unnamed list
+		n1 <- length(l1)
+		n2 <- length(l2)
+		for (i in 1:n2) l1[[n1 + i]] <- l2[[i]]
+	}
+	return(l1)
+}
+
+.configStd <- function (x, lstval)
+{
+	## These config parameters are considered as data
+	## Image
+	if (!is.null(lstval$image)) {
+		tkconfigure(x, image = lstval$image)
+		lstval$image <- NULL
+	}
+	## Text
+	if (!is.null(lstval$text)) {
+		tkconfigure(x, text = lstval$text)
+		lstval$text <- NULL
+	}
+	## Textvariable
+	if (!is.null(lstval$textvariable)) {
+		tkconfigure(x, textvariable = lstval$textvariable)
+		lstval$textvariable <- NULL
+	}
+	## Values
+	if (!is.null(lstval$values)) {
+		values(x) <- lstval$values
+		lstval$values <- NULL
+	}
+	## Value
+	if (!is.null(lstval$value)) {
+		value(x) <- lstval$value
+		lstval$value <- NULL
+	}
+	## Selection
+	if (!is.null(lstval$selection)) {
+		selection(x) <- lstval$selection
+		lstval$selection <- NULL
+	}
+	## Label (not a Tk attribute)
+	if (!is.null(lstval$label)) {
+		label(x) <- lstval$label
+		lstval$label <- NULL
+	}
+	## Tag (not a Tk attribute)
+	if (!is.null(lstval$name)) {
+		tag(x) <- lstval$tag
+		lstval$tag <- NULL
+	}
+	## Tooltip
+	if (!is.null(lstval$tip)) {
+		tip(x) <- lstval$tip
+		lstval$tip <- NULL
+	}
+	## Disabled (is tk 'state' parameter indeed)
+	if (!is.null(lstval$disabled)) {
+		disabled(x) <- lstval$disabled
+		lstval$disabled <- NULL
+	}
+	## Return modified value list
+	return(lstval)
+}
+
+.wraplength <- function (w, width)
+{
+	## Calculate wraplength required for tk2label widgets
+	## width is expressed in characters, but wraplength must be given in pixels
+	## This is stupid and requires additional computation to calculate the
+	## width in pixel of an average character, like "0" to do the conversion!
+	## Get the average size of one character in the current font used
+	
+	## If width is not set, just return a large value for wraplength
+	if (!length(width)) return(1000)
+	
+	## Get the font and measure it	
+	font <- tclvalue(tkcget(w, "-font"))
+	if (font == "") font <- tk2style("tk2label", "font")
+	if (font == "") {
+		charsize <- 8 # Use an everage value
+	} else charsize <- as.numeric(tkfont.measure(tkfont.actual(font), "0"))
+	
+	## Optimal wraplength is width * charsize
+	return(width * charsize)
 }
 
 .TempEnv <- function ()

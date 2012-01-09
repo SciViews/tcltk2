@@ -33,4 +33,11 @@ tkpack(txt, fill = "both", expand = 1)
 tcl(pf, "setwidget", sf)
 tkpack(sf, fill = "both", expand =  1, padx = 4, pady = 4)
 
+# The superframe (what is this?)
+tclRequire("widget::superframe")
+tt <- tktoplevel()
+sf <- tkwidget(tt, "widget::superframe", text = "Superframe:")
+tkpack(sf)
+tkpack(tk2button(sf, text = "A button"))
+
 

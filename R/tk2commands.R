@@ -210,6 +210,178 @@ tk2theme <- function (theme = NULL)
 ###	-relief [list {pressed !disabled} sunken] \ 
 ###	;
 
+## Function to look for a ttk style
+tk2style <- function (class, style, state = c("default", "active",
+"disabled", "focus", "!focus", "pressed", "selected", "background", "readonly",
+"alternate", "invalid", "hover", "all"), default = NULL)
+{
+	## Get a ttk style in the current theme
+	## Class is either the TTk class, or the tk2 function name
+	## TODO: add tk2toolbutton and tk2sizegrip!
+	class <- switch(class,
+		tk2button = "TButton",
+		tk2label = "TLabel",
+		tk2toolbutton = "Toolbutton",
+		tk2menubutton = "TMenubutton",
+		tk2checkbutton = "TCheckbutton",
+		tk2radiobutton = "TRadiobutton",
+		tk2entry = "TEntry",
+		tk2combobox = "TCombobox",
+		tk2notebook = "TNotebook",
+		tk2labelframe = "TLabelframe",
+		tk2scrollbar = "TScrollbar",
+		tk2scale = "TScale",
+		tk2progress = "TProgressbar",
+		#tk2spinbox = "TSpinbox",
+		tk2tree = "Treeview",
+		tk2frame = "TFrame",
+		tk2panedwindow = "TPanedwindow",
+		tk2separator = "TSeparator",
+		#"TSizegrip",
+		as.character(class)[1] # Supposed to be the ttk class
+		## Not ttk widgets: tk2canvas, tk2ctext, tk2edit, tk2listbox,
+		## tk2mclistbox, tk2menu, tk2menuentry, tk2spinbox, tk2table
+	)
+	style = paste("-", as.character(style)[1], sep = "")
+	state = match.arg(state)
+	if (is.null(default)) default <- ""
+	
+	## styles creates a named vector (items in even elements, labels = odd)
+	styles <- function (x) {
+		st <- as.character(x)
+		l <- length(st)
+		if (l == 0) return(character(0))
+		if (l == 1) return(c(default = st))
+		if (l %% 2 > 0) stop("Didn't get an even number of items: ", st)
+		stnames <- st[seq(1, l - 1, by = 2)]
+		st <- st[seq(2, l, by = 2)]
+		names(st) <- stnames
+		return(st)
+	}
+	
+	## First look at the map for this class
+	res <-  styles(tcl("ttk::style", "map", class, style))
+	res2 <-  styles(tcl("ttk::style", "map", ".", style))
+	res <- c(res, res2[!names(res2) %in% names(res)])
+	res2 <-  styles(tcl("ttk::style", "configure", class, style))
+	res <- c(res, res2[!names(res2) %in% names(res)])
+	res2 <-  styles(tcl("ttk::style", "configure", ".", style))
+	res <- c(res, res2[!names(res2) %in% names(res)])
+	if (length(res) == 0) res <- c(default = default)
+	
+	## If state != "all", try to resolve the right state
+	if (state != "all") {
+		## If the given state is there, use it
+		if (state %in% names(res)) {
+			return(res[state])
+		} else if ("default" %in% names(res)) {
+			return(res["default"])
+		} else {
+			return(c(default = as.character(default)[1]))
+		}
+	} else return(res)
+}
+
+tk2dataList <- function (x)
+{
+	## List data parameters for a given tk2widget
+	## Data manage the content of the widgets
+	## Common items are label, tag, and tip
+	## image: widgets that can display images
+	## text, textvariable: display text
+	## values, value and selection
+	## command: the command to run
+	## validate, validatecommand, invalidcommand: validation mechanism
+	## variable: varaible associated with value
+	## postcommand: specific to comboboxes, to fill them!
+	## onvalue & offvalue: specific to checkbutton
+	## default: specific for button (default button in a dialog box)
+	## show: specific to entry for password... clash with treeview show => ???
+	## mode, maximum, value: for progressbars
+	## from, to, increment, : for spinbox & scale + format
+	## Look in text widget what we keep!
+	if (is.tk2widget(x)) cl <- class(x)[1] else cl <- as.character(x)[1]
+	res <- switch(cl,
+		tk2button = c("image", "text", "textvariable", "command", "default"),
+		tk2canvas = character(0),
+		tk2checkbutton = c("image", "text", "textvariable", "variable",
+			"command", "onvalue", "offvalue"),
+		tk2combobox = c("postcommand", "textvariable", "values"),
+		tk2ctext = c("values", "value", "selection", "maxundo", "undo",
+			"spacing1", "spacing2", "spacing3", "tabs", "tabstyle"), # language
+		tk2entry = c("invalidcommand", "textvariable", "validate",
+			"validatecommand", "show"),
+		tk2label = c("image", "text", "textvariable"),
+		tk2labelframe = c("text"),
+		tk2listbox = c("values", "value", "selection"),
+		tk2mclistbox = c("values", "value", "selection"),
+		tk2notebook = character(0),
+		tk2notetab = c("image", "text"),
+		tk2panedwindow = character(0),
+		tk2progress = c("mode", "maximum", "value", "variable"),
+		tk2radiobutton = c("image", "text", "textvariable",
+			"command", "value", "variable"),
+		tk2scale = c("command", "from", "to", "value", "variable"),
+		tk2scrollbar = c("command"),
+		tk2separator = character(0),
+		#tk2sizegrip = character(0),
+		tk2spinbox = c("validate", "validatecommand", "from", "to", "increment",
+			"values", "format", "command"),
+		tk2table = c("values", "value", "selection"),
+		tk2text = c("values", "value", "selection", "maxundo", "undo",
+			"spacing1", "spacing2", "spacing3", "tabs", "tabstyle"),
+		tk2tree = c("values", "value", "selection"),
+		stop("Unknown tk2widget, provide a tk2widget object or its class")	
+	)
+	## Add label, tag & tip for all
+	res <- c(res, "label", "tag", "tip")
+	return(res)
+}
+
+tk2configList <- function (x)
+{
+	## List config parameters for a given tk2widget
+	## Note: most of the appearance is controlled by the theme, we keep here
+	## only a subset of items that are most useful considering themed widgets:
+	## height, width or length: the size of the widget
+	## compound: how image and text are composed
+	## justify and wrap: control of text flow
+	## orient: for widgets that can be horizontal or vertical
+	## selectmode: for widgets that allow for multiple selections
+	## show: tree and/or headings for the treeview widget
+	if (is.tk2widget(x)) cl <- class(x)[1] else cl <- as.character(x)[1]
+	res <- switch(cl,
+		tk2button = c("compound", "width"),
+		tk2canvas = c("height", "width"),
+		tk2checkbutton = c("compound", "width"),
+		tk2combobox = c("justify", "height", "width"),
+		tk2ctext = c("height", "width"),
+		tk2entry = c("justify", "width"),
+		tk2label = c("compound", "justify", "width", "wraplength"), # Use wrap!
+		tk2labelframe = c("height", "width"),
+		tk2listbox = c("height", "width", "selectmode"),
+		tk2mclistbox = c("height", "width", "selectmode"),
+		tk2notebook = c("height", "width"),
+		tk2notetab = c("compound"),
+		tk2panedwindow = c("orient", "height", "width"),
+		tk2progress = c("length", "orient"),
+		tk2radiobutton = c("compound", "width"),
+		tk2scale = c("length", "orient"),
+		tk2scrollbar = c("orient"),
+		tk2separator = character(0),
+		#tk2sizegrip = character(0),
+		tk2spinbox = c("wrap"),
+		tk2table = c("height", "width"),
+		tk2text = c("height", "width"),
+		tk2tree = c("height", "selectmode", "show"), # show tree and/or headings
+		stop("Unknown tk2widget, provide a tk2widget object or its class")
+	)
+	## Add cursor and takefocus that are common to all
+	# Should we really add these?
+	#res <- c(res, "cursor", "takefocus")
+	return(res)
+}
+
 setLanguage <- function (lang)
 {
 	## Change locale for both R and Tcl/Tk

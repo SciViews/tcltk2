@@ -31,39 +31,57 @@
   A series of widgets you can use in your Tk windows/dialog boxes.
 }
 \usage{
-tk2button(parent, tip = "", ...)
-tk2canvas(parent, tip = "", ...)
-tk2checkbutton(parent, tip = "", ...)
-tk2combobox(parent, tip = "", ...)
-tk2entry(parent, tip = "", ...)
-tk2frame(parent, ...)
-tk2label(parent, tip = "", ...)
-tk2labelframe(parent, ...)
-tk2listbox(parent, selectmode = c("single", "browse", "multiple", "extended"),
-    tip = "", ...)
-tk2mclistbox(parent, tip ="", ...)
-tk2menu(parent, ...)
-tk2menubutton(parent, tip = "", ...)
+tk2button(parent, tip = "", \dots)
+tk2canvas(parent, tip = "", \dots)
+tk2checkbutton(parent, tip = "", \dots)
+tk2combobox(parent, tip = "", \dots)
+tk2entry(parent, tip = "", \dots)
+tk2frame(parent, \dots)
+tk2label(parent, tip, label, tag, cfglist, wrap = FALSE, \dots)
+tk2labelframe(parent, \dots)
+tk2listbox(parent, values, value, selection, selectmode = c("extended", "single",
+    "browse", "multiple"), height = 5, tip = "", scroll = "both",
+    autoscroll = "x", enabled = TRUE, \dots)
+tk2mclistbox(parent, tip ="", \dots)
+tk2menu(parent, \dots)
+tk2menubutton(parent, tip = "", \dots)
 tk2message(parent, text = "", justify = c("left", "center", "right"),
-    width = -1, aspect = 150, tip = "", ...)
-tk2notebook(parent, tabs, ...)
-tk2panedwindow(parent, orientation = c("horizontal", "vertical"), ...)
-tk2progress(parent, orientation = c("horizontal", "vertical"), tip = "", ...)
-tk2radiobutton(parent, tip = "", ...)
-tk2scale(parent, orientation = c("horizontal", "vertical"), tip = "", ...)
-tk2scrollbar(parent, orientation = c("horizontal", "vertical"), ...)
-tk2separator(parent, orientation = c("horizontal", "vertical"), ...)
-tk2spinbox(parent, tip = "", ...)
-tk2table(parent, ...)
-tk2text(parent, tip = "", ...)
-tk2ctext(parent, tip = "", ...)
-tk2tree(parent, tip = "", ...)
+    width = -1, aspect = 150, tip = "", \dots)
+tk2notebook(parent, tabs, \dots)
+tk2panedwindow(parent, orientation = c("horizontal", "vertical"), \dots)
+tk2progress(parent, orientation = c("horizontal", "vertical"), tip = "", \dots)
+tk2radiobutton(parent, tip = "", \dots)
+tk2scale(parent, orientation = c("horizontal", "vertical"), tip = "", \dots)
+tk2scrollbar(parent, orientation = c("horizontal", "vertical"), \dots)
+tk2separator(parent, orientation = c("horizontal", "vertical"), \dots)
+tk2spinbox(parent, tip = "", \dots)
+tk2table(parent, \dots)
+tk2text(parent, tip = "", \dots)
+tk2ctext(parent, tip = "", \dots)
+tk2tree(parent, tip = "", \dots)
 }
 
 \arguments{
   \item{parent}{ the parent window. }
-  \item{tip}{ a tooltip to display for this widget. }
-  \item{selectmode}{ the selection mode for this widget. }
+  \item{tip}{ a tooltip to display for this widget (optional). }
+  \item{label}{ a single character string used to label that widget (optional). }
+  \item{tag}{ any object that you would like to associate with this widget
+    (optional). }
+  \item{cfglist}{ a named list with configuration parameters and values to apply. }
+  \item{wrap}{ do we wrap long lines in the widget? }
+  \item{values}{ a character vector with values to use to populate the widget. }
+  \item{value}{ a character vector with current value for the widget, or currently
+    selected values, if multiple selection is allowed. Takes precedence on
+    \code{selection}. }
+  \item{selection}{ a numeric (indices) vector with current selection. }
+  \item{selectmode}{ the selection mode for this widget. \code{extended} is the
+    usual choice for multiselction \code{tk2listbox()}. }
+  \item{height}{ the height of the widget. }
+  \item{scroll}{ do we add scrollbars? Possible values are \code{"x"},
+    \code{"y"}, \code{"both"} or \code{"none"}; can be abridged. }
+  \item{autoscroll}{ do we automatically hide scrollbars if not needed? Possible
+    values are the same as for the \code{scroll} argument. }
+  \item{enabled}{ is the widget enabled or disabled? }
   \item{text}{ the text to display in the widget. }
   \item{justify}{ how text is justified? }
   \item{tabs}{ the tabs to create in the notebook widget. }

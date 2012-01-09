@@ -1,5 +1,26 @@
 = tcltk2 news
 
+== Version 1.2-0
+
+* Clearlooks ttk theme added and made default theme under Linux. More modern
+  look&feel for ttk widgets under Linux!
+  
+* Radiance ttk theme created and added. This matches ambiance and radiance
+  themes under Ubuntu 11.x. This is the default theme used in Ubuntu.
+  
+* The tk widget tablelist is updated to version 5.5.
+
+* tk2listbox() is completelly reworked to provide (autohide) scrollbars,
+  integration with the tk2theme() and easier filling of its content.
+
+* tk2label is now fully implemented.
+
+* Many methods for tk2widget and tk2cfglist objects are now provided.
+
+* tk2style(), tk2dataList() and tk2configList() provide info on style, config
+  and data associated with a tk2widget.
+
+
 == Version 1.1-6
 
 * When setting options(scipen = -5) or lower, is.tk() returned FALSE, even if

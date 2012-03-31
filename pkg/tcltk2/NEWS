@@ -2,6 +2,12 @@
 
 == Version 1.2-0
 
+* A couple of warnings for partial argument matching in tclTaskXXX() functions
+  under R 2.15.0 are corrected.
+  
+
+== Version 1.2-0
+
 * Clearlooks ttk theme added and made default theme under Linux. More modern
   look&feel for ttk widgets under Linux!
   

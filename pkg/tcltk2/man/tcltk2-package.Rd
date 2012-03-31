@@ -16,8 +16,8 @@ Additions to the tcltk package: more Tk widgets and Tcl/Tk commands.
 \tabular{ll}{
 Package: \tab tcltk2\cr
 Type: \tab Package\cr
-Version: \tab 1.2-0\cr
-Date: \tab 2012-01-07\cr
+Version: \tab 1.2-1\cr
+Date: \tab 2012-03-31\cr
 License: \tab see LICENSE file\cr
 LazyLoad: \tab yes\cr
 }

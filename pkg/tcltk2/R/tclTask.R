@@ -80,7 +80,7 @@ tclTaskSchedule <- function (wait, expr, id = "task#", redo = FALSE)
 	if (wait <= 0) wait <- "idle"  # Schedule task on next event loop
 
 	Tasks <- .getTclTasks()
-	TNames <- ls(Tasks, all = TRUE)
+	TNames <- ls(Tasks, all.names = TRUE)
 
 	id <- as.character(id)[1]
 	## If 'id' contains '#', replace it by a number (first one available)
@@ -164,7 +164,7 @@ tclTaskGet <- function(id = NULL, all = FALSE)
 	## If id is NULL, list all scheduled tasks, otherwise, give info about a
 	## particular scheduled task
 	if (is.null(id)) {
-		return(ls(.getTclTasks(), all = all))
+		return(ls(.getTclTasks(), all.names = all))
 	} else {
 		## Get the data associated with a scheduled task
 		return(.getTclTasks()[[id]])
@@ -213,7 +213,7 @@ tclTaskDelete <- function (id)
 	## Remove a previously scheduled task (if id s NULL, then, remove all tasks)
 	if (is.null(id)) {
 		## Delete all current tasks
-		for (Task in ls(Tasks, all = TRUE))
+		for (Task in ls(Tasks, all.names = TRUE))
 			tclAfterCancel(Tasks[[Task]]$task)
 		## Eliminate .tclTasks environment from TempEnv
 		rm(list = ".tclTasks", envir = .TempEnv())

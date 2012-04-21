@@ -158,9 +158,13 @@
 	} else return(FALSE)
 }
 
-.isUbuntu <- function ()
-	return(grepl("^Ubuntu", suppressWarnings(system("cat /etc/issue",
-		intern = TRUE, ignore.stderr = TRUE))[1]))
+.isUbuntu <- function () {
+	## Note: take care not to call 'cat' on Windows: it is usually *not* there!
+	if (.Platform$OS.type == "windows" || grepl("^mac", .Platform$pkgType))
+		return(FALSE)	# This is either Windows or Mac OS X!
+	grepl("^Ubuntu", suppressWarnings(try(system("cat /etc/issue",
+		intern = TRUE, ignore.stderr = TRUE), silent = TRUE))[1])	
+}
 
 .mergeList <- function (l1, l2)
 {

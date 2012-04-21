@@ -1,7 +1,7 @@
 Package: tcltk2
 Type: Package
 Version: 1.2-1
-Date: 2012-03-31
+Date: 2012-04-21
 Title: Tcl/Tk Additions
 Authors@R: c(person("Philippe", "Grosjean", role = c("aut", "cre"),
   email = "phgrosjean@sciviews.org"))

@@ -1,5 +1,14 @@
 = tcltk2 news
 
+== Version 1.2-2
+
+* For some reasons, version 1.2-1 on CRAN looks like version 1.2-0 on R-Forge.
+  This version is an update.
+
+* tk2ico.XXX() function change (incompatible changes for some of them!) due to
+  drop of winico.dll in favor of the full-Tcl 'ico' package. See ?tk2ico.set.
+
+
 == Version 1.2-1
 
 * The new ttk theme introduced in 1.2-0 have introduced a bug preventing the

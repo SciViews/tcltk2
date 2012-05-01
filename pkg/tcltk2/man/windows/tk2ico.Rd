@@ -4,8 +4,11 @@
 \alias{tk2ico.destroy}
 \alias{tk2ico.hicon}
 \alias{tk2ico.info}
+\alias{tk2ico.list}
+\alias{tk2ico.sizes}
 \alias{tk2ico.load}
 \alias{tk2ico.pos<-}
+\alias{tk2ico.setFromFile}
 \alias{tk2ico.set}
 \alias{tk2ico.taskbar.add}
 \alias{tk2ico.taskbar.delete}
@@ -22,12 +25,17 @@
 }
 
 \usage{
-tk2ico.load(file = "shell32.dll", res = "application")
-tk2ico.create(iconfile)
+tk2ico.create(iconfile, res = 0, size = 16)
 tk2ico.destroy(icon)
+tk2ico.list(file = "shell32.dll")
+tk2ico.sizes(file = "shell32.dll", res = "application")
+tk2ico.load(file = "shell32.dll", res = "application", size = 16)
+tk2ico.set(win, icon, pos = NULL, type = c("all", "small", "big"))
+tk2ico.setFromFile(win, iconfile)
+
+## Deprecated functions since drop of winico.dll support
 tk2ico.hicon(icon)
 tk2ico.info(icon, convert = TRUE)
-tk2ico.set(win, icon, pos = NULL, type = c("all", "small", "big"))
 tk2ico.text(icon)
 tk2ico.text(icon) <- value
 tk2ico.pos(icon) <- value
@@ -38,15 +46,18 @@ tk2ico.taskbar.modify(icon, pos = NULL, text = NULL)
 }
 
 \arguments{
+  \item{iconfile}{ a file with a .ico, or .exe extension, containing one or
+    more Windows icons }
   \item{file}{ a file having icon resources (.exe, or .dll) }
-  \item{res}{ the name of the resource from where the icon should be extracted }  
-  \item{iconfile}{ a file with a .ico extension, containing one or more Windows
-    icons }
-  \item{icon}{ an icon object. }
-  \item{convert}{ do we convert the result into a data.frame? }
-  \item{win}{ a tk window, or an integer representing the handle (HWND) of a
+  \item{res}{ the name of the resource from where the icon should be extracted }
+  \item{size}{ the size of the icon to use. For windows icons, 16 should be
+    fine usually }
+  \item{win}{ a Tk window, or an integer representing the handle (HWND) of a
     foreign window whose icon will be changed (take care, the function returns
-	\code{TRUE} even if the handle is wrong! }
+	\code{TRUE} even if the handle is wrong! }  
+  \item{icon}{ an icon object. }
+
+  \item{convert}{ do we convert the result into a data.frame? }
   \item{pos}{ a position (starting from 0) pointing to an icon in a multi-icon
     object. Note that \code{pos} is not used in \code{tk2ico.set()} if
 	\code{type = "all"} (in this case, best icons matching both \"small\" and
@@ -67,16 +78,23 @@ tk2ico.taskbar.modify(icon, pos = NULL, text = NULL)
   are \code{c("tclObj", "tclIcon")}. Do not forget to destroy it using
   \code{tk2ico.destroy()} when you do not need it any more!
   
-  If \code{tk2ico.load()}, \code{tk2ico.info()} fail, they return \code{NULL}
-  instead on a Tcl object.
+  If \code{tk2ico.load()} fails, it returns \code{NULL} instead of a Tcl object.
 }
 
 \author{ Philippe Grosjean }
 
-\note{ This is Windows-specific. It uses the winico Tcl library. Under other
-  platforms these functions just return \code{NULL} without error or warning. So,
-  code that must run on different platforms could use these functions all the
-  time, as soon as they correctly deal with possible \code{NULL} return. }
+\note{ This is Windows-specific. It was implemented using the winico Tcl library
+  in tcltk2 <= 1.2-0. Now it switches to the ico Tcl package, which is supported
+  on all platforms. Hence, in future versions of this package, it will be also
+  available for Linux/Unix and Max OS X. Under other platforms these functions
+  currently just return \code{NULL} without error or warning. So, code that must
+  run on different platforms could use these functions all the
+  time, as soon as they correctly deal with possible \code{NULL} return.
+  The functions \code{tk2ico.hicon()}, \code{tk2ico.info()}, \code{tk2ico.text()},
+  \code{tk2ico.pos()}, \code{tk2ico.taskbar.add()}, \code{tk2ico.taskbar.delete()}
+  and \code{tk2ico.taskbar.modify()} are deprecated (and by the way, they issue
+  an error, because the corresponding Tcl code is not available in the 'ico' Tcl
+  package) and will be removed in futures versions of the tcltk2 package. }
 
 \seealso{ \code{\link{tk2dde}}, \code{\link{tk2reg}} }
 
@@ -90,60 +108,28 @@ tt2 <- tktoplevel()
 ## Load a system icon (there are: "application", "asterisk", "error",
 ## "exclamation", "hand", "question", "information", "warning", and "winlogo".
 Warn <- tk2ico.load(res = "warning")
-tk2ico.info(Warn)
-## Change the text
-tk2ico.text(Warn)
-tk2ico.text(Warn) <- "Warning icon"
-tk2ico.text(Warn)
-## Get hicon
-tk2ico.hicon(Warn)
 ## Change the icon of my window tt2
 tk2ico.set(tt2, Warn)
 ## Do not forget to destroy icon to free resource when not needed any more
 tk2ico.destroy(Warn)
 rm(Warn)
-## Load an icon from the resource section of an exe, or dll
-Rico <- tk2ico.load(file.path(Sys.getenv("R_HOME"), "bin", "R.exe"), res = "R")
-tk2ico.info(Rico)
-tk2ico.set(tt2, Rico)
-tk2ico.destroy(Rico)
-rm(Rico)
 
-### Load one or several icons from an .ico file
-libdir <- file.path(.path.package(package = "tcltk2")[1], "gui")
-SVico <- tk2ico.create(file.path(libdir, "SciViews.ico"))
-## The various resolution icons created from this file
-tk2ico.info(SVico)
-## Change the default position to 1 (the second icon)
-tk2ico.pos(SVico) <- 1
-## Change only the small icon (use Alt-Tab to see the large one)
-tk2ico.set(tt2, SVico, type = "small")
+### Otherwise, the list of icons in a file are:
+tk2ico.list()
+## and for a given icon, the various sizes are:
+tk2ico.sizes(res = 4)
 
-## Set a taskbar icon, with both a left and right-click menu
-lmenu <- tkmenu(.TkRoot, tearoff = FALSE)
-tkadd(lmenu, "command", label = "Say hello",
-    command = function() cat("Hello from taskbar!\n"))
-rmenu <- tkmenu(.TkRoot, tearoff = FALSE)
-tkadd(rmenu, "command", label = "Say hello again",
-    command = function() cat("Hello again from taskbar!\n"))
-tk2ico.taskbar.add(SVico, pos = 1, text = "my R taskbar icon",
-    leftmenu = lmenu, rightmenu = rmenu)
-## Try left and right-click on the taskbar icon...
-## Change its text...
-tk2ico.taskbar.modify(SVico,  pos = 1, text = "text changed!")
-##... and delete it
-tk2ico.taskbar.delete(SVico)
+### One can set icon of a window from an .ico or .exe file directly
+tk2ico.setFromFile(tt, default = file.path(R.home("bin"), "Rgui.exe"))
+ 
+tk2ico.setFromFile(tt2, system.file("gui", "SciViews.ico", package = "tcltk2"))
 
-## Destroy the icons
-tk2ico.destroy(SVico)
-rm(SVico)
-
-## When done, dispose of the window and clean the workspace
+### When done, dispose of the window and clean the workspace
 tkdestroy(tt2)
-rm(list = c("libdir", "lmenu", "rmenu", "tt2"))
+rm(tt2)
 }
 }
 
 \keyword{ utilities }
 
-\concept{ icons, windows and taskbar }
+\concept{ icons, windows }

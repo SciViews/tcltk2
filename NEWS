@@ -1,5 +1,10 @@
 = tcltk2 news
 
+== Version 1.2-3
+
+* The Tk configuration sequence in .onLoad() is changed. 
+
+
 == Version 1.2-2
 
 * For some reasons, version 1.2-1 on CRAN looks like version 1.2-0 on R-Forge.

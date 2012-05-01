@@ -76,6 +76,52 @@
 				}
 			}')
 		}
+		
+		## Load additional ttk themes
+		try(tclRequire("ttk::theme::plastik"), silent = TRUE)
+		try(tclRequire("ttk::theme::keramik"), silent = TRUE)
+		try(tclRequire("ttk::theme::keramik_alt"), silent = TRUE)
+		try(tclRequire("ttk::theme::clearlooks"), silent = TRUE)
+		try(tclRequire("ttk::theme::radiance"), silent = TRUE)
+		
+		## Which ttk theme should we use?
+		## If the user specified a default theme, use it
+		if (!.loadTheme()) {
+			## ...otherwise, try to guess the best default value
+			themes <- try(tk2theme.list(), silent = TRUE)
+			if (!inherits(themes, "try-error")) {
+				if ("aqua" %in% themes) { # This must be aquaTk on a Mac
+					try(tk2theme("aqua"), silent = TRUE)
+				} else if ("vista" %in% themes) { # This must be Vista or Win 7
+					try(tk2theme("vista"), silent = TRUE)
+				} else if ("xpnative" %in% themes) { # This must be XP
+					try(tk2theme("xpnative"), silent = TRUE)
+				} else if ("winnative" %in% themes) { # This must be a pre-XP windows
+					try(tk2theme("winnative"), silent = TRUE)
+				} else if (.isUbuntu() && "radiance" %in% themes) {
+					try(tk2theme("radiance"), silent = TRUE)
+					## Special treatment for Ubuntu: change fonts to Ubuntu and Ubuntu mono
+					## and use white text on black for tooltips
+					tkfont.configure("TkDefaultFont", family = "Ubuntu", size = 11)
+					tkfont.configure("TkMenuFont", family = "Ubuntu", size = 11)
+					tkfont.configure("TkCaptionFont", family = "Ubuntu", size = 10)
+					tkfont.configure("TkSmallCaptionFont", family = "Ubuntu", size = 9)
+					tkfont.configure("TkTooltipFont", family = "Ubuntu", size = 9)
+					tkfont.configure("TkMenuFont", family = "Ubuntu", size = 11)
+					tkfont.configure("TkHeadingFont", family = "Ubuntu", size = 12)
+					tkfont.configure("TkIconFont", family = "Ubuntu", size = 11)
+					tkfont.configure("TkTextFont", family = "Ubuntu", size = 11)
+					tkfont.configure("TkFixedFont", family = "Ubuntu Mono", size = 11)
+					res <- tclRequire("tooltip")
+					if (inherits(res, "tclObj")) {
+						.Tcl(paste("set ::tooltip::labelOpts [list -highlightthickness 0",
+							"-relief solid -bd 1 -background black -fg white]"))
+					}
+				} else { # A modern "default" theme that fit not too bad in many situations
+					try(tk2theme("clearlooks"), silent = TRUE)
+				}
+			}
+		}		
 	}
 	
 	## Windows only
@@ -91,53 +137,6 @@
 		## Also register the DDE server as TclEval|R
         tk2dde("R")
     }
-	
-	## Load additional ttk themes
-	try(tclRequire("ttk::theme::plastik"), silent = TRUE)
-	try(tclRequire("ttk::theme::keramik"), silent = TRUE)
-	try(tclRequire("ttk::theme::keramik_alt"), silent = TRUE)
-	try(tclRequire("ttk::theme::clearlooks"), silent = TRUE)
-	try(tclRequire("ttk::theme::radiance"), silent = TRUE)
-	
-	## Which ttk theme should we use?
-	## If the user specified a default theme, use it
-	isUbuntu <- .isUbuntu()
-	if (!.loadTheme()) {
-		## ...otherwise, try to guess the best default value
-		themes <- tk2theme.list()
-		if ("aqua" %in% themes) { # This must be aquaTk on a Mac
-			try(tk2theme("aqua"), silent = TRUE)
-		} else if ("vista" %in% themes) { # This must be Vista or Win 7
-			try(tk2theme("vista"), silent = TRUE)
-		} else if ("xpnative" %in% themes) { # This must be XP
-			try(tk2theme("xpnative"), silent = TRUE)
-		} else if ("winnative" %in% themes) { # This must be a pre-XP windows
-			try(tk2theme("winnative"), silent = TRUE)
-		} else if (isUbuntu) {
-			try(tk2theme("radiance"), silent = TRUE)
-		} else { # A modern "default" theme that fit not too bad in many situations
-			try(tk2theme("clearlooks"), silent = TRUE)
-		}
-	}
-	## Special treatment for Ubuntu: change fonts to Ubuntu and Ubuntu mono
-	## and use white text on black for tooltips
-	if (isUbuntu && is.tk()) {
-		tkfont.configure("TkDefaultFont", family = "Ubuntu", size = 11)
-		tkfont.configure("TkMenuFont", family = "Ubuntu", size = 11)
-		tkfont.configure("TkCaptionFont", family = "Ubuntu", size = 10)
-		tkfont.configure("TkSmallCaptionFont", family = "Ubuntu", size = 9)
-		tkfont.configure("TkTooltipFont", family = "Ubuntu", size = 9)
-		tkfont.configure("TkMenuFont", family = "Ubuntu", size = 11)
-		tkfont.configure("TkHeadingFont", family = "Ubuntu", size = 12)
-		tkfont.configure("TkIconFont", family = "Ubuntu", size = 11)
-		tkfont.configure("TkTextFont", family = "Ubuntu", size = 11)
-		tkfont.configure("TkFixedFont", family = "Ubuntu Mono", size = 11)
-		res <- tclRequire("tooltip")
-		if (inherits(res, "tclObj")) {
-			.Tcl(paste("set ::tooltip::labelOpts [list -highlightthickness 0",
-				"-relief solid -bd 1 -background black -fg white]"))
-		}
-	}
 }
 
 .Last.lib <- function (libpath)

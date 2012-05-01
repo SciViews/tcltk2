@@ -83,10 +83,11 @@
 		tclRequire("dde")       # Version 1.2.2
         ## Not loaded automatically!
         #tclRequire("registry")  # Version 1.1.3
-        if (nzchar(r_arch <- .Platform$r_arch))
-			tcl("load", file.path(libname, pkgname, "libs", r_arch, "Winico06.dll"))
-		else
-			tcl("load", file.path(libname, pkgname, "libs", "Winico06.dll"))
+		## Support for winico.dll is drop from version 1.2-1!
+    #    if (nzchar(r_arch <- .Platform$r_arch))
+	#		tcl("load", file.path(libname, pkgname, "libs", r_arch, "Winico06.dll"))
+	#	else
+	#		tcl("load", file.path(libname, pkgname, "libs", "Winico06.dll"))
 		## Also register the DDE server as TclEval|R
         tk2dde("R")
     }

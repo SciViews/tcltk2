@@ -4,8 +4,11 @@
 \alias{tk2ico.destroy}
 \alias{tk2ico.hicon}
 \alias{tk2ico.info}
+\alias{tk2ico.list}
+\alias{tk2ico.sizes}
 \alias{tk2ico.load}
 \alias{tk2ico.pos<-}
+\alias{tk2ico.setFromFile}
 \alias{tk2ico.set}
 \alias{tk2ico.taskbar.add}
 \alias{tk2ico.taskbar.delete}
@@ -22,12 +25,17 @@
 }
 
 \usage{
-tk2ico.load(file = "shell32.dll", res = "application")
-tk2ico.create(iconfile)
+tk2ico.create(iconfile, res = 0, size = 16)
 tk2ico.destroy(icon)
+tk2ico.list(file = "shell32.dll")
+tk2ico.sizes(file = "shell32.dll", res = "application")
+tk2ico.load(file = "shell32.dll", res = "application", size = 16)
+tk2ico.set(win, icon, pos = NULL, type = c("all", "small", "big"))
+tk2ico.setFromFile(win, iconfile)
+
+## Deprecated functions since drop of winico.dll support
 tk2ico.hicon(icon)
 tk2ico.info(icon, convert = TRUE)
-tk2ico.set(win, icon, pos = NULL, type = c("all", "small", "big"))
 tk2ico.text(icon)
 tk2ico.text(icon) <- value
 tk2ico.pos(icon) <- value
@@ -37,16 +45,20 @@ tk2ico.taskbar.delete(icon)
 tk2ico.taskbar.modify(icon, pos = NULL, text = NULL)
 }
 
+
 \arguments{
-  \item{file}{ a file having icon resources (.exe, or .dll). }
-  \item{res}{ the name of the resource from where the icon should be extracted. }  
-  \item{iconfile}{ a file with a .ico extension, containing one or more Windows
-    icons. }
-  \item{icon}{ an icon object. }
-  \item{convert}{ do we convert the result into a data.frame? }
-  \item{win}{ a tk window, or an integer representing the handle (HWND) of a
+  \item{iconfile}{ a file with a .ico, or .exe extension, containing one or
+    more Windows icons }
+  \item{file}{ a file having icon resources (.exe, or .dll) }
+  \item{res}{ the name of the resource from where the icon should be extracted }
+  \item{size}{ the size of the icon to use. For windows icons, 16 should be
+    fine usually }
+  \item{win}{ a Tk window, or an integer representing the handle (HWND) of a
     foreign window whose icon will be changed (take care, the function returns
-	\code{TRUE} even if the handle is wrong! }
+	\code{TRUE} even if the handle is wrong! }  
+  \item{icon}{ an icon object. }
+
+  \item{convert}{ do we convert the result into a data.frame? }
   \item{pos}{ a position (starting from 0) pointing to an icon in a multi-icon
     object. Note that \code{pos} is not used in \code{tk2ico.set()} if
 	\code{type = "all"} (in this case, best icons matching both \"small\" and
@@ -54,7 +66,7 @@ tk2ico.taskbar.modify(icon, pos = NULL, text = NULL)
   \item{type}{ do we change only the small, the large, or both icons? }
   \item{value}{ a string with the new text for the icon in
     \code{tk2ico.text()} or a numerical value indicating the new default
-	position in the icon resource for \code{tk2ico.pos()} }
+	position in the icon resource for \code{tk2ico.pos()}. }
   \item{text}{ change a text for an icon. }
   \item{leftmenu}{ a \"tkwin\" object to display when the user left-clicks on
     the taskbar icon (usually, a Tk popup menu), or \code{NULL} for nothing. }
@@ -71,4 +83,4 @@ tk2ico.taskbar.modify(icon, pos = NULL, text = NULL)
 
 \keyword{ utilities }
 
-\concept{ icons, windows and taskbar }
+\concept{ icons, windows }

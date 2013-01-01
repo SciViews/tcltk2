@@ -139,9 +139,10 @@
     }
 }
 
-.Last.lib <- function (libpath)
+.onUnload <- function (libpath)
 {
-    ## Remove all currently scheduled tasks
+    # PhG: was .Last.lib()
+	## Remove all currently scheduled tasks
 	tclTaskDelete(id = NULL)
 }
 

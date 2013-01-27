@@ -117,8 +117,7 @@ export(makeTclNames,
        visibleItem,
        size,
        config,
-       "config<-",
-       .Last.lib)
+       "config<-")
 
 S3method(print, tclTask)
 S3method(tip, tk2widget)

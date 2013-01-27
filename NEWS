@@ -1,5 +1,10 @@
 = tcltk2 news
 
+== Version 1.3-4
+
+* Temporary objects are now located in SciViews:TempEnv instead of TempEnv.
+
+
 == Version 1.2-3
 
 * The Tk configuration sequence in .onLoad() is changed. 

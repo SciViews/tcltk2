@@ -113,7 +113,7 @@ tk2font.set  <- function (font, settings)
 tk2font.setstyle <- function (text = TRUE, system = FALSE, default.styles = FALSE)
 {
 	## Set default fonts according to currently defined style
-	## .SystemFonts and .Fonts must be defined in TempEnv!
+	## .SystemFonts and .Fonts must be defined in SciViews:TempEnv!
 
 	if (!is.tk()) {
 		warning("Package Tk is required but not loaded")
@@ -123,12 +123,12 @@ tk2font.setstyle <- function (text = TRUE, system = FALSE, default.styles = FALS
 	## This is a copy of assignTemp(), getTemp() and existsTemp() functions from
 	## svMisc, so that we do not link to this package
 	TempEnv <- function () {
-	    pos <-  match("TempEnv", search())
+	    pos <-  match("SciViews:TempEnv", search())
 	    if (is.na(pos)) { # Must create it
-	        TempEnv <- list()
-	        attach(TempEnv, pos = length(search()) - 1)
-	        rm(TempEnv)
-	        pos <- match("TempEnv", search())
+	        `SciViews:TempEnv` <- list()
+	        attach(`SciViews:TempEnv`, pos = length(search()) - 1)
+	        rm(`SciViews:TempEnv`)
+	        pos <- match("SciViews:TempEnv", search())
 	    }
 	    return(pos.to.env(pos))
 	}

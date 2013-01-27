@@ -26,13 +26,14 @@ tk2font.setstyle(text = TRUE, system = FALSE, default.styles = FALSE)
     font characteristics (list with components 'family', 'size', 'bold', 'italic',
     'underline' and 'overstrike'). }
   \item{text}{ do we synchronise text Tk fonts (text, titles, and fixed-font text)
-    with current settings, as in '.Fonts' in TempEnv? }
+    with current settings, as in \code{.Fonts} in \code{SciViews:TempEnv}? }
   \item{system}{ do we synchronise system Tk fonts (widgets, window caption,
     menus, tooltips, ...) with current system configuration? This is highly
     platform dependent. Currently, system settings are gathered only under Windows,
     thanks to the winSystemFonts() function. }
-  \item{default.styles}{ do we add .fontsStyleXXX in TempEnv, where XXX is one
-    of the four default styles: 'Classic', 'Alternate', 'Presentation' or 'Fancy'. }
+  \item{default.styles}{ do we add \code{.fontsStyleXXX} in
+    \code{SciViews:TempEnv}, where XXX is one of the four default styles:
+    'Classic', 'Alternate', 'Presentation' or 'Fancy'. }
 }
 
 \value{

@@ -215,7 +215,7 @@ tclTaskDelete <- function (id)
 		## Delete all current tasks
 		for (Task in ls(Tasks, all.names = TRUE))
 			tclAfterCancel(Tasks[[Task]]$task)
-		## Eliminate .tclTasks environment from TempEnv
+		## Eliminate .tclTasks environment from Sciviews:TempEnv
 		rm(list = ".tclTasks", envir = .TempEnv())
 	} else {
 		## Delete only one task

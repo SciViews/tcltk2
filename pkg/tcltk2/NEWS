@@ -1,6 +1,11 @@
 = tcltk2 news
 
-== Version 1.3-4
+== Version 1.2-5
+
+* Clarifications of license terms for R code and additional Tcl libraries.
+
+
+== Version 1.2-4
 
 * Temporary objects are now located in SciViews:TempEnv instead of TempEnv.
 

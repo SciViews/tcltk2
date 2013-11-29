@@ -194,10 +194,20 @@ tk2theme <- function (theme = NULL)
     if (is.null(theme)) {  # Get it
         res <- getOption("tk2theme")
     } else {  # Set it to theme
-        .Tcl(paste("ttk::style theme use", theme))  # Better to use tile::setTheme?
+        ## First, check if the theme is already loaded... or try loading it
+		loadedThemes <- tk2theme.list()
+		if (!theme %in% loadedThemes) {
+			## Could be plastik, keramik, keramik_alt, clearlooks, radiance 
+			res <- try(tclRequire(paste0("ttk::theme::", theme)), silent = TRUE)
+			if (inherits(res, "try-error"))
+				stop("Ttk theme ", theme, " is not found")
+		}
+		.Tcl(paste("ttk::style theme use", theme))  # Better to use tile::setTheme?
         ## And save current theme in option "tk2theme"
         options(tk2theme = theme)
-        res <- theme
+		## Make sure to homogenize background for old tk widgets (suggested by Milan Bouchet-Valat)
+		.Tcl(paste("tk_setPalette", tclvalue(.Tcl("ttk::style lookup TFrame -background"))))
+		res <- theme
     }
     return(res)
 }

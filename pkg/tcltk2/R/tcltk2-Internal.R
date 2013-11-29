@@ -77,12 +77,13 @@
 			}')
 		}
 		
-		## Load additional ttk themes
-		try(tclRequire("ttk::theme::plastik"), silent = TRUE)
-		try(tclRequire("ttk::theme::keramik"), silent = TRUE)
-		try(tclRequire("ttk::theme::keramik_alt"), silent = TRUE)
-		try(tclRequire("ttk::theme::clearlooks"), silent = TRUE)
-		try(tclRequire("ttk::theme::radiance"), silent = TRUE)
+		## Load additional ttk themes - No: load only on demand!
+		## Not done any more on startup, done on demand in tk2theme() now
+		#try(tclRequire("ttk::theme::plastik"), silent = TRUE)
+		#try(tclRequire("ttk::theme::keramik"), silent = TRUE)
+		#try(tclRequire("ttk::theme::keramik_alt"), silent = TRUE)
+		#try(tclRequire("ttk::theme::clearlooks"), silent = TRUE)
+		#try(tclRequire("ttk::theme::radiance"), silent = TRUE)
 		
 		## Which ttk theme should we use?
 		## If the user specified a default theme, use it
@@ -98,7 +99,7 @@
 					try(tk2theme("xpnative"), silent = TRUE)
 				} else if ("winnative" %in% themes) { # This must be a pre-XP windows
 					try(tk2theme("winnative"), silent = TRUE)
-				} else if (.isUbuntu() && "radiance" %in% themes) {
+				} else if (.isUbuntu()) {
 					try(tk2theme("radiance"), silent = TRUE)
 					## Special treatment for Ubuntu: change fonts to Ubuntu and Ubuntu mono
 					## and use white text on black for tooltips
@@ -126,7 +127,7 @@
 	
 	## Windows only
     if (.Platform$OS.type == "windows") {
-		tclRequire("dde")       # Version 1.2.2
+		try(tclRequire("dde"), silent = TRUE)       # Version 1.2.2
         ## Not loaded automatically!
         #tclRequire("registry")  # Version 1.1.3
 		## Support for winico.dll is drop from version 1.2-1!
@@ -135,7 +136,7 @@
 	#	else
 	#		tcl("load", file.path(libname, pkgname, "libs", "Winico06.dll"))
 		## Also register the DDE server as TclEval|R
-        tk2dde("R")
+        try(tk2dde("R"), silent = TRUE)
     }
 }
 

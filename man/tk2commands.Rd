@@ -105,6 +105,90 @@ tk2configList(x)
 
 \seealso{ \code{\link{tk2widgets}}, \code{\link{tk2tip}} }
 
+\examples{
+\dontrun{
+## These cannot be run by examples() but should be OK when pasted
+## into an interactive R session with the tcltk package loaded
+
+tt <- tktoplevel()
+# A label with a image and some text
+file <- system.file("gui", "SciViews.gif", package = "tcltk2")
+
+# Make this a tk2image function...
+Image <- tclVar()
+tkimage.create("photo", Image, file = file)
+
+tlabel <- tk2label(tt, image = Image,
+	text = "A label with an image")
+tkpack(tlabel)
+config(tlabel, compound = "left")
+
+tlabel2 <- tk2label(tt, text = "A disabled label")
+tkpack(tlabel2)
+disabled(tlabel2) <- TRUE
+
+fruits <- c("Apple", "Orange", "Banana")
+tcombo <- tk2combobox(tt, values = fruits)
+tkpack(tcombo)
+tkinsert(tcombo, 0, "Apple")
+
+## Buttons
+tbut <- tk2button(tt, text = "Enabled")
+tbut2 <- tk2button(tt, text = "Disabled")
+tkpack(tbut, tbut2)
+tkconfigure(tbut2, state = "disabled")
+
+tcheck <- tk2checkbutton(tt, text = "Some checkbox")
+tcheck2 <- tk2checkbutton(tt, text = "Disabled checkbox")
+tkconfigure(tcheck2, state = "disabled")
+tcheck3 <- tk2checkbutton(tt, text = "Disabled and selected")
+tkpack(tcheck, tcheck2, tcheck3)
+cbValue <- tclVar("1")
+tkconfigure(tcheck3, variable=cbValue)
+tkconfigure(tcheck3, state = "disabled")
+
+tradio <- tk2radiobutton(tt, text = "Some radiobutton")
+tradio2 <- tk2radiobutton(tt, text = "Disabled and checked")
+tkpack(tradio, tradio2)
+tkconfigure(tradio2, state = "checked")
+tkconfigure(tradio2, state = "disabled")
+
+## Menu allowing to change ttk theme
+topMenu <- tkmenu(tt)           # Create a menu
+tkconfigure(tt, menu = topMenu) # Add it to the 'tt' window
+themes <- tk2theme.list()
+themeMenu <- tkmenu(topMenu, tearoff = FALSE)
+if ("alt" %in% themes) tkadd(themeMenu, "command", label = "alt",
+    command = function() tk2theme("alt"))
+if ("aqua" %in% themes) tkadd(themeMenu, "command", label = "aqua",
+    command = function() tk2theme("aqua"))
+if ("clam" %in% themes) tkadd(themeMenu, "command", label = "clam",
+    command = function() tk2theme("clam"))
+tkadd(themeMenu, "command", label = "clearlooks",
+    command = function() tk2theme("clearlooks"))
+if ("classic" %in% themes) tkadd(themeMenu, "command", label = "classic",
+    command = function() tk2theme("classic"))
+if ("default" %in% themes) tkadd(themeMenu, "command", label = "default",
+    command = function() tk2theme("default"))
+tkadd(themeMenu, "command", label = "keramik",
+    command = function() tk2theme("keramik"))
+tkadd(themeMenu, "command", label = "plastik",
+    command = function() tk2theme("plastik"))
+tkadd(themeMenu, "command", label = "radiance (fonts change too)!",
+    command = function() tk2theme("radiance"))
+if ("vista" %in% themes) tkadd(themeMenu, "command", label = "vista",
+    command = function() tk2theme("vista"))
+if ("winnative" %in% themes) tkadd(themeMenu, "command", label = "winnative",
+    command = function() tk2theme("winnative"))
+if ("xpnative" %in% themes) tkadd(themeMenu, "command", label = "xpnative",
+    command = function() tk2theme("xpnative"))
+tkadd(themeMenu, "separator")
+tkadd(themeMenu, "command", label = "Quit", command = function() tkdestroy(tt))
+tkadd(topMenu, "cascade", label = "Theme", menu = themeMenu)
+tkfocus(tt)
+}
+}
+
 \keyword{ utilities }
 
 \concept{ Tcl/Tk widgets commands }

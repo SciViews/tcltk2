@@ -1,5 +1,20 @@
 = tcltk2 news
 
+== Version 1.2-6
+
+* No additional ttk themes are loaded on startup any more. The required
+  resources are now loaded on demand in the tk2theme() function [suggested by
+  Milan Bouchet-Valat & John Fox]. Note that the additional themes 'plastik',
+  'keramik', 'keramik_alt', 'clearlooks' and 'radiance' are not listed any more
+  with tk2theme.list(), unless their resources are loaded using, e.g.,
+  tk2theme("plastik"). Note also that the 'radiance' theme permanently changes
+  fonts used by the Ttk widgets to fonts identical, or close to those used by
+  Ubuntu.
+  
+* tk2theme() now tries to set the same background color for old tk widgets than
+  the color used by ttk widgets. Suggested by Milan Bouchet-Valat.
+
+
 == Version 1.2-5
 
 * Clarifications of license terms for R code and additional Tcl libraries.

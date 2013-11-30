@@ -7,6 +7,8 @@
   very simple example is also added in the document. The widget is very rich,
   and you will have to figure out by yourself how to access all its command from
   its original documentation.
+  
+* A tk2swaplist() dialog box is added.
 
 
 == Version 1.2-6

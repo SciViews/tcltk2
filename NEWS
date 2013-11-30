@@ -1,5 +1,14 @@
 = tcltk2 news
 
+== Version 1.2-7
+
+* A tk2tablelist() function added to create a tablelist widget (the Tcl package
+  was distributed with tcltk2, but no convenient widget creator provided). A
+  very simple example is also added in the document. The widget is very rich,
+  and you will have to figure out by yourself how to access all its command from
+  its original documentation.
+
+
 == Version 1.2-6
 
 * No additional ttk themes are loaded on startup any more. The required

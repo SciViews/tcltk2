@@ -22,6 +22,7 @@
 \alias{tk2separator}
 \alias{tk2spinbox}
 \alias{tk2table}
+\alias{tk2tablelist}
 \alias{tk2text}
 \alias{tk2ctext}
 \alias{tk2tree}
@@ -56,6 +57,7 @@ tk2scrollbar(parent, orientation = c("horizontal", "vertical"), \dots)
 tk2separator(parent, orientation = c("horizontal", "vertical"), \dots)
 tk2spinbox(parent, tip = "", \dots)
 tk2table(parent, \dots)
+tk2tablelist(parent, \dots)
 tk2text(parent, tip = "", \dots)
 tk2ctext(parent, tip = "", \dots)
 tk2tree(parent, tip = "", \dots)
@@ -195,6 +197,16 @@ tt2 <- tktoplevel()
 table1 <- tk2table(tt2, variable = "tclarray", rows = "3", cols = "2",
     titlerows = "1", selectmode = "extended", colwidth = "25", background = "white")
 tkpack(table1)
+
+## A tablelist example
+tt <- tktoplevel()
+tlist <- tk2tablelist(tt, columntitles = c("First column", "Second column"),
+    stretch = "all", expand = 1)
+tkpack(tlist, fill = "both")
+tkinsert(tlist, "end", c("first row", "another value"))
+tkinsert(tlist, "end", c("another row", "bla bla"))
+tbut <- tk2button(tt, text = "Done", command = function () tkdestroy(tt))
+tkpack(tbut)
 }
 }
 

@@ -361,6 +361,19 @@ tk2table <- function (parent, ...)
 	} else stop("Tcl package 'Tktable' must be installed first")
 }
 
+tk2tablelist <- function (parent, ...) 
+{
+    if (!is.ttk()) 
+        stop("Tcl/Tk >= 8.5 is required")
+    if (inherits(tclRequire("tablelist_tile", warn = FALSE), "tclObj")) {
+        w <- tkwidget(parent, "tablelist::tablelist", font = "TkDefaultFont", 
+            ...)
+        class(w) <- c("tk2tablelist", "tk2widget", class(w))
+        return(w)
+    }
+    else stop("Tcl package 'tablelist' must be installed first")
+}
+
 tk2text <- function (parent, tip = "", ...)
 {
 ### TODO: autohide scrollbars

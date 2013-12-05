@@ -1,5 +1,14 @@
 = tcltk2 news
 
+== Version 1.2-8
+
+* A better handling of fonts and colors for Tk widgets according to themes used
+  for Ttk widgets using tk2theme(). Also for menus.
+  
+* The default font was not reset properly after switching back from radiance
+  to another theme.
+
+
 == Version 1.2-7
 
 * A tk2tablelist() function added to create a tablelist widget (the Tcl package

@@ -122,7 +122,9 @@
 					try(tk2theme("clearlooks"), silent = TRUE)
 				}
 			}
-		}		
+		}
+		## Save default font as TkSysDefaultFont
+		tk2font.set("TkSysDefaultFont", tk2font.get("TkDefaultFont"))
 	}
 	
 	## Windows only

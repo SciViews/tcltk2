@@ -163,6 +163,7 @@ tk2font.setstyle <- function (text = TRUE, system = FALSE, default.styles = FALS
 		)
 		## Make sure these are correctly defined
 		assignTemp(".SystemFonts", sysfonts)
+		res <- TRUE
 	} else res <- character(0)
 
 	if (default.styles) {  # Define default styles

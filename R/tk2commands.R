@@ -202,14 +202,55 @@ tk2theme <- function (theme = NULL)
 			if (inherits(res, "try-error"))
 				stop("Ttk theme ", theme, " is not found")
 		}
-		.Tcl(paste("ttk::style theme use", theme))  # Better to use tile::setTheme?
+		## Themes (like radiance) change TkDefaultFont => reset it for the others
+		if (theme == "radiance") {
+			tkfont.configure("TkDefaultFont", family = "Ubuntu", size = 11)
+		} else tk2font.set("TkDefaultFont", tk2font.get("TkSysDefaultFont"))
+		## Change theme
+		.Tcl(paste("ttk::style theme use", theme))
         ## And save current theme in option "tk2theme"
         options(tk2theme = theme)
 		## Make sure to homogenize background for old tk widgets (suggested by Milan Bouchet-Valat)
-		.Tcl(paste("tk_setPalette", tclvalue(.Tcl("ttk::style lookup TFrame -background"))))
+		## Note: foreground not defined for plastik and keramik => workaround
+		fg <- tclvalue(.Tcl("ttk::style lookup TLabel -foreground"))
+		if (fg == "") fg <- "#000000"
+		afg <- tclvalue(.Tcl("ttk::style lookup TLabel -foreground active"))
+		if (afg == "") afg <- "#000000"
+		ffg <- tclvalue(.Tcl("ttk::style lookup TLabel -foreground focus"))
+		if (ffg == "") ffg <- "#000000"
+		hfg <- tclvalue(.Tcl("ttk::style lookup TLabel -foreground hover"))
+		if (hfg == "") hfg <- "#000000"
+		.Tcl(paste("tk_setPalette",
+			"background",
+				tclvalue(.Tcl("ttk::style lookup TLabel -background")),
+			"foreground", fg,
+			"activeBackground",
+				tclvalue(.Tcl("ttk::style lookup TLabel -background active")),
+			"activeForeground", afg,
+			"disabledForeground",
+				tclvalue(.Tcl("ttk::style lookup TLabel -foreground disabled")),
+			"highlightBackground",
+				tclvalue(.Tcl("ttk::style lookup TLabel -background focus")),
+			"highlightColor", ffg,
+			"insertBackground",
+				tclvalue(.Tcl("ttk::style lookup TLabel -background active")),
+			"selectBackground",
+				tclvalue(.Tcl("ttk::style lookup TText -selectbackground")),
+			"selectForeground",
+				tclvalue(.Tcl("ttk::style lookup TText -selectforeground")),
+			"selectColor",
+				tclvalue(.Tcl("ttk::style lookup TText -selectforeground")),
+			"throughColor", hfg))
+		
+		## Set menu font the same as label font
+		font <- tclvalue(.Tcl("ttk::style lookup TLabel -font"))
+		if (!length(font) || font == "") font <- "TkDefaultFont"
+		tk2font.set("TkMenuFont", tk2font.get(font))
+		
+		## Return the theme
 		res <- theme
     }
-    return(res)
+    res
 }
 ### Note: to change a style element: .Tcl('ttk::style configure TButton -font "helvetica 24"')
 ### Create a derived style: ttk::style configure Emergency.TButton -font "helvetica 24" -foreground red -padding 10

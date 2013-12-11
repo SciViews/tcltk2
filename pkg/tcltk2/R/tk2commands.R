@@ -229,18 +229,20 @@ tk2theme <- function (theme = NULL)
 			"activeForeground", afg,
 			"disabledForeground",
 				tclvalue(.Tcl("ttk::style lookup TLabel -foreground disabled")),
-			"highlightBackground",
-				tclvalue(.Tcl("ttk::style lookup TLabel -background focus")),
+			"highlightBackground", "white",
+				#tclvalue(.Tcl("ttk::style lookup TLabel -background focus")),
 			"highlightColor", ffg,
 			"insertBackground",
-				tclvalue(.Tcl("ttk::style lookup TLabel -background active")),
+				tclvalue(.Tcl("ttk::style lookup TLabel -foreground active")),
 			"selectBackground",
 				tclvalue(.Tcl("ttk::style lookup TText -selectbackground")),
 			"selectForeground",
 				tclvalue(.Tcl("ttk::style lookup TText -selectforeground")),
 			"selectColor",
 				tclvalue(.Tcl("ttk::style lookup TText -selectforeground")),
-			"throughColor", hfg))
+			"throughColor", hfg),
+			"fieldBackground",
+				tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground")))
 		
 		## Set menu font the same as label font
 		font <- tclvalue(.Tcl("ttk::style lookup TLabel -font"))

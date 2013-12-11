@@ -27,7 +27,13 @@ tk2canvas <- function (parent, tip = "", ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 ### TODO: use autoscroll here!
-	w <- tkwidget(parent, "canvas", ...)
+	## Default background to fieldbackground
+	if (any(names(list(...)) == "background")) {
+        w <- tkwidget(parent, "canvas", ...)
+    } else {
+        w <- tkwidget(parent, "canvas",
+            background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+    }
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2canvas", "tk2widget", class(w))
 	return(w)
@@ -154,37 +160,41 @@ tip = "", scroll = "both", autoscroll = "x", enabled = TRUE, ...)
 		w <- tkwidget(parent, "listbox", font = "TkDefaultFont",
 			borderwidth = 1, relief = "sunken", activestyle = "dotbox",
 			selectmode = selectmode, height = height, exportselection = 0,
-			background = "#ffffff", ...)
+			background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
 	} else { # We need to create a tk2frame as parent of the listbox
 		wf <- tk2frame(parent)
 		w <- tkwidget(wf, "listbox", font = "TkDefaultFont",
 			borderwidth = 1, relief = "sunken", activestyle = "dotbox",
 			selectmode = selectmode, height = height, exportselection = 0,
-			background = "#ffffff", ...)
+			background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
 	}
 	## Make it react to tk2theme changes, and integrate the listbox as much
 	## as possible with current ttk theme
-	restyleListbox <- function (W) {
-		## Restyle the listbox according to current ttk style
-		## Note: font is set to TkDefaultFont => already managed there!
-		tkconfigure(W,
-			foreground = tk2style("tk2entry", "foreground",
-				default = "#000000"),
-			borderwidth = tk2style("", "borderwidth", default = 0),
-			disabledforeground = tk2style("tk2entry", "foreground",
-				"disabled", default = "#a3a3a3"),
-			highlightbackground = tk2style("tk2entry", "selectbackground",
-				default = "#c3c3c3"),
-			highlightcolor = tk2style("tk2entry", "selectbackground",
-				default = "#c3c3c3"),
-			selectbackground = tk2style("tk2entry", "selectbackground",
-				default = "#c3c3c3"),
-			selectforeground = tk2style("tk2entry", "selectforeground",
-				default = "#ffffff")
-		)
-	}
+	#restyleListbox <- function (W) {
+	#	## Restyle the listbox according to current ttk style
+	#	## Note: font is set to TkDefaultFont => already managed there!
+	#	tkconfigure(W,
+	#		foreground = tk2style("tk2entry", "foreground",
+	#			default = "#000000"),
+	#		borderwidth = tk2style("", "borderwidth", default = 0),
+	#		disabledforeground = tk2style("tk2entry", "foreground",
+	#			"disabled", default = "#a3a3a3"),
+	#		highlightbackground = tk2style("tk2entry", "selectbackground",
+	#			default = "#c3c3c3"),
+	#		highlightcolor = tk2style("tk2entry", "selectbackground",
+	#			default = "#c3c3c3"),
+	#		selectbackground = tk2style("tk2entry", "selectbackground",
+	#			default = "#c3c3c3"),
+	#		selectforeground = tk2style("tk2entry", "selectforeground",
+	#			default = "#ffffff")
+	#	)
+	#}
 	## Restyle it now
-	restyleListbox(w)
+	#restyleListbox(w)
+	restyleListbox <- function (W) {
+		tkconfigure(W, background =
+			.Tcl("ttk::style lookup TEntry -fieldbackground"))
+	}
 	
 	## If there are values and/or selections, populate the list now
 	for (item in values)
@@ -229,7 +239,8 @@ tk2mclistbox <- function (parent, tip ="", ...)
 	res <- tclRequire("mclistbox")
 	if (!inherits(res, "tclObj"))
 		stop("Impossible to load the Tcl mclistbox package; check your Tcl/Tk installation")
-	w <- tkwidget(parent, "mclistbox::mclistbox", font = "TkDefaultFont", ...)
+	w <- tkwidget(parent, "mclistbox::mclistbox", font = "TkDefaultFont",
+		background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
 	tkconfigure(w, relief = "flat")
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2mclistbox", "tk2widget", class(w))
@@ -342,8 +353,16 @@ tk2separator <- function (parent, orientation = c("horizontal", "vertical"), ...
 tk2spinbox <- function (parent, tip = "", ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
-	w <- tkwidget(parent, "spinbox", font = "TkDefaultFont",
-		relief = "solid", borderwidth = 1, ...)
+	## Default background to fieldbackground
+	if (any(names(list(...)) == "background")) {
+        w <- tkwidget(parent, "spinbox", font = "TkDefaultFont",
+			relief = "solid", borderwidth = 1, ...)
+    } else {
+        w <- tkwidget(parent, "spinbox", font = "TkDefaultFont",
+			relief = "solid", borderwidth = 1,
+            background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+    }
+	
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2spinbox", "tk2widget", class(w))
 	return(w)
@@ -366,8 +385,17 @@ tk2tablelist <- function (parent, ...)
     if (!is.ttk()) 
         stop("Tcl/Tk >= 8.5 is required")
     if (inherits(tclRequire("tablelist_tile", warn = FALSE), "tclObj")) {
-        w <- tkwidget(parent, "tablelist::tablelist", font = "TkDefaultFont", 
-            ...)
+        ## Default background to fieldbackground
+		if (any(names(list(...)) == "background")) {
+			w <- tkwidget(parent, "tablelist::tablelist",
+				font = "TkDefaultFont", ...)
+		} else {
+			w <- tkwidget(parent, "tablelist::tablelist",
+				font = "TkDefaultFont",
+				background = .Tcl("ttk::style lookup TEntry -fieldbackground"),
+				...)
+		}
+		
         class(w) <- c("tk2tablelist", "tk2widget", class(w))
         return(w)
     }
@@ -378,7 +406,15 @@ tk2text <- function (parent, tip = "", ...)
 {
 ### TODO: autohide scrollbars
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
-	w <- tkwidget(parent, "text", font = "TkTextFont", ...)
+	
+	## Default background to fieldbackground
+	if (any(names(list(...)) == "background")) {
+		w <- tkwidget(parent, "text", font = "TkTextFont", ...)
+	} else {
+		w <- tkwidget(parent, "text", font = "TkTextFont",
+			background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+	}
+	
 	tkconfigure(w, relief = "flat")
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2text", "tk2widget", class(w))
@@ -390,7 +426,15 @@ tk2ctext <- function (parent, tip = "", ...)
 ### TODO: autohide scrollbars
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	tclRequire("ctext")
-	w <- tkwidget(parent, "ctext", font = "TkFixedFont", ...)
+	
+	## Default background to fieldbackground
+	if (any(names(list(...)) == "background")) {
+		w <- tkwidget(parent, "ctext", font = "TkFixedFont", ...)
+	} else {
+		w <- tkwidget(parent, "ctext", font = "TkFixedFont",
+			background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+	}
+	
 	tkconfigure(w, relief = "flat")
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2ctext", "tk2widget", class(w))

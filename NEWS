@@ -1,5 +1,15 @@
 = tcltk2 news
 
+== Version 1.2-9
+
+* New theme handling introduced in version 1.2-8 resulted in an invisible caret
+  in text widget.
+  
+* Further tweaking of color themes: now fieldbackground for entry, combobox,
+  canvas, listbox, mclistbox, tablelist, spinbox, text and ctext widgets (build
+  using old Tk widgets or megawidgets) now default with the correct theme color.
+
+
 == Version 1.2-8
 
 * A better handling of fonts and colors for Tk widgets according to themes used

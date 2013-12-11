@@ -5,7 +5,7 @@ if {[file isdirectory [file join $dir radiance]]} {
         package ifneeded ttk::theme::radiance 0.1 \
             [list source [file join $dir radiance8.5.tcl]]
     } else {
-        package ifneeded tile::theme::clearlooks 0.1 \
+        package ifneeded tile::theme::radiance 0.1 \
             [list source [file join $dir radiance8.4.tcl]]
     }
 }

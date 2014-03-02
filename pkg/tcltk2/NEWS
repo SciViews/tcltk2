@@ -1,5 +1,10 @@
 = tcltk2 news
 
+== Version 1.2-10
+
+* Reworked Author field in the DESCRIPTION file.
+
+
 == Version 1.2-9
 
 * New theme handling introduced in version 1.2-8 resulted in an invisible caret

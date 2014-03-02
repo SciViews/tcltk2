@@ -31,8 +31,10 @@ tk2canvas <- function (parent, tip = "", ...)
 	if (any(names(list(...)) == "background")) {
         w <- tkwidget(parent, "canvas", ...)
     } else {
-        w <- tkwidget(parent, "canvas",
-            background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+        background <- tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground"))
+		if (background == "") background <- "white"
+		w <- tkwidget(parent, "canvas",
+            background = background, ...)
     }
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2canvas", "tk2widget", class(w))
@@ -156,17 +158,19 @@ tip = "", scroll = "both", autoscroll = "x", enabled = TRUE, ...)
 	}
 	
 	## Location of the widget depends if we add scrollbars or not
+	background <- tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground"))
+	if (background == "") background <- "white"
 	if (scroll == "none") {
 		w <- tkwidget(parent, "listbox", font = "TkDefaultFont",
 			borderwidth = 1, relief = "sunken", activestyle = "dotbox",
 			selectmode = selectmode, height = height, exportselection = 0,
-			background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+			background = background, ...)
 	} else { # We need to create a tk2frame as parent of the listbox
 		wf <- tk2frame(parent)
 		w <- tkwidget(wf, "listbox", font = "TkDefaultFont",
 			borderwidth = 1, relief = "sunken", activestyle = "dotbox",
 			selectmode = selectmode, height = height, exportselection = 0,
-			background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+			background = background, ...)
 	}
 	## Make it react to tk2theme changes, and integrate the listbox as much
 	## as possible with current ttk theme
@@ -192,8 +196,9 @@ tip = "", scroll = "both", autoscroll = "x", enabled = TRUE, ...)
 	## Restyle it now
 	#restyleListbox(w)
 	restyleListbox <- function (W) {
-		tkconfigure(W, background =
-			.Tcl("ttk::style lookup TEntry -fieldbackground"))
+		background <- tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground"))
+		if (background == "") background <- "white"
+		tkconfigure(W, background = background)
 	}
 	
 	## If there are values and/or selections, populate the list now
@@ -239,8 +244,11 @@ tk2mclistbox <- function (parent, tip ="", ...)
 	res <- tclRequire("mclistbox")
 	if (!inherits(res, "tclObj"))
 		stop("Impossible to load the Tcl mclistbox package; check your Tcl/Tk installation")
+	
+	background <- tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground"))
+	if (background == "") background <- "white"
 	w <- tkwidget(parent, "mclistbox::mclistbox", font = "TkDefaultFont",
-		background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+		background = background, ...)
 	tkconfigure(w, relief = "flat")
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2mclistbox", "tk2widget", class(w))
@@ -358,9 +366,11 @@ tk2spinbox <- function (parent, tip = "", ...)
         w <- tkwidget(parent, "spinbox", font = "TkDefaultFont",
 			relief = "solid", borderwidth = 1, ...)
     } else {
-        w <- tkwidget(parent, "spinbox", font = "TkDefaultFont",
+        background <- tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground"))
+		if (background == "") background <- "white"
+		w <- tkwidget(parent, "spinbox", font = "TkDefaultFont",
 			relief = "solid", borderwidth = 1,
-            background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+            background = background, ...)
     }
 	
 	if (tip != "") tk2tip(w, tip)
@@ -390,10 +400,10 @@ tk2tablelist <- function (parent, ...)
 			w <- tkwidget(parent, "tablelist::tablelist",
 				font = "TkDefaultFont", ...)
 		} else {
+			background <- tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground"))
+			if (background == "") background <- "white"
 			w <- tkwidget(parent, "tablelist::tablelist",
-				font = "TkDefaultFont",
-				background = .Tcl("ttk::style lookup TEntry -fieldbackground"),
-				...)
+				font = "TkDefaultFont", background = background, ...)
 		}
 		
         class(w) <- c("tk2tablelist", "tk2widget", class(w))
@@ -411,8 +421,10 @@ tk2text <- function (parent, tip = "", ...)
 	if (any(names(list(...)) == "background")) {
 		w <- tkwidget(parent, "text", font = "TkTextFont", ...)
 	} else {
+		background <- tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground"))
+		if (background == "") background <- "white"
 		w <- tkwidget(parent, "text", font = "TkTextFont",
-			background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+			background = background, ...)
 	}
 	
 	tkconfigure(w, relief = "flat")
@@ -431,8 +443,10 @@ tk2ctext <- function (parent, tip = "", ...)
 	if (any(names(list(...)) == "background")) {
 		w <- tkwidget(parent, "ctext", font = "TkFixedFont", ...)
 	} else {
+		background <- tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground"))
+		if (background == "") background <- "white"
 		w <- tkwidget(parent, "ctext", font = "TkFixedFont",
-			background = .Tcl("ttk::style lookup TEntry -fieldbackground"), ...)
+			background = background, ...)
 	}
 	
 	tkconfigure(w, relief = "flat")

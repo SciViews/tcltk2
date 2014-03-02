@@ -4,6 +4,10 @@
 
 * Reworked Author field in the DESCRIPTION file.
 
+* A bug in tk2listbox() and several other tk2XXX() widgets when it is not
+  possible to get fieldbackground color for the TEntry widget is corrected.
+  (thanks Jaime Egido)
+
 
 == Version 1.2-9
 

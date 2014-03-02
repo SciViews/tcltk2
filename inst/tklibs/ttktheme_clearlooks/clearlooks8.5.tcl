@@ -89,6 +89,7 @@ namespace eval ttk::theme::clearlooks {
 
         ## Buttons.
         #
+        ttk::style configure TButton -anchor center
         ttk::style configure TButton -padding {10 0}
         ttk::style layout TButton {
             Button.button -children {

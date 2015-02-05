@@ -1,5 +1,17 @@
 = tcltk2 news
 
+== Version 1.2-11
+
+* After a problem for active menu items not displayed in a contrasted color on
+  some platforms, tk2menu() function receives two new arguments:
+  activebackground and activeforeground, but reasonable colors are used in case
+  these are not provided, with a fallback to white on darkblue in case it is not
+  possible to determine the color used for the current theme. That color is
+  *not* change when the theme is changed of existing menu items (but it is for
+  future menu items). This is due to the fact that Tk menus do not follow the
+  ttk styling scheme.
+  
+
 == Version 1.2-10
 
 * Reworked Author field in the DESCRIPTION file.

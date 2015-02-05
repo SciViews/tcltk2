@@ -44,7 +44,7 @@ tk2listbox(parent, values, value, selection, selectmode = c("extended", "single"
     "browse", "multiple"), height = 5, tip = "", scroll = "both",
     autoscroll = "x", enabled = TRUE, \dots)
 tk2mclistbox(parent, tip ="", \dots)
-tk2menu(parent, \dots)
+tk2menu(parent, activebackground, activeforeground, \dots)
 tk2menubutton(parent, tip = "", \dots)
 tk2message(parent, text = "", justify = c("left", "center", "right"),
     width = -1, aspect = 150, tip = "", \dots)
@@ -91,6 +91,10 @@ tk2tree(parent, tip = "", \dots)
   \item{aspect}{ sets the aspect ratio of the widget (100 = square, 200 = twice as large,
     50 = twice as tall). Only used if \code{width} is negative. }
   \item{orientation}{ either \code{"horizontal"} or \code{"vertical"}. }
+  \item{activebackground}{ color to use for active background of menu items (if
+    not provided, a reasonable default value is used). }
+  \item{activeforeground}{ color to use for active foreground of menu items (if
+    not provided, a reasonable default value is used). }
   \item{\dots}{ further arguments passed to the widget. }
 }
 

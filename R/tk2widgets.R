@@ -255,13 +255,30 @@ tk2mclistbox <- function (parent, tip ="", ...)
 	return(w)
 }
 
-tk2menu <- function (parent, ...)
+#tk2menu <- function (parent, ...)
+#{
+#	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
+#	w <- tkwidget(parent, "menu", ...)
+#	class(w) <- c("tk2menu", "tk2widget", class(w))
+#	return(w)
+#}
+
+tk2menu <- function (parent, activebackground, activeforeground, ...) 
 {
-	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
-	w <- tkwidget(parent, "menu", ...)
-	class(w) <- c("tk2menu", "tk2widget", class(w))
-	return(w)
+    if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
+    w <- tkwidget(parent, "menu", ...)
+    if (missing(activebackground))
+		activebackground <- tk2style("tk2button", "selectbackground")
+    if (activebackground == "") activebackground = "darkblue" # Default value
+    if (missing(activeforeground))
+		activeforeground <- tk2style("tk2button", "selectforeground")
+    if (activeforeground == "") activeforeground = "white" # Default value
+    tkconfigure(w, activebackground = activebackground,
+		activeforeground = activeforeground)
+    class(w) <- c("tk2menu", "tk2widget", class(w))
+    return(w)
 }
+
 
 tk2menubutton <- function (parent, tip = "", ...)
 {

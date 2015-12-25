@@ -50,7 +50,8 @@ package require widget
 package require tile
 
 snit::widget widget::scrolledwindow {
-    hulltype ttk::frame
+    hulltype frame
+    #hulltype ttk::frame
 
     component hscroll
     component vscroll

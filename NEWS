@@ -1,5 +1,11 @@
 = tcltk2 news
 
+== Version 1.2-12
+
+* A bug led to incorrect tk2list.set(), tk2list.insert() and tk2list.delete()
+  treatment in case of tk2combobox widgets. Corrected.
+
+
 == Version 1.2-11
 
 * After a problem for active menu items not displayed in a contrasted color on

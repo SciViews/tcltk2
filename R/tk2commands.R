@@ -20,7 +20,7 @@ tk2column <- function (widget, action = c("add", "configure", "delete", "names",
 tk2list.set <- function (widget, items)
 {
 	## Set a list of values for a widget (e.g., combobox)
-	if (inherits(widget, "ttk2combobox")) {
+	if (inherits(widget, "tk2combobox")) {
         ## ttk::combobox uses -values parameter
         tkconfigure(widget, values = as.character(items))
     } else {
@@ -36,7 +36,7 @@ tk2list.set <- function (widget, items)
 tk2list.insert <- function (widget, index = "end", ...)
 {
 	## Insert one or more items in a list
-	if (inherits(widget, "ttk2combobox")) {
+	if (inherits(widget, "tk2combobox")) {
         ## ttk::combobox uses -values parameter
 		Items <- as.character(unlist(list(...)))
 		if (length(Items) < 1) return()	# Nothing to insert
@@ -63,7 +63,7 @@ tk2list.insert <- function (widget, index = "end", ...)
 tk2list.delete <- function (widget, first, last = first)
 {
 	## Delete one or more items from a list
-	if (inherits(widget, "ttk2combobox")) {
+	if (inherits(widget, "tk2combobox")) {
         ## ttk::combobox uses -values parameter
 		List <- as.character(tcl(widget, "cget", "-values"))
 		if (length(List) < 2 && List == "") return(List)	# The list in empty

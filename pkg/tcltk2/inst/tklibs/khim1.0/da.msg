@@ -96,6 +96,9 @@ namespace eval ::khim {
     ::msgcat::mcset da {Unicode...} {Unicode...}
 
     ::msgcat::mcset da {Use KHIM} {Benyt KHIM}
+    
+    ::msgcat::mcset da {Do you want to save this configuration on disk?} \
+    {Do you want to save this configuration on disk?}
 
 }
 

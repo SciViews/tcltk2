@@ -22,8 +22,10 @@
 #
 #----------------------------------------------------------------------
 
-package require Tcl 8.4
-package require Tk 8.4
+# PhG: customized for tcltk2 to use ttk widgets
+
+package require Tcl 8.5
+package require Tk 8.5
 package require msgcat 1.2
 package require autoscroll 1.0
 
@@ -95,8 +97,8 @@ namespace eval khim {
 }
 
 # Load up message catalogs for the locale
-
-namespace eval khim [list ::msgcat::mcload [file dirname [info script]]]
+::msgcat::mcload [file join [file dirname [info script]] msgs]
+#namespace eval khim [list ::msgcat::mcload [file join[file dirname [info script]] msgs]]
 
 # Compressed table of which Unicode code points in the BMP are printable
 # characters. The table is read, "0x0000-0x001f are not printable,
@@ -296,71 +298,79 @@ proc khim::getOptions {w} {
 
     # Create GUI and manage geometry
 
-    checkbutton $w.v -variable ::khim::inputUse -text [mc "Use KHIM"]
-    label $w.l1 -text [mc "Compose key:"]
-    button $w.b1 -textvariable khim::inputComposeKey \
+    ttk::checkbutton $w.v -variable ::khim::inputUse -text [mc "Use KHIM"]
+    ttk::label $w.l1 -text [mc "Compose key:"]
+    ttk::button $w.b1 -textvariable khim::inputComposeKey \
 	-command [list ::khim::GetComposeKey $w.b1]
-    labelframe $w.lf1 -text [mc "Key sequences"] -padx 5 -pady 5 -width 400
+    #labelframe $w.lf1 -text [mc "Key sequences"] -padx 5 -pady 5 -width 400
+    ttk::labelframe $w.lf1 -text [mc "Key sequences"]
     listbox $w.lf1.lb -height 20 -yscroll [list $w.lf1.y set] \
 	-font {Courier 12} -width 8 -height 10 \
-	-exportselection 0
+	-exportselection 0 -background [ttk::style lookup TEntry -fieldbackground]
     bind $w.lf1.lb <<ListboxSelect>> [list ::khim::Select %W]
-    scrollbar $w.lf1.y -orient vertical -command [list $w.lf1.lb yview]
-    frame $w.lf1.f1
-    label $w.lf1.f1.l1 -text [mc "Input key sequence"]
+    ttk::scrollbar $w.lf1.y -orient vertical -command [list $w.lf1.lb yview]
+    ttk::frame $w.lf1.f1
+    ttk::label $w.lf1.f1.l1 -text [mc "Input key sequence"]
     entry $w.lf1.f1.e1 -textvariable ::khim::inputSequence -width 2 \
-	-font {Courier 12}
+	-font {Courier 12} -background [ttk::style lookup TEntry -fieldbackground] \
+    -relief flat -borderwidth 1
     bind $w.lf1.f1.e1 <FocusIn> {
 	%W selection from 0
 	%W selection to end
     }
     grid $w.lf1.f1.l1 $w.lf1.f1.e1
     grid columnconfigure $w.lf1.f1 2 -weight 1
-    frame $w.lf1.f2
-    label $w.lf1.f2.l1 -text [mc "Character"]
+    ttk::frame $w.lf1.f2
+    ttk::label $w.lf1.f2.l1 -text [mc "Character"]
     entry $w.lf1.f2.e1 -textvariable ::khim::inputCharacter -width 2 \
-	-font {Courier 12}
+	-font {Courier 12} -background [ttk::style lookup TEntry -fieldbackground] \
+    -relief flat -borderwidth 1
     bind $w.lf1.f2.e1 <FocusIn> {
 	%W selection from 0
 	%W selection to end
     }
-    button $w.lf1.f2.b1 -text [mc "Unicode..."] \
+    ttk::button $w.lf1.f2.b1 -text [mc "Unicode..."] \
 	-command [list ::khim::FocusAndInsertSymbol $w.lf1.f2.e1]
 
     grid $w.lf1.f2.l1 $w.lf1.f2.e1
-    grid $w.lf1.f2.b1 -row 0 -column 2 -sticky w -padx {20 0}
+    grid $w.lf1.f2.b1 -row 0 -column 2 -sticky w -padx {20 0} -pady 10
     grid columnconfigure $w.lf1.f2 3 -weight 1
-    grid $w.lf1.lb -row 0 -column 0 -sticky nsew -rowspan 5
-    grid $w.lf1.y -row 0 -column 1 -sticky ns -rowspan 5
-    frame $w.lf1.f3
-    button $w.lf1.f3.b1 -text [mc Change] \
+    grid $w.lf1.lb -row 0 -column 0 -sticky nsew -rowspan 5 -padx {5 0} -pady 5
+    grid $w.lf1.y -row 0 -column 1 -sticky ns -rowspan 5 -pady 5
+    ttk::frame $w.lf1.f3
+    ttk::button $w.lf1.f3.b1 -text [mc Change] -width -6 \
 	-command [list ::khim::ChangeSequence $w]
-    button $w.lf1.f3.b2 -text [mc Delete] \
+    ttk::button $w.lf1.f3.b2 -text [mc Delete] -width -6 \
 	-command [list ::khim::DeleteSequence $w]
     grid $w.lf1.f1 -row 0 -column 2 -sticky e -padx {20 0}
     grid $w.lf1.f2 -row 1 -column 2 -sticky e -padx {20 0}
-    grid $w.lf1.f3.b1 $w.lf1.f3.b2 -padx 5 -sticky ew
+    grid $w.lf1.f3.b1 $w.lf1.f3.b2 -padx 5 -sticky ew  -pady 10
     grid columnconfigure $w.lf1.f3 {0 1} -weight 1 -uniform A
     grid $w.lf1.f3 -row 3 -column 2 -sticky e -padx 20
     
     grid rowconfigure $w.lf1 2 -weight 1
     grid columnconfigure $w.lf1 3 -weight 1
     ::autoscroll::autoscroll $w.lf1.y
-    frame $w.bf
-    button $w.bf.ok -text [mc OK] -command [list ::khim::OK $w]
-    button $w.bf.apply -text [mc Apply] -command [list ::khim::Apply $w]
-    button $w.bf.cancel -text [mc Cancel] -command [list destroy $w]
-    button $w.bf.help -text [mc Help...] \
+    ttk::frame $w.bf
+    ttk::button $w.bf.ok -text [mc OK] -width -6 -command [list ::khim::OK $w]
+    ttk::button $w.bf.apply -text [mc Apply] -width -6 -command [list ::khim::Apply $w]
+    ttk::button $w.bf.cancel -text [mc Cancel] -width -6 -command [list destroy $w]
+    ttk::button $w.bf.help -text [mc Help...] -width -6 \
 	-command [list ::khim::showHelp $w.help]
-    grid $w.bf.ok -row 0 -column 0 -padx 5 -sticky ew
-    grid $w.bf.apply -row 0 -column 1 -padx 5 -sticky ew
-    grid $w.bf.cancel -row 0 -column 2 -padx 5 -sticky ew
-    grid $w.bf.help -row 0 -column 4 -padx 5
+    #grid $w.bf.ok -row 0 -column 0 -padx 5 -sticky ew
+    #grid $w.bf.apply -row 0 -column 1 -padx 5 -sticky ew
+    #grid $w.bf.cancel -row 0 -column 2 -padx 5 -sticky ew
+    #grid $w.bf.help -row 0 -column 4 -padx 5
+    grid $w.bf.help -row 0 -column 0 -padx {10 5} -sticky ew -pady {5 15}
+    grid $w.bf.cancel -row 0 -column 1 -padx 5 -sticky ew -pady {5 15}
+    grid $w.bf.apply -row 0 -column 2 -padx 5 -sticky ew -pady {5 15}
+    grid $w.bf.ok -row 0 -column 4 -padx {5 10} -pady {5 15}
+    
     grid columnconfigure $w.bf 3 -weight 1
     grid columnconfigure $w.bf {0 1 2 4} -uniform A
-    grid $w.v -columnspan 2 -sticky w
-    grid $w.l1 $w.b1 -sticky w
-    grid $w.lf1 -columnspan 2 -sticky nsew -padx 5 -pady 5
+    grid $w.v -columnspan 2 -sticky w  -padx 5 -pady 10
+    grid $w.l1 $w.b1 -sticky w  -padx 5 -pady 10
+    grid $w.lf1 -columnspan 2 -sticky nsew -padx 5 -pady 5 -ipadx 10 -ipady 10
     grid $w.bf -pady 5 -sticky ew -columnspan 2
     grid columnconfigure $w 1 -weight 1
 
@@ -444,14 +454,14 @@ proc khim::showHelp {w} {
     if {$text eq "HELPTEXT"} {
 	# This must be a version of Tcl that doesn't support the root
 	# locale.  Do The Right Thing anyway
-	set locale [::msgcat::mclocale]
-	::msgcat::mclocale en
+	#set locale [::msgcat::mclocale]
+###	::msgcat::mclocale en
 	set text [string trim [mc HELPTEXT]]
 	if {$text eq "HELPTEXT"} {
-	    ::msgcat::mcload $KHIMDir
+	    #::msgcat::mcload $KHIMDir
 	    set text [string trim [mc HELPTEXT]]
 	}
-	::msgcat::mclocale $locale
+###	::msgcat::mclocale $locale
     }
     regsub -all -line {^[ \t]+} $text {} text
     regsub -all -line {[ \t]+$} $text {} text
@@ -461,11 +471,11 @@ proc khim::showHelp {w} {
     $w.t insert insert $text
     $w.t see 1.0
     $w.t configure -state disabled
-    scrollbar $w.y -command [list $w.t yview] -orient vertical
-    button $w.ok -text [mc OK] -command [list destroy $w]
+    ttk::scrollbar $w.y -command [list $w.t yview] -orient vertical
+    ttk::button $w.ok -text [mc OK] -width -6 -command [list destroy $w]
     grid $w.t -row 0 -column 0 -sticky nsew
     grid $w.y -row 0 -column 1 -sticky ns
-    grid $w.ok -pady 5 -row 1 -column 0 -columnspan 2
+    grid $w.ok -padx 10 -pady 15 -row 1 -column 0 -columnspan 2
     grid rowconfigure $w 0 -weight 1
     grid columnconfigure $w 0 -weight 1
 
@@ -525,14 +535,14 @@ proc khim::GetComposeKey {parent} {
     if {$text eq "SELECT COMPOSE KEY"} {
 	# This must be a version of Tcl that doesn't support the root
 	# locale.  Do The Right Thing anyway
-	set locale [::msgcat::mclocale]
-	::msgcat::mclocale en
+	#set locale [::msgcat::mclocale]
+###	#::msgcat::mclocale en
 	set text [string trim [mc "SELECT COMPOSE KEY"]]
 	if {$text eq "SELECT COMPOSE KEY"} {
-	    ::msgcat::mcload $KHIMDir
+	    #::msgcat::mcload $KHIMDir
 	    set text [string trim [mc "SELECT COMPOSE KEY"]]
 	}
-	::msgcat::mclocale $locale
+###	::msgcat::mclocale $locale
     }
     grid [label $w.l -text $text]
     bind $w.l <Any-Key> [list set ::khim::inputComposeKey %K]
@@ -1639,8 +1649,10 @@ proc khim::CMapInteractor {w} {
 	set CMapInputCodePage($map) 0
 	set CMapCodePage($map) 0
     }
-    grid [label $map.l1 -text [mc {Select code page:}]] \
+    grid [ttk::label $map.l1 -text [mc {Select code page:}]] \
 	-row 0 -column 0 -sticky e
+    
+    ## PhG: if Tk 8.6, I could use ttk::spinbox
     grid [spinbox $map.spin -textvariable khim::CMapInputCodePage($map) \
 	      -width 4] \
 	-row 0 -column 1 -sticky w
@@ -1659,15 +1671,24 @@ proc khim::CMapInteractor {w} {
     grid [canvas $c -width 400 -height 400 \
 	      -bg $CMapBackground($map) -takefocus 1] \
 	-columnspan 2 -padx 3 -pady 3
-    grid [frame $map.f] -row 2 -column 0 -columnspan 2 -sticky ew -pady 3
-    button $map.f.b1 -text [mc OK] -command [list khim::CMapOK $map]
-    button $map.f.b2 -text [mc Cancel] -command [list khim::CMapCancel $map]
-    button $map.f.b3 -text [mc Help...] \
+    grid [ttk::frame $map.f] -row 2 -column 0 -columnspan 2 -sticky ew -pady 3
+    #button $map.f.b1 -text [mc OK] -command [list khim::CMapOK $map]
+    #button $map.f.b2 -text [mc Cancel] -command [list khim::CMapCancel $map]
+    #button $map.f.b3 -text [mc Help...] \
+	#-command [list khim::showHelp $map.help]
+    #grid $map.f.b1 -row 0 -column 0 -sticky ew -padx 5
+    #grid $map.f.b2 -row 0 -column 1 -sticky ew -padx 5
+    #grid $map.f.b3 -row 0 -column 3 -sticky ew -padx 5
+    ttk::button $map.f.b1 -text [mc OK] -width -6 \
+    -command [list khim::CMapOK $map]
+    ttk::button $map.f.b2 -text [mc Cancel] -width -6 \
+    -command [list khim::CMapCancel $map]
+    ttk::button $map.f.b3 -text [mc Help...] -width -6 \
 	-command [list khim::showHelp $map.help]
-    grid $map.f.b1 -row 0 -column 0 -sticky ew -padx 5
-    grid $map.f.b2 -row 0 -column 1 -sticky ew -padx 5
-    grid $map.f.b3 -row 0 -column 3 -sticky ew -padx 5
-    grid columnconfigure $map.f 2 -weight 1
+    grid $map.f.b3 -row 0 -column 0 -sticky ew -padx 5 -pady 10
+    grid $map.f.b2 -row 0 -column 2 -sticky ew -padx 5 -pady 10
+    grid $map.f.b1 -row 0 -column 3 -sticky ew -padx 5 -pady 10
+    grid columnconfigure $map.f 1 -weight 1
     grid columnconfigure $map.f {0 1 3} -uniform A
     grid columnconfigure $map 1 -weight 1
 

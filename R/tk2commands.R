@@ -435,17 +435,29 @@ tk2configList <- function (x)
 	return(res)
 }
 
+
+## Management of locales and message translation using msgcat
 setLanguage <- function (lang)
 {
 	## Change locale for both R and Tcl/Tk
 	Sys.setenv(language = lang)
-	try(Sys.setlocale("LC_MESSAGES", lang), silent = TRUE)  # Fails on Windows!
+	Sys.setenv(LANG = lang)
+	#try(Sys.setlocale("LC_MESSAGES", lang), silent = TRUE)  # Fails on Windows!
 	res <- tclRequire("msgcat")
 	if (inherits(res, "tclObj")) {
-		tcl("::msgcat::mclocale", lang)
-		return(TRUE)
+		.Tcl("namespace import msgcat::*")
+		# If the tcl.language attribute is defined, use it
+		tcllang <- attr(lang, "tcl.language")
+		if (!is.null(tcllang) && tcllang[1] != "") {
+			lang <- tcllang[1] # Use only first item 
+		} else {
+			# Tcl does not accept locales like en_US.UF-8: must be en_us only
+			lang <- tolower(sub("^([^.]+)\\..*$", "\\1", lang))
+		}
+		tclmclocale(lang)
+		TRUE
 	} else {
-		return(FALSE)
+		FALSE
 	}
 }
 
@@ -456,10 +468,42 @@ getLanguage <- function ()
 	if (lang == "") lang <- Sys.getlocale("LC_MESSAGES")
 	## This is a bad hack that probably does not work all the time, but at least,
 	## it works under Windows for getting "fr" for French language
-	if (lang == "") lang <- tolower(substr(Sys.getlocale("LC_TIME"), 1, 2))
-	return(lang)
+	if (lang == "") lang <- tolower(substr(Sys.getlocale("LC_COLLATE"), 1, 2))
+	
+	## Try to get language information from Tcl
+	tcllang <- try(as.character(tcl("mcpreferences")), silent = TRUE)
+	attr(lang, "tcl.language") <- tcllang
+	
+	lang
 }
 
+tclmclocale <- function (lang) {
+  if (missing(lang)) {
+    as.character(tcl("mclocale"))
+  } else {
+	# Make sure lang is made compatible to Tcl
+	lang <- tolower(sub("^([^.]+)\\..*$", "\\1", lang))
+    as.character(tcl("mclocale", lang))
+  }
+}
+
+tclmcset <- function(lang, msg, translation)
+  invisible(tclvalue(tcl("mcset", lang, msg, translation)))
+
+tclmc <- function (fmt, ..., domain = NULL) {
+  if (is.null(domain) || domain == "") {
+    # Simpler form
+    tclvalue(tcl("mc", fmt, ...))
+  } else {
+    # Need to evaluate in 'domain' Tcl namespace
+    transl <- .Tcl(paste0("namespace eval ", domain, " {set ::Rtransl [mc {",
+      fmt, "}]}"))
+    sprintf(tclvalue(transl), ...)
+  }
+}
+
+
+## Check if Tk or Tttk aze available
 is.tk <- function ()
 	return(tclvalue(.Tcl("catch { package present Tk }")) == "0")
 

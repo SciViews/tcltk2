@@ -3,14 +3,10 @@
 * Despite I changed ::msgcat::mclocale to de, tk2chooseFont() is still in
   English (but it works for fr... why?)
 
-* tile.use(FALSE) after loading tile does not work with tk2chooseFont()
-
 * Rework tk2edit() [takes numeric only and return characters for the moment!
   rework also the button bar]
 
-* Add twapi, toolbar, tkdnd, datefield and swaplist
-
-* Rework the code to detect and work with ActiveState install under Linux
+* Add toolbar, datefield, etc.
 
 * For the tips: select background color and font from style (same for bwidgets)
 
@@ -33,14 +29,9 @@
   tclvars
   unknown
   A function to display the Tcl/Tk help and additional package help from R
-  Use of the msgcat Tcl package
-  easier definition and retrieval of bindings (+ keysyms) and events
-  bitmap (2 colors) and image (+ IMG package? PPM/PGM and GIF by default)
-  cursors
-  experiment with focus -force! + lower/raise
-  font manipulation functions + homogeneity of fonts between R and Tk
-  styles must be handled with option! + tk_setPalette?
-  GUI designer for fixed place of widgets
-  tk/tkvars to retrieve various tk information
+  Easier definition and retrieval of bindings (+ keysyms) and events
+  Bitmap (2 colors) and image (+ IMG package? PPM/PGM and GIF by default)
+  Cursors
+  Experiment with focus -force! + lower/raise
 
 * Make a demo section

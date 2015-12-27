@@ -15,11 +15,18 @@
 	}
     res <- addTclPath(libdir)	# extend the Tcl/Tk path
 
-    ## Make sure that Tcl/Tk locale is the same one as current R locale
-	lang <- getLanguage()
-	if (lang != "") {  # Set the same language for Tcl/Tk
-		res <- tclRequire("msgcat")
-	    if (inherits(res, "tclObj")) tcl("::msgcat::mclocale", lang)
+    ## Load Tcl and Tk translation catalogs
+	res <- tclRequire("msgcat")
+	if (inherits(res, "tclObj")) {
+		.Tcl("namespace import msgcat::*")
+		.Tcl("mcload [file join $::tcl_library msgs]")
+		.Tcl("mcload [file join $::tk_library msgs]")
+	
+		## Make sure that Tcl/Tk locale is the same one as current R locale
+		lang <- getLanguage()
+		if (lang != "") {  # Set the same language for Tcl/Tk
+			setLanguage(lang)	
+		}
 	}
 
     if (is.tk()) {
@@ -42,7 +49,7 @@
 	    tcl("source", file.path(libdir, "tree1.7", "tree.tcl"))
 
 		## Do we try to load the tile widgets? (only if Tcl./Tk < 8.5)
-		if (as.numeric(.Tcl("set ::tcl_version")) < 8.5) {
+		if (as.numeric(tclvalue("::tcl_version")) < 8.5) {
 ###				tcl("source", file.path(libdir, "fonts.tcl"))
 				## Define fonts used in Tk (note: must be done AFTER loading tile!)
 				## Default values for system fonts are calculated by tile...
@@ -100,25 +107,30 @@
 				} else if ("winnative" %in% themes) { # This must be a pre-XP windows
 					try(tk2theme("winnative"), silent = TRUE)
 				} else if (.isUbuntu()) {
-					try(tk2theme("radiance"), silent = TRUE)
+					#try(tk2theme("radiance"), silent = TRUE)
+					#We also load clearlooks by default in Ubuntu
+					try(tk2theme("clearlooks"), silent = TRUE)
 					## Special treatment for Ubuntu: change fonts to Ubuntu and Ubuntu mono
 					## and use white text on black for tooltips
-					tkfont.configure("TkDefaultFont", family = "Ubuntu", size = 11)
-					tkfont.configure("TkMenuFont", family = "Ubuntu", size = 11)
-					tkfont.configure("TkCaptionFont", family = "Ubuntu", size = 10)
-					tkfont.configure("TkSmallCaptionFont", family = "Ubuntu", size = 9)
-					tkfont.configure("TkTooltipFont", family = "Ubuntu", size = 9)
-					tkfont.configure("TkMenuFont", family = "Ubuntu", size = 11)
-					tkfont.configure("TkHeadingFont", family = "Ubuntu", size = 12)
-					tkfont.configure("TkIconFont", family = "Ubuntu", size = 11)
-					tkfont.configure("TkTextFont", family = "Ubuntu", size = 11)
-					tkfont.configure("TkFixedFont", family = "Ubuntu Mono", size = 11)
+					
+					## Again, Tk 8.5/8.6 does a better job by default now than 8.4
+					## So, we don't need this any more!?
+					#tkfont.configure("TkDefaultFont", family = "Ubuntu", size = 11)
+					#tkfont.configure("TkMenuFont", family = "Ubuntu", size = 11)
+					#tkfont.configure("TkCaptionFont", family = "Ubuntu", size = 10)
+					#tkfont.configure("TkSmallCaptionFont", family = "Ubuntu", size = 9)
+					#tkfont.configure("TkTooltipFont", family = "Ubuntu", size = 9)
+					#tkfont.configure("TkMenuFont", family = "Ubuntu", size = 11)
+					#tkfont.configure("TkHeadingFont", family = "Ubuntu", size = 12)
+					#tkfont.configure("TkIconFont", family = "Ubuntu", size = 11)
+					#tkfont.configure("TkTextFont", family = "Ubuntu", size = 11)
+					#tkfont.configure("TkFixedFont", family = "Ubuntu Mono", size = 11)
 					res <- tclRequire("tooltip")
 					if (inherits(res, "tclObj")) {
 						.Tcl(paste("set ::tooltip::labelOpts [list -highlightthickness 0",
 							"-relief solid -bd 1 -background black -fg white]"))
 					}
-				} else { # A modern "default" theme that fit not too bad in many situations
+				} else { # A modern "default" theme that fits not too bad in many situations
 					try(tk2theme("clearlooks"), silent = TRUE)
 				}
 			}
@@ -144,7 +156,6 @@
 
 .onUnload <- function (libpath)
 {
-    # PhG: was .Last.lib()
 	## Remove all currently scheduled tasks
 	tclTaskDelete(id = NULL)
 }
@@ -158,16 +169,17 @@
 		if (inherits(theme, 'try-error')) return(FALSE)
 		## Try changing the tk2theme according to this value
 		res <- try(tk2theme(theme), silent = TRUE)
-		return(!inherits(res, "try-error"))
-	} else return(FALSE)
+		!inherits(res, "try-error")
+	} else FALSE
 }
 
 .isUbuntu <- function () {
 	## Note: take care not to call 'cat' on Windows: it is usually *not* there!
 	if (.Platform$OS.type == "windows" || grepl("^mac", .Platform$pkgType))
 		return(FALSE)	# This is either Windows or Mac OS X!
-	grepl("^Ubuntu", suppressWarnings(try(system("cat /etc/issue",
-		intern = TRUE, ignore.stderr = TRUE), silent = TRUE))[1])	
+	# On Ubuntu, there is an lsb-release file, but read it just to make sure
+	file.exists("/etc/lsb-release") &&
+		any(grepl("[Uu]buntu", readLines("/etc/lsb-release")))
 }
 
 .mergeList <- function (l1, l2)

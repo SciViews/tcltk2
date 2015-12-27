@@ -115,6 +115,9 @@ namespace eval ::khim {
     ::msgcat::mcset ru {Unicode...} {Unicode...}
 
     ::msgcat::mcset ru {Use KHIM} {Использовать KHIM}
+    
+    ::msgcat::mcset ru {Do you want to save this configuration on disk?} \
+    {Do you want to save this configuration on disk?}
 
 }
 

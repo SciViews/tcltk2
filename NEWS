@@ -1,6 +1,6 @@
 = tcltk2 news
 
-== Version 1.3-0
+== Version 1.3.0
 
 * Message translation is completed. setLanguage()/getLanguage() work now in a
   more robust way. getLanguage() separately reports the language used by R and
@@ -12,6 +12,8 @@
 * A dialog box to enter uncode characters in tk2entry or tk2text widgets and to
   configure a composer to enter such unicode character on the keyboard are added
   (functions tk2unicode_xxx()).
+
+* All old 'ttk2xxx' widget classes are now converted into 'tk2xxx' classes.
 
 
 == Version 1.2-12
@@ -30,7 +32,7 @@
   *not* change when the theme is changed of existing menu items (but it is for
   future menu items). This is due to the fact that Tk menus do not follow the
   ttk styling scheme.
-  
+
 
 == Version 1.2-10
 
@@ -45,7 +47,7 @@
 
 * New theme handling introduced in version 1.2-8 resulted in an invisible caret
   in text widget.
-  
+
 * Further tweaking of color themes: now fieldbackground for entry, combobox,
   canvas, listbox, mclistbox, tablelist, spinbox, text and ctext widgets (build
   using old Tk widgets or megawidgets) now default with the correct theme color.
@@ -55,7 +57,7 @@
 
 * A better handling of fonts and colors for Tk widgets according to themes used
   for Ttk widgets using tk2theme(). Also for menus.
-  
+
 * The default font was not reset properly after switching back from radiance
   to another theme.
 
@@ -67,7 +69,7 @@
   very simple example is also added in the document. The widget is very rich,
   and you will have to figure out by yourself how to access all its command from
   its original documentation.
-  
+
 * A tk2swaplist() dialog box is added.
 
 
@@ -81,7 +83,7 @@
   tk2theme("plastik"). Note also that the 'radiance' theme permanently changes
   fonts used by the Ttk widgets to fonts identical, or close to those used by
   Ubuntu.
-  
+
 * tk2theme() now tries to set the same background color for old tk widgets than
   the color used by ttk widgets. Suggested by Milan Bouchet-Valat.
 
@@ -98,7 +100,7 @@
 
 == Version 1.2-3
 
-* The Tk configuration sequence in .onLoad() is changed. 
+* The Tk configuration sequence in .onLoad() is changed.
 
 
 == Version 1.2-2
@@ -119,20 +121,20 @@
 
 * A couple of warnings for partial argument matching in tclTaskXXX() functions
   under R 2.15.0 are corrected.
-  
+
 * Documentation and demos for the tablelist Tk widgets are not distributed any
   more in the tcltk2 package, to keep its size compatible with CRAN requirements
   (no more than 5mb). Those are available from http://www.nemethi.de/.
-  
+
 
 == Version 1.2-0
 
 * Clearlooks ttk theme added and made default theme under Linux. More modern
   look&feel for ttk widgets under Linux!
-  
+
 * Radiance ttk theme created and added. This matches ambiance and radiance
   themes under Ubuntu 11.x. This is the default theme used in Ubuntu.
-  
+
 * The tk widget tablelist is updated to version 5.5.
 
 * tk2listbox() is completelly reworked to provide (autohide) scrollbars,
@@ -156,7 +158,7 @@
 
 * Little correction in Winico.c that prevented it to compile correctly on all
   Windows architectures (thanks Prof. B. Ripley for the patch).
-  
+
 
 == Version 1.1-4
 
@@ -170,7 +172,7 @@
 
 * New /win/src/Makevars to make it compatible with the double compilation for
   Windows 32bit and 64bit. Thanks Prof. Brian Ripley.
-  
+
 * Correction of the example in ?tk2reg. Thanks Tony Plate.
 
 * .onload() now works inside SciViews.
@@ -187,7 +189,7 @@
 * A bug in tk2mclistbox, clailing for missing -state argument when selecting
   an item in the box is corrected, thanks to a patch provided by Christiane
   Raemsch (and slightly modified).
-  
+
 
 == Version 1.1-0
 

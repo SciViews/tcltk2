@@ -147,7 +147,7 @@ tk2notetab <- function (nb, tab)
 			w$env <- new.env()
 			w$env$num.subwin <- 0
 			w$env$parent <- nb
-            class(w) <- c("ttk2notetab", "tk2container", "tkwin")
+            class(w) <- c("tk2notetab", "tk2container", "tkwin")
             return(w)
 		} else return(NULL)  # Tab not found!
     } else stop ("'nb' must be a 'tk2notebook' object")
@@ -197,7 +197,7 @@ tk2theme <- function (theme = NULL)
         ## First, check if the theme is already loaded... or try loading it
 		loadedThemes <- tk2theme.list()
 		if (!theme %in% loadedThemes) {
-			## Could be plastik, keramik, keramik_alt, clearlooks, radiance 
+			## Could be plastik, keramik, keramik_alt, clearlooks, radiance
 			res <- try(tclRequire(paste0("ttk::theme::", theme)), silent = TRUE)
 			if (inherits(res, "try-error"))
 				stop("Ttk theme ", theme, " is not found")
@@ -243,12 +243,12 @@ tk2theme <- function (theme = NULL)
 			"throughColor", hfg),
 			"fieldBackground",
 				tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground")))
-		
+
 		## Set menu font the same as label font
 		font <- tclvalue(.Tcl("ttk::style lookup TLabel -font"))
 		if (!length(font) || font == "") font <- "TkDefaultFont"
 		tk2font.set("TkMenuFont", tk2font.get(font))
-		
+
 		## Return the theme
 		res <- theme
     }
@@ -257,10 +257,10 @@ tk2theme <- function (theme = NULL)
 ### Note: to change a style element: .Tcl('ttk::style configure TButton -font "helvetica 24"')
 ### Create a derived style: ttk::style configure Emergency.TButton -font "helvetica 24" -foreground red -padding 10
 ### Changing different states:
-###ttk::style map TButton \ 
-###	-background [list disabled #d9d9d9  active #ececec] \ 
-###	-foreground [list disabled #a3a3a3] \ 
-###	-relief [list {pressed !disabled} sunken] \ 
+###ttk::style map TButton \
+###	-background [list disabled #d9d9d9  active #ececec] \
+###	-foreground [list disabled #a3a3a3] \
+###	-relief [list {pressed !disabled} sunken] \
 ###	;
 
 ## Function to look for a ttk style
@@ -298,7 +298,7 @@ tk2style <- function (class, style, state = c("default", "active",
 	style = paste("-", as.character(style)[1], sep = "")
 	state = match.arg(state)
 	if (is.null(default)) default <- ""
-	
+
 	## styles creates a named vector (items in even elements, labels = odd)
 	styles <- function (x) {
 		st <- as.character(x)
@@ -311,7 +311,7 @@ tk2style <- function (class, style, state = c("default", "active",
 		names(st) <- stnames
 		return(st)
 	}
-	
+
 	## First look at the map for this class
 	res <-  styles(tcl("ttk::style", "map", class, style))
 	res2 <-  styles(tcl("ttk::style", "map", ".", style))
@@ -321,7 +321,7 @@ tk2style <- function (class, style, state = c("default", "active",
 	res2 <-  styles(tcl("ttk::style", "configure", ".", style))
 	res <- c(res, res2[!names(res2) %in% names(res)])
 	if (length(res) == 0) res <- c(default = default)
-	
+
 	## If state != "all", try to resolve the right state
 	if (state != "all") {
 		## If the given state is there, use it
@@ -384,7 +384,7 @@ tk2dataList <- function (x)
 		tk2text = c("values", "value", "selection", "maxundo", "undo",
 			"spacing1", "spacing2", "spacing3", "tabs", "tabstyle"),
 		tk2tree = c("values", "value", "selection"),
-		stop("Unknown tk2widget, provide a tk2widget object or its class")	
+		stop("Unknown tk2widget, provide a tk2widget object or its class")
 	)
 	## Add label, tag & tip for all
 	res <- c(res, "label", "tag", "tip")
@@ -449,7 +449,7 @@ setLanguage <- function (lang)
 		# If the tcl.language attribute is defined, use it
 		tcllang <- attr(lang, "tcl.language")
 		if (!is.null(tcllang) && tcllang[1] != "") {
-			lang <- tcllang[1] # Use only first item 
+			lang <- tcllang[1] # Use only first item
 		} else {
 			# Tcl does not accept locales like en_US.UF-8: must be en_us only
 			lang <- tolower(sub("^([^.]+)\\..*$", "\\1", lang))
@@ -469,11 +469,11 @@ getLanguage <- function ()
 	## This is a bad hack that probably does not work all the time, but at least,
 	## it works under Windows for getting "fr" for French language
 	if (lang == "") lang <- tolower(substr(Sys.getlocale("LC_COLLATE"), 1, 2))
-	
+
 	## Try to get language information from Tcl
 	tcllang <- try(as.character(tcl("mcpreferences")), silent = TRUE)
 	attr(lang, "tcl.language") <- tcllang
-	
+
 	lang
 }
 

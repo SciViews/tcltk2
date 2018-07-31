@@ -64,7 +64,7 @@ tk2configList(x)
   \item{last}{ the 0-based last index to consider in the list, or \code{"end"}
     for using the last element of the list. }
   \item{index}{ the 0-based index where to insert items in the list. }
-  \item{nb}{ a tk2notebook or ttk2notebook widget (\"tclObj\" object). }
+  \item{nb}{ a tk2notebook widget (\"tclObj\" object). }
   \item{tab}{ the name (text) of a tab in a notebook. }
   \item{state}{ the new state of the widget, or the state to inquiry. }
   \item{theme}{ a theme to use (character string). }

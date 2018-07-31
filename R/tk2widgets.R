@@ -110,7 +110,7 @@ tk2label <- function (parent, tip, label, tag, cfglist, wrap = FALSE, ...)
 		## If width is not reapplied after wraplength, the text is not always
 		## wrapped in the widget (is this a bug?)
 		if (wraplength > 0 && length(width)) tkconfigure(w, width = width)
-	}	
+	}
 	return(w)
 }
 
@@ -118,7 +118,7 @@ tk2labelframe <- function (parent, ...)
 {
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	w <- tkwidget(parent, "ttk::labelframe", ...)
-	class(w) <- c("ttk2labelframe", "tk2widget", class(w))
+	class(w) <- c("tk2labelframe", "tk2widget", class(w))
 	return(w)
 }
 
@@ -156,7 +156,7 @@ tip = "", scroll = "both", autoscroll = "x", enabled = TRUE, ...)
 			selection <- selection[1]
 		}
 	}
-	
+
 	## Location of the widget depends if we add scrollbars or not
 	background <- tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground"))
 	if (background == "") background <- "white"
@@ -200,19 +200,19 @@ tip = "", scroll = "both", autoscroll = "x", enabled = TRUE, ...)
 		if (background == "") background <- "white"
 		tkconfigure(W, background = background)
 	}
-	
+
 	## If there are values and/or selections, populate the list now
 	for (item in values)
 		tkinsert(w, "end", item)
 	if (!is.null(selection)) {
 		for (sel in selection)
 			tkselection.set(w, sel - 1) # Because Tcl uses 0-based indexing!
-		tksee(w, selection[1]) # Ensure that the first selected item is visible	
+		tksee(w, selection[1]) # Ensure that the first selected item is visible
 	}
-	
+
 	## Possibly add a tooltip
 	if (tip != "") tk2tip(w, tip)
-	
+
 	## Do we add scrollbars?
 	if (scroll == "none") {
 		## Apply bindings to original listbox
@@ -244,7 +244,7 @@ tk2mclistbox <- function (parent, tip ="", ...)
 	res <- tclRequire("mclistbox")
 	if (!inherits(res, "tclObj"))
 		stop("Impossible to load the Tcl mclistbox package; check your Tcl/Tk installation")
-	
+
 	background <- tclvalue(.Tcl("ttk::style lookup TEntry -fieldbackground"))
 	if (background == "") background <- "white"
 	w <- tkwidget(parent, "mclistbox::mclistbox", font = "TkDefaultFont",
@@ -263,7 +263,7 @@ tk2mclistbox <- function (parent, tip ="", ...)
 #	return(w)
 #}
 
-tk2menu <- function (parent, activebackground, activeforeground, ...) 
+tk2menu <- function (parent, activebackground, activeforeground, ...)
 {
     if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
     w <- tkwidget(parent, "menu", ...)
@@ -389,7 +389,7 @@ tk2spinbox <- function (parent, tip = "", ...)
 			relief = "solid", borderwidth = 1,
             background = background, ...)
     }
-	
+
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2spinbox", "tk2widget", class(w))
 	return(w)
@@ -407,9 +407,9 @@ tk2table <- function (parent, ...)
 	} else stop("Tcl package 'Tktable' must be installed first")
 }
 
-tk2tablelist <- function (parent, ...) 
+tk2tablelist <- function (parent, ...)
 {
-    if (!is.ttk()) 
+    if (!is.ttk())
         stop("Tcl/Tk >= 8.5 is required")
     if (inherits(tclRequire("tablelist_tile", warn = FALSE), "tclObj")) {
         ## Default background to fieldbackground
@@ -422,7 +422,7 @@ tk2tablelist <- function (parent, ...)
 			w <- tkwidget(parent, "tablelist::tablelist",
 				font = "TkDefaultFont", background = background, ...)
 		}
-		
+
         class(w) <- c("tk2tablelist", "tk2widget", class(w))
         return(w)
     }
@@ -433,7 +433,7 @@ tk2text <- function (parent, tip = "", ...)
 {
 ### TODO: autohide scrollbars
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
-	
+
 	## Default background to fieldbackground
 	if (any(names(list(...)) == "background")) {
 		w <- tkwidget(parent, "text", font = "TkTextFont", ...)
@@ -443,7 +443,7 @@ tk2text <- function (parent, tip = "", ...)
 		w <- tkwidget(parent, "text", font = "TkTextFont",
 			background = background, ...)
 	}
-	
+
 	tkconfigure(w, relief = "flat")
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2text", "tk2widget", class(w))
@@ -455,7 +455,7 @@ tk2ctext <- function (parent, tip = "", ...)
 ### TODO: autohide scrollbars
 	if (!is.ttk()) stop("Tcl/Tk >= 8.5 is required")
 	tclRequire("ctext")
-	
+
 	## Default background to fieldbackground
 	if (any(names(list(...)) == "background")) {
 		w <- tkwidget(parent, "ctext", font = "TkFixedFont", ...)
@@ -465,7 +465,7 @@ tk2ctext <- function (parent, tip = "", ...)
 		w <- tkwidget(parent, "ctext", font = "TkFixedFont",
 			background = background, ...)
 	}
-	
+
 	tkconfigure(w, relief = "flat")
 	if (tip != "") tk2tip(w, tip)
 	class(w) <- c("tk2ctext", "tk2widget", class(w))

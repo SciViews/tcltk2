@@ -12,7 +12,7 @@
     if (!path %in% paths) {
       tcl("lappend", "::auto_path", path)
     } else {
-      # To have a consistent output is the path is not changed:
+      # To have a consistent output if the path is not changed:
       tcl("set", "::auto_path")
     }
   }

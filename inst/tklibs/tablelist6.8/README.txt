@@ -6,6 +6,12 @@
 
                        csaba.nemethi@t-online.de 
 
+PLEASE NOTE: the version provided here does not include the large documentation
+and demos, in order to keep the R package distributed on CRAN into more
+reasonable limits. You are encouraged to download the full packages with doc
+and demos from https://www.nemethi.de/. The documentation is also accessible from
+there in HTML format. (Ph. Grosjean)
+
 
 What Is Tablelist?
 ------------------

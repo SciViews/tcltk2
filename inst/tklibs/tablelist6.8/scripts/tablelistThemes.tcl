@@ -8,7 +8,7 @@
 #   - Private procedures performing RGB <-> HSV conversions
 #   - Private procedures related to global KDE configuration options
 #
-# Copyright (c) 2005-2011  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
+# Copyright (c) 2005-2019  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
 #==============================================================================
 
 #
@@ -22,11 +22,7 @@
 # Returns the current tile theme.
 #------------------------------------------------------------------------------
 proc tablelist::getCurrentTheme {} {
-    if {[info exists ttk::currentTheme]} {
-	return $ttk::currentTheme
-    } else {
-	return $tile::currentTheme
-    }
+    return [mwutil::currentTheme]
 }
 
 #------------------------------------------------------------------------------
@@ -37,7 +33,7 @@ proc tablelist::getCurrentTheme {} {
 #------------------------------------------------------------------------------
 proc tablelist::setThemeDefaults {} {
     variable themeDefaults
-    if {[catch {[getCurrentTheme]Theme}] != 0} {
+    if {[catch {[mwutil::currentTheme]Theme}] != 0} {
 	#
 	# Fall back to the "default" theme (which is the root of all
 	# themes) and then override the options set by the current one
@@ -46,7 +42,7 @@ proc tablelist::setThemeDefaults {} {
 	array set themeDefaults [style configure .]
     }
 
-    if {[string compare $themeDefaults(-arrowcolor) ""] == 0} {
+    if {[string length $themeDefaults(-arrowcolor)] == 0} {
 	set themeDefaults(-arrowdisabledcolor) ""
     } else {
 	set themeDefaults(-arrowdisabledcolor) $themeDefaults(-labeldisabledFg)
@@ -84,7 +80,8 @@ proc tablelist::altTheme {} {
 	-selectforeground	#ffffff \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
-        -labelbackground	#d9d9d9 \
+	-labelbackground	#d9d9d9 \
+	-labeldeactivatedBg	#d9d9d9 \
 	-labeldisabledBg	#d9d9d9 \
 	-labelactiveBg		#ececec \
 	-labelpressedBg		#ececec \
@@ -95,8 +92,8 @@ proc tablelist::altTheme {} {
 	-labelfont		TkDefaultFont \
 	-labelborderwidth	2 \
 	-labelpady		1 \
-	-arrowcolor		"" \
-	-arrowstyle		sunken10x9 \
+	-arrowcolor		black \
+	-arrowstyle		flat8x4 \
 	-treestyle		winnative \
     ]
 }
@@ -105,41 +102,77 @@ proc tablelist::altTheme {} {
 # tablelist::aquaTheme
 #------------------------------------------------------------------------------
 proc tablelist::aquaTheme {} {
+    variable newAquaSupport
     scan $::tcl_platform(osVersion) "%d" majorOSVersion
-    if {$majorOSVersion >= 11} {			;# OS X 10.7 or higher
-	set labelBg		#efefef
-	set labelpressedBg	#cbcbcb
-	set arrowColor		#afafaf
+    if {$majorOSVersion >= 14} {			;# OS X 10.10 or higher
+	if {$newAquaSupport} {
+	    set labelBg			#eeeeee
+	    set labeldeactivatedBg	#f6f6f6
+	    set labeldisabledBg		""
+	    set labelpressedBg		#eeeeee
+	} else {
+	    set labelBg			#f6f6f6
+	    set labeldeactivatedBg	#ffffff
+	    set labeldisabledBg		#ffffff
+	    set labelpressedBg		#e9e9e9
+	}
+	set arrowColor		#404040
+    } elseif {$majorOSVersion >= 11} {			;# OS X 10.7 or higher
+	set labelBg		#f3f3f3
+	set labeldeactivatedBg	#f3f3f3
+	set labeldisabledBg	#f3f3f3
+	set labelpressedBg	#d5d5d5
+	set arrowColor		#777777
     } else {
-	set labelBg		#e9e8e8
-	set labelpressedBg	#d2d2d2
-	set arrowColor		#717171
+	set labelBg		#efefef
+	set labeldeactivatedBg	#efefef
+	set labeldisabledBg	#efefef
+	set labelpressedBg	#dddddd
+	set arrowColor		#777777
     }
 
     switch [winfo rgb . systemMenuActive] {
 	"13621 29041 52685" -
 	"32256 44288 55552" {				;# Blue Cocoa/Carbon
-	    if {$majorOSVersion >= 11} {		;# OS X 10.7 or higher
-		set stripeBg			#f0f4f9
-		set labelselectedBg		#80b8f0
-		set labelselectedpressedBg	#417ddc
+	    if {$majorOSVersion >= 14} {		;# OS X 10.10 or higher
+		set stripeBg			#f5f5f5
+		if {$newAquaSupport} {
+		    set labelselectedBg		#eeeeee
+		    set labelselectedpressedBg	#eeeeee
+		} else {
+		    set labelselectedBg		#f6f6f6
+		    set labelselectedpressedBg	#e9e9e9
+		}
+	    } elseif {$majorOSVersion >= 11} {		;# OS X 10.7 or higher
+		set stripeBg			#f3f6fa
+		set labelselectedBg		#91c5f3
+		set labelselectedpressedBg	#5092e3
 	    } else {
 		set stripeBg			#edf3fe
-		set labelselectedBg		#7ab2e9
-		set labelselectedpressedBg	#679ed5
+		set labelselectedBg		#80b8ef
+		set labelselectedpressedBg	#69aaeb
 	    }
 	}
 
 	"24415 27499 31354" -
 	"39680 43776 48384" {				;# Graphite Cocoa/Carbon
-	    if {$majorOSVersion >= 11} {		;# OS X 10.7 or higher
-		set stripeBg			#f4f5f7
-		set labelselectedBg		#9ba7b5
-		set labelselectedpressedBg	#636e88
+	    if {$majorOSVersion >= 14} {		;# OS X 10.10 or higher
+		set stripeBg			#f5f5f5
+		if {$newAquaSupport} {
+		    set labelselectedBg		#eeeeee
+		    set labelselectedpressedBg	#eeeeee
+		} else {
+		    set labelselectedBg		#f6f6f6
+		    set labelselectedpressedBg	#e9e9e9
+		}
+	    } elseif {$majorOSVersion >= 11} {		;# OS X 10.7 or higher
+		set stripeBg			#f6f7f9
+		set labelselectedBg		#abb6c2
+		set labelselectedpressedBg	#76829a
 	    } else {
 		set stripeBg			#f0f0f0
-		set labelselectedBg		#b6c2cd
-		set labelselectedpressedBg	#a7b3be
+		set labelselectedBg		#c0c7ce
+		set labelselectedpressedBg	#afb7c0
 	    }
 	}
     }
@@ -148,6 +181,16 @@ proc tablelist::aquaTheme {} {
     # Get an approximation of alternateSelectedControlColor
     #
     switch [winfo rgb . systemHighlight] {
+	"65535 48058 47288"	{ set selectBg #ff3b30 }
+	"65535 57311 46003"	{ set selectBg #ff9500 }
+	"65535 61423 45231"	{ set selectBg #ffcc00 }
+	"49343 63222 44460"	{ set selectBg #63da38 }
+	"45746 55246 65535"	{ set selectBg #0069d9 }
+	"63478 54484 65535"	{ set selectBg #cc73e1 }
+	"65535 49087 53969"	{ set selectBg #ff2a68 }
+	"60909 57053 51914"	{ set selectBg #a2845e }
+	"55512 55512 56539"	{ set selectBg #6f6f73 }
+
 	"51143 53456 56281"	{ set selectBg #738499 }
 	"50887 50887 50887"	{ set selectBg #7f7f7f }
 	"46516 54741 65535"	{ set selectBg #3875d7 }
@@ -156,6 +199,7 @@ proc tablelist::aquaTheme {} {
 	"65535 53968 33154"	{ set selectBg #ff8a22 }
 	"50114 63994 37263"	{ set selectBg #66c547 }
 	"59879 47290 65535"	{ set selectBg #8c4eb8 }
+
 	default {
 	    set rgb [winfo rgb . systemHighlight]
 	    foreach {h s v} [eval rgb2hsv $rgb] {}
@@ -184,20 +228,21 @@ proc tablelist::aquaTheme {} {
 	-selectbackground	$selectBg \
 	-selectforeground	white \
 	-selectborderwidth	0 \
-	-font			{"Lucida Grande" 12} \
-        -labelbackground	$labelBg \
-	-labeldisabledBg	$labelBg \
+	-font			TkTextFont \
+	-labelbackground	$labelBg \
+	-labeldeactivatedBg	$labeldeactivatedBg \
+	-labeldisabledBg	$labeldisabledBg \
 	-labelactiveBg		$labelBg \
 	-labelpressedBg		$labelpressedBg \
 	-labelselectedBg	$labelselectedBg \
 	-labelselectedpressedBg	$labelselectedpressedBg \
 	-labelforeground	black \
-	-labeldisabledFg	black \
+	-labeldisabledFg	#a3a3a3 \
 	-labelactiveFg		black \
 	-labelpressedFg		black \
 	-labelselectedFg	black \
 	-labelselectedpressedFg	black \
-	-labelfont		{"Lucida Grande" 11} \
+	-labelfont		TkHeadingFont \
 	-labelborderwidth	1 \
 	-labelpady		1 \
 	-arrowcolor		$arrowColor \
@@ -205,7 +250,9 @@ proc tablelist::aquaTheme {} {
     ]
 
     variable pngSupported
-    if {$pngSupported} {
+    if {$majorOSVersion >= 14} {			;# OS X 10.10 or higher
+	set themeDefaults(-arrowstyle) flatAngle7x4
+    } elseif {$pngSupported} {
 	set themeDefaults(-arrowstyle) photo7x7
     } else {
 	set themeDefaults(-arrowstyle) flat7x7
@@ -221,12 +268,13 @@ proc tablelist::AquativoTheme {} {
 	-background		white \
 	-foreground		black \
 	-disabledforeground	black \
-	-stripebackground	"" \
+	-stripebackground	#edf3fe \
 	-selectbackground	#000000 \
 	-selectforeground	#ffffff \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
-        -labelbackground	#fafafa \
+	-labelbackground	#fafafa \
+	-labeldeactivatedBg	#fafafa \
 	-labeldisabledBg	#fafafa \
 	-labelactiveBg		#fafafa \
 	-labelpressedBg		#fafafa \
@@ -237,9 +285,73 @@ proc tablelist::AquativoTheme {} {
 	-labelfont		TkDefaultFont \
 	-labelborderwidth	2 \
 	-labelpady		1 \
-	-arrowcolor		#717171 \
-	-arrowstyle		flat8x5 \
+	-arrowcolor		#777777 \
+	-arrowstyle		flat7x7 \
 	-treestyle		aqua \
+    ]
+}
+
+#------------------------------------------------------------------------------
+# tablelist::aquativoTheme
+#------------------------------------------------------------------------------
+proc tablelist::aquativoTheme {} {
+    variable themeDefaults
+    array set themeDefaults [list \
+	-background		white \
+	-foreground		black \
+	-disabledforeground	#565248 \
+	-stripebackground	#edf3fe \
+	-selectbackground	#000000 \
+	-selectforeground	#ffffff \
+	-selectborderwidth	0 \
+	-font			TkTextFont \
+	-labelbackground	#fafafa \
+	-labeldeactivatedBg	#fafafa \
+	-labeldisabledBg	#e3e1dd\
+	-labelactiveBg		#c1d2ee \
+	-labelpressedBg		#bab5ab \
+	-labelforeground	black \
+	-labeldisabledFg	#565248 \
+	-labelactiveFg		black \
+	-labelpressedFg		black \
+	-labelfont		TkDefaultFont \
+	-labelborderwidth	2 \
+	-labelpady		1 \
+	-arrowcolor		#777777 \
+	-arrowstyle		flat7x7 \
+	-treestyle		aqua \
+    ]
+}
+
+#------------------------------------------------------------------------------
+# tablelist::ArcTheme
+#------------------------------------------------------------------------------
+proc tablelist::ArcTheme {} {
+    variable themeDefaults
+    array set themeDefaults [list \
+	-background		white \
+	-foreground		#5c616c \
+	-disabledforeground	#a9acb2 \
+	-stripebackground	"" \
+	-selectbackground	#5294e2 \
+	-selectforeground	#ffffff \
+	-selectborderwidth	0 \
+	-font			TkTextFont \
+	-labelbackground	#f5f6f7 \
+	-labeldeactivatedBg	#f5f6f7 \
+	-labeldisabledBg	#fbfcfc \
+	-labelactiveBg		#f5f6f7 \
+	-labelpressedBg		#f5f6f7 \
+	-labelforeground	#5c616c \
+	-labeldisabledFg	#a9acb2 \
+	-labelactiveFg		#5c616c \
+	-labelpressedFg		#5c616c \
+	-labelfont		TkDefaultFont \
+	-labelborderwidth	0 \
+	-labelpady		0 \
+	-arrowcolor		#5c616c \
+	-arrowstyle		flatAngle10x6 \
+	-treestyle		arc \
     ]
 }
 
@@ -257,7 +369,8 @@ proc tablelist::blueTheme {} {
 	-selectforeground	#000000 \
 	-selectborderwidth	1 \
 	-font			TkTextFont \
-        -labelbackground	#6699cc \
+	-labelbackground	#6699cc \
+	-labeldeactivatedBg	#6699cc \
 	-labeldisabledBg	#6699cc \
 	-labelactiveBg		#6699cc \
 	-labelpressedBg		#6699cc \
@@ -266,7 +379,7 @@ proc tablelist::blueTheme {} {
 	-labelactiveFg		black \
 	-labelpressedFg		black \
 	-labelfont		TkDefaultFont \
-	-labelborderwidth	2 \
+	-labelborderwidth	1 \
 	-labelpady		1 \
 	-arrowcolor		#2d2d66 \
 	-arrowstyle		flat9x5 \
@@ -288,7 +401,8 @@ proc tablelist::clamTheme {} {
 	-selectforeground	#ffffff \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
-        -labelbackground	#dcdad5 \
+	-labelbackground	#dcdad5 \
+	-labeldeactivatedBg	#dcdad5 \
 	-labeldisabledBg	#dcdad5 \
 	-labelactiveBg		#eeebe7 \
 	-labelpressedBg		#eeebe7 \
@@ -298,9 +412,9 @@ proc tablelist::clamTheme {} {
 	-labelpressedFg		black \
 	-labelfont		TkDefaultFont \
 	-labelborderwidth	2 \
-	-labelpady		1 \
-	-arrowcolor		"" \
-	-arrowstyle		sunken10x9 \
+	-labelpady		3 \
+	-arrowcolor		black \
+	-arrowstyle		flat8x4 \
 	-treestyle		gtk \
     ]
 }
@@ -319,7 +433,8 @@ proc tablelist::classicTheme {} {
 	-selectforeground	#000000 \
 	-selectborderwidth	1 \
 	-font			TkTextFont \
-        -labelbackground	#d9d9d9 \
+	-labelbackground	#d9d9d9 \
+	-labeldeactivatedBg	#d9d9d9 \
 	-labeldisabledBg	#d9d9d9 \
 	-labelactiveBg		#ececec \
 	-labelpressedBg		#ececec \
@@ -335,11 +450,43 @@ proc tablelist::classicTheme {} {
 	-treestyle		gtk \
     ]
 
-    if {[info exists tile::version] &&
-	[string compare $tile::version 0.8] < 0} {
+    if {[info exists ::tile::version] &&
+	[string compare $::tile::version 0.8] < 0} {
 	set themeDefaults(-font)	TkClassicDefaultFont
 	set themeDefaults(-labelfont)	TkClassicDefaultFont
     }
+}
+
+#------------------------------------------------------------------------------
+# tablelist::clearlooksTheme
+#------------------------------------------------------------------------------
+proc tablelist::clearlooksTheme {} {
+    variable themeDefaults
+    array set themeDefaults [list \
+	-background		white \
+	-foreground		black \
+	-disabledforeground	#b5b3ac \
+	-stripebackground	"" \
+	-selectbackground	#71869e \
+	-selectforeground	#ffffff \
+	-selectborderwidth	0 \
+	-font			TkTextFont \
+	-labelbackground	#efeae6 \
+	-labeldeactivatedBg	#efeae6 \
+	-labeldisabledBg	#eee9e4 \
+	-labelactiveBg		#f4f2ee \
+	-labelpressedBg		#d4cfca \
+	-labelforeground	black \
+	-labeldisabledFg	#b5b3ac \
+	-labelactiveFg		black \
+	-labelpressedFg		black \
+	-labelfont		TkDefaultFont \
+	-labelborderwidth	0 \
+	-labelpady		1 \
+	-arrowcolor		black \
+	-arrowstyle		flatAngle9x6 \
+	-treestyle		gtk \
+    ]
 }
 
 #------------------------------------------------------------------------------
@@ -356,7 +503,8 @@ proc tablelist::defaultTheme {} {
 	-selectforeground	#ffffff \
 	-selectborderwidth	1 \
 	-font			TkTextFont \
-        -labelbackground	#d9d9d9 \
+	-labelbackground	#d9d9d9 \
+	-labeldeactivatedBg	#d9d9d9 \
 	-labeldisabledBg	#d9d9d9 \
 	-labelactiveBg		#ececec \
 	-labelpressedBg		#ececec \
@@ -367,8 +515,8 @@ proc tablelist::defaultTheme {} {
 	-labelfont		TkDefaultFont \
 	-labelborderwidth	1 \
 	-labelpady		1 \
-	-arrowcolor		"" \
-	-arrowstyle		sunken10x9 \
+	-arrowcolor		black \
+	-arrowstyle		flat8x4 \
 	-treestyle		gtk \
     ]
 }
@@ -387,7 +535,8 @@ proc tablelist::keramikTheme {} {
 	-selectforeground	#ffffff \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
-        -labelbackground	#e2e4e7 \
+	-labelbackground	#e2e4e7 \
+	-labeldeactivatedBg	#e2e4e7 \
 	-labeldisabledBg	#e2e4e7 \
 	-labelactiveBg		#e2e4e7 \
 	-labelpressedBg		#c6c8cc \
@@ -396,7 +545,7 @@ proc tablelist::keramikTheme {} {
 	-labelactiveFg		black \
 	-labelpressedFg		black \
 	-labelfont		TkDefaultFont \
-	-labelborderwidth	2 \
+	-labelborderwidth	0 \
 	-labelpady		1 \
 	-arrowcolor		black \
 	-arrowstyle		flat8x5 \
@@ -418,7 +567,8 @@ proc tablelist::keramik_altTheme {} {
 	-selectforeground	#ffffff \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
-        -labelbackground	#e2e4e7 \
+	-labelbackground	#e2e4e7 \
+	-labeldeactivatedBg	#e2e4e7 \
 	-labeldisabledBg	#e2e4e7 \
 	-labelactiveBg		#e2e4e7 \
 	-labelpressedBg		#c6c8cc \
@@ -427,7 +577,7 @@ proc tablelist::keramik_altTheme {} {
 	-labelactiveFg		black \
 	-labelpressedFg		black \
 	-labelfont		TkDefaultFont \
-	-labelborderwidth	2 \
+	-labelborderwidth	0 \
 	-labelpady		1 \
 	-arrowcolor		black \
 	-arrowstyle		flat8x5 \
@@ -449,7 +599,8 @@ proc tablelist::krocTheme {} {
 	-selectforeground	#ffffff \
 	-selectborderwidth	1 \
 	-font			TkTextFont \
-        -labelbackground	#fcb64f \
+	-labelbackground	#fcb64f \
+	-labeldeactivatedBg	#fcb64f \
 	-labeldisabledBg	#fcb64f \
 	-labelactiveBg		#694418 \
 	-labelpressedBg		#694418 \
@@ -460,8 +611,8 @@ proc tablelist::krocTheme {} {
 	-labelfont		TkDefaultFont \
 	-labelborderwidth	2 \
 	-labelpady		1 \
-	-arrowcolor		"" \
-	-arrowstyle		sunken10x9 \
+	-arrowcolor		black \
+	-arrowstyle		flat8x4 \
 	-treestyle		gtk \
     ]
 }
@@ -480,7 +631,8 @@ proc tablelist::plastikTheme {} {
 	-selectforeground	#ffffff \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
-        -labelbackground	#dcdde3 \
+	-labelbackground	#dcdde3 \
+	-labeldeactivatedBg	#dcdde3 \
 	-labeldisabledBg	#dcdde3 \
 	-labelactiveBg		#dcdde3 \
 	-labelpressedBg		#b9bcc0 \
@@ -489,7 +641,7 @@ proc tablelist::plastikTheme {} {
 	-labelactiveFg		black \
 	-labelpressedFg		black \
 	-labelfont		TkDefaultFont \
-	-labelborderwidth	2 \
+	-labelborderwidth	0 \
 	-labelpady		1 \
 	-arrowcolor		black \
 	-arrowstyle		flat7x4 \
@@ -511,7 +663,8 @@ proc tablelist::srivTheme {} {
 	-selectforeground	#000000 \
 	-selectborderwidth	1 \
 	-font			TkTextFont \
-        -labelbackground	#a0a0a0 \
+	-labelbackground	#a0a0a0 \
+	-labeldeactivatedBg	#a0a0a0 \
 	-labeldisabledBg	#a0a0a0 \
 	-labelactiveBg		#a0a0a0 \
 	-labelpressedBg		#a0a0a0 \
@@ -522,8 +675,8 @@ proc tablelist::srivTheme {} {
 	-labelfont		TkDefaultFont \
 	-labelborderwidth	2 \
 	-labelpady		1 \
-	-arrowcolor		"" \
-	-arrowstyle		sunken10x9 \
+	-arrowcolor		black \
+	-arrowstyle		flat8x4 \
 	-treestyle		gtk \
     ]
 }
@@ -542,7 +695,8 @@ proc tablelist::srivlgTheme {} {
 	-selectforeground	#000000 \
 	-selectborderwidth	1 \
 	-font			TkTextFont \
-        -labelbackground	#6699cc \
+	-labelbackground	#6699cc \
+	-labeldeactivatedBg	#6699cc \
 	-labeldisabledBg	#6699cc \
 	-labelactiveBg		#6699cc \
 	-labelpressedBg		#6699cc \
@@ -553,8 +707,8 @@ proc tablelist::srivlgTheme {} {
 	-labelfont		TkDefaultFont \
 	-labelborderwidth	2 \
 	-labelpady		1 \
-	-arrowcolor		"" \
-	-arrowstyle		sunken10x9 \
+	-arrowcolor		black \
+	-arrowstyle		flat8x4 \
 	-treestyle		gtk \
     ]
 }
@@ -573,7 +727,8 @@ proc tablelist::stepTheme {} {
 	-selectforeground	#ffffff \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
-        -labelbackground	#a0a0a0 \
+	-labelbackground	#a0a0a0 \
+	-labeldeactivatedBg	#a0a0a0 \
 	-labeldisabledBg	#a0a0a0 \
 	-labelactiveBg		#aeb2c3 \
 	-labelpressedBg		#aeb2c3 \
@@ -584,8 +739,8 @@ proc tablelist::stepTheme {} {
 	-labelfont		TkDefaultFont \
 	-labelborderwidth	2 \
 	-labelpady		1 \
-	-arrowcolor		"" \
-	-arrowstyle		sunken10x9 \
+	-arrowcolor		black \
+	-arrowstyle		flat8x4 \
 	-treestyle		gtk \
     ]
 }
@@ -595,29 +750,36 @@ proc tablelist::stepTheme {} {
 #
 # Tested with the following Qt styles:
 #
-#   Acqua              KDE_XP                     Motif Plus     SGI
-#   B3/KDE             Keramik                    MS Windows 9x  System-Series
-#   Baghira            Light Style, 2nd revision  Phase          System++
-#   CDE                Light Style, 3rd revision  Plastik        ThinKeramik
-#   HighColor Classic  Lipstik                    Platinum
-#   HighContrast       Marble                     QtCurve
-#   KDE Classic        Motif                      RISC OS
+#   Acqua              KDE Classic                Motif Plus     RISC OS
+#   B3/KDE             KDE_XP                     MS Windows 9x  SGI
+#   Baghira            Keramik                    Oxygen         System-Series
+#   CDE                Light Style, 2nd revision  Phase          System++
+#   Cleanlooks         Light Style, 3rd revision  Plastik        ThinKeramik
+#   GTK+ Style         Lipstik                    Plastique
+#   HighColor Classic  Marble                     Platinum
+#   HighContrast       Motif                      QtCurve
 #
-# Supported color schemes:
+# Supported KDE 1/2/3 color schemes:
 #
-#   Aqua Blue                     Ice (FreddyK)      Point Reyes Green
-#   Aqua Graphite                 KDE 1              Pumpkin
-#   Atlas Green                   KDE 2              Redmond 2000
-#   BeOS                          Keramik            Redmond 95
-#   Blue Slate                    Keramik Emerald    Redmond XP
-#   CDE                           Keramik White      Solaris
-#   Dark Blue                     Lipstik Noble      Storm
-#   Desert Red                    Lipstik Standard   SuSE, old & new
-#   Digital CDE                   Lipstik White      SUSE-kdm
-#   EveX                          Media Peach        System
-#   High Contrast Black Text      Next               Thin Keramik, old & new
-#   High Contrast Yellow on Blue  Pale Gray          Thin Keramik II
+#   Aqua Blue                     Ice (FreddyK)     Point Reyes Green
+#   Aqua Graphite                 KDE 1             Pumpkin
+#   Atlas Green                   KDE 2             Redmond 2000
+#   BeOS                          Keramik           Redmond 95
+#   Blue Slate                    Keramik Emerald   Redmond XP
+#   CDE                           Keramik White     Solaris
+#   Dark Blue                     Lipstik Noble     Storm
+#   Desert Red                    Lipstik Standard  SuSE, old & new
+#   Digital CDE                   Lipstik White     SUSE-kdm
+#   EveX                          Media Peach       System
+#   High Contrast Black Text      Next              Thin Keramik, old & new
+#   High Contrast Yellow on Blue  Pale Gray         Thin Keramik II
 #   High Contrast White Text      Plastik
+#
+# Supported KDE 4 color schemes:
+#
+#   Honeycomb       Oxygen (= Standard)  Steel       Zion (Reversed)
+#   Norway          Oxygen Cold          Wonton Soup
+#   Obsidian Coast  Oxygen-Molecule 3.0  Zion
 #------------------------------------------------------------------------------
 proc tablelist::tileqtTheme {} {
     set bg		[tileqt_currentThemeColour -background]
@@ -638,7 +800,7 @@ proc tablelist::tileqtTheme {} {
     #
     switch "$bg $labelBg" {
 	"#fafafa #6188d7" {	;# color scheme "Aqua Blue"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #ffffff }
 		"platinum"			      { set pressedBg #d0d0d0 }
 		"baghira"	{ set labelBg #f5f5f5;  set pressedBg #9ec2fa }
@@ -652,7 +814,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#ffffff #89919b" {	;# color scheme "Aqua Graphite"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #ffffff }
 		"platinum"			      { set pressedBg #d4d4d4 }
 		"baghira"	{ set labelBg #f5f5f5;  set pressedBg #c3c7cd }
@@ -666,7 +828,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#afb49f #afb49f" {	;# color scheme "Atlas Green"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #c1c6af }
 		"platinum"			      { set pressedBg #929684 }
 		"baghira"	{ set labelBg #e5e8dc;  set pressedBg #dadcd0 }
@@ -680,7 +842,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#d9d9d9 #d9d9d9" {	;# color scheme "BeOS"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #eeeeee }
 		"platinum"			      { set pressedBg #b4b4b4 }
 		"baghira"	{ set labelBg #f2f2f2;  set pressedBg #e9e9e9 }
@@ -694,7 +856,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#9db9c8 #9db9c8" {	;# color scheme "Blue Slate"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #adcbdc }
 		"platinum"			      { set pressedBg #8299a6 }
 		"baghira"	{ set labelBg #ddeff6;  set pressedBg #d0e1ea }
@@ -708,7 +870,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#999999 #999999" {	;# color scheme "CDE"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #a8a8a8 }
 		"platinum"			      { set pressedBg #7f7f7f }
 		"baghira"	{ set labelBg #d5d5d5;  set pressedBg #cccccc }
@@ -722,7 +884,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#426794 #426794" {	;# color scheme "Dark Blue"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #4871a2 }
 		"platinum"			      { set pressedBg #37567b }
 		"baghira"	{ set labelBg #8aafdc;  set pressedBg #82a3cc }
@@ -736,7 +898,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#d6cdbb #d6cdbb" {	;# color scheme "Desert Red"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #ebe1ce }
 		"platinum"			      { set pressedBg #b2ab9c }
 		"baghira"	{ set labelBg #f7f4ec;  set pressedBg #edeae0 }
@@ -750,7 +912,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#4b7b82 #4b7b82" {	;# color scheme "Digital CDE"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #52878f }
 		"platinum"			      { set pressedBg #3e666c }
 		"baghira"	{ set labelBg #97c3c9;  set pressedBg #8eb6bc }
@@ -764,7 +926,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#e6dedc #e4e4e4" {	;# color scheme "EveX"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #fdf4f2 }
 		"platinum"			      { set pressedBg #bfb8b7 }
 		"baghira"	{ set labelBg #f6f5f5;  set pressedBg #ededed }
@@ -778,7 +940,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#ffffff #ffffff" {	;# color scheme "High Contrast Black Text"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #ffffff }
 		"platinum"			      { set pressedBg #d4d4d4 }
 		"baghira"	{ set labelBg #f5f5f5;  set pressedBg #f2f2f2 }
@@ -792,7 +954,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#0000ff #0000ff" {	;# color scheme "High Contrast Yellow on Blue"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #1919ff }
 		"platinum"			      { set pressedBg #0000d4 }
 		"baghira"	{ set labelBg #4848ff;  set pressedBg #4646ff }
@@ -806,7 +968,7 @@ proc tablelist::tileqtTheme {} {
 	}
 
 	"#000000 #000000" {	;# color scheme "High Contrast White Text"
-	    switch -- $style {  
+	    switch -- $style {
 		"light, 3rd revision"		      { set pressedBg #000000 }
 		"platinum"			      { set pressedBg #000000 }
 		"baghira"	{ set labelBg #818181;  set pressedBg #7f7f7f }
@@ -1182,6 +1344,78 @@ proc tablelist::tileqtTheme {} {
 		"thinkeramik"	{ set labelBg #f1f1e8;  set pressedBg #dbdad0 }
 	    }
 	}
+
+	"#d4d7d0 #babdb7" {	;# color scheme "Honeycomb"
+	    switch -- $style {
+		"cde" -
+		"motif"				      { set pressedBg #b1b4ae }
+		"plastique"	{ set labelBg #b8bbb5;  set pressedBg #c1c4be }
+	    }
+	}
+
+	"#ebe2d2 #f7f2e8" {	;# color scheme "Norway"
+	    switch -- $style {
+		"cde" -
+		"motif"				      { set pressedBg #c8bba3 }
+		"plastique"	{ set labelBg #f4f0e6;  set pressedBg #d6cfbf }
+	    }
+	}
+
+	"#302f2f #403f3e" {	;# color scheme "Obsidian Coast"
+	    switch -- $style {
+		"cde" -
+		"motif"				      { set pressedBg #2a2929 }
+		"plastique"	{ set labelBg #3f3e3d;  set pressedBg #2b2a2a }
+	    }
+	}
+
+	"#d6d2d0 #dfdcd9" {	;# color schemes "Oxygen" and "Standard"
+	    switch -- $style {
+		"cde" -
+		"motif"				      { set pressedBg #b6aeaa }
+		"plastique"	{ set labelBg #dddad7;  set pressedBg #c3bfbe }
+	    }
+	}
+
+	"#e0dfde #e8e7e6" {	;# c. s. "Oxygen Cold" and "Oxygen-Molecule 3.0"
+	    switch -- $style {
+		"cde" -
+		"motif"				      { set pressedBg #bbb9b8 }
+		"plastique"	{ set labelBg #e6e5e4;  set pressedBg #cdcccb }
+	    }
+	}
+
+	"#e0dfd8 #e8e7df" {	;# color scheme "Steel"
+	    switch -- $style {
+		"cde" -
+		"motif"				      { set pressedBg #babab4 }
+		"plastique"	{ set labelBg #e6e5dd;  set pressedBg #cdccc5 }
+	    }
+	}
+
+	"#494e58 #525863" {	;# color scheme "Wonton Soup"
+	    switch -- $style {
+		"cde" -
+		"motif"				      { set pressedBg #3f444c }
+		"plastique"	{ set labelBg #515762;  set pressedBg #424650 }
+	    }
+	}
+
+	"#fcfcfc #ffffff" {	;# color scheme "Zion"
+	    switch -- $style {
+		"cde" -
+		"motif"				      { set pressedBg #dedede }
+		"plastique"	{ set labelBg #f9f9f9;  set pressedBg #e5e5e5 }
+	    }
+	}
+
+	"#101010 #000000" {	;# color scheme "Zion (Reversed)"
+	    switch -- $style {
+		"cde" -
+		"motif"				      { set pressedBg #5e5e5e }
+		"plastique"	{ set labelBg #000000;  set pressedBg #0e0e0e }
+	    }
+	}
     }
 
     #
@@ -1192,12 +1426,17 @@ proc tablelist::tileqtTheme {} {
 	    set labelBg #e7e7e7;  set labelFg #000000;  set pressedBg #8fbeec
 	}
 
+	"gtk+" {
+	    set labelBg #e8e7e6;			set pressedBg $labelBg
+	}
+
 	"kde_xp" {
 	    set labelBg #ebeadb;  set labelFg #000000;  set pressedBg #faf8f3
 	}
 
-	"lipstik" {
-	    set labelBg $bg;                            set pressedBg $labelBg
+	"lipstik" -
+	"oxygen" {
+	    set labelBg $bg;				set pressedBg $labelBg
 	}
 
 	"marble" {
@@ -1218,9 +1457,13 @@ proc tablelist::tileqtTheme {} {
     # The stripe background color is specified
     # by a global KDE configuration option:
     #
-    if {[set val [getKdeConfigVal "General" "alternateBackground"]] eq ""} {
-	set stripeBg ""
-    } elseif {[string index $val 0] eq "#"} {
+    if {[info exists ::env(KDE_SESSION_VERSION)] &&
+	$::env(KDE_SESSION_VERSION) ne ""} {
+	set val [getKdeConfigVal "Colors:View" "BackgroundAlternate"]
+    } else {
+	set val [getKdeConfigVal "General" "alternateBackground"]
+    }
+    if {$val eq "" || [string index $val 0] eq "#"} {
 	set stripeBg $val
     } elseif {[scan $val "%d,%d,%d" r g b] == 3} {
 	set stripeBg [format "#%02x%02x%02x" $r $g $b]
@@ -1237,27 +1480,36 @@ proc tablelist::tileqtTheme {} {
 	"light, 3rd revision" -
 	"lipstik" -
 	"phase" -
-	"plastik"	{ set arrowColor $labelFg;  set arrowStyle flat7x4 }
+	"plastik"	{ set arrowColor $labelFg; set arrowStyle flat7x4 }
 
-	"baghira"	{ set arrowColor $labelFg;  set arrowStyle flat7x7 }
+	"baghira"	{ set arrowColor $labelFg; set arrowStyle flat7x7 }
 
-	"phase"		{ set arrowColor $labelFg;  set arrowStyle flat6x4 }
+	"cleanlooks" -
+	"gtk+" -
+	"oxygen"	{ set arrowColor $labelFg; set arrowStyle flatAngle9x6 }
 
-	"qtcurve"	{ set arrowColor $labelFg;  set arrowStyle flat7x5 }
+	"phase"		{ set arrowColor $labelFg; set arrowStyle flat6x4 }
+
+	"qtcurve"	{ set arrowColor $labelFg; set arrowStyle flatAngle7x5 }
 
 	"keramik" -
-	"thinkeramik"	{ set arrowColor $labelFg;  set arrowStyle flat8x5 }
+	"thinkeramik"	{ set arrowColor $labelFg; set arrowStyle flat8x5 }
 
-	default		{ set arrowColor "";	    set arrowStyle sunken12x11 }
+	default		{ set arrowColor "";	   set arrowStyle sunken12x11 }
     }
 
     #
     # The tree style depends on the current Qt style:
     #
     switch -- $style {
-	"baghira"	{ set treeStyle baghira }
+	"baghira" -
+	"cde" -
+	"motif"		{ set treeStyle baghira }
+	"gtk+"		{ set treeStyle gtk }
+	"oxygen"	{ set treeStyle oxygen2 }
 	"phase"		{ set treeStyle phase }
 	"plastik"	{ set treeStyle plastik }
+	"plastique"	{ set treeStyle plastique }
 	"qtcurve"	{ set treeStyle klearlooks }
 	default		{ set treeStyle winnative }
     }
@@ -1272,7 +1524,8 @@ proc tablelist::tileqtTheme {} {
 	-selectforeground	$selectFg \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
-        -labelbackground	$labelBg \
+	-labelbackground	$labelBg \
+	-labeldeactivatedBg	$labelBg \
 	-labeldisabledBg	$labelBg \
 	-labelactiveBg		$labelBg \
 	-labelpressedBg		$pressedBg \
@@ -1299,8 +1552,6 @@ proc tablelist::vistaTheme {} {
 	-foreground		SystemWindowText \
 	-disabledforeground	SystemDisabledText \
 	-stripebackground	"" \
-	-selectbackground	SystemHighlight \
-	-selectforeground	SystemHighlightText \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
 	-labelforeground	SystemButtonText \
@@ -1310,45 +1561,100 @@ proc tablelist::vistaTheme {} {
 	-labelfont		TkDefaultFont \
     ]
 
-    switch [winfo rgb . SystemHighlight] {
-	"13107 39321 65535" {					;# Aero
-	    set themeDefaults(-selectbackground) #d8effb
-	    set themeDefaults(-selectforeground) SystemWindowText
+    if {$::tcl_platform(osVersion) >= 10.0} {			;# Win 10
+	set selectBg	#cce8ff
+	set selectFg	SystemWindowText
+	set labelBg	#ffffff
+	set activeBg	#d9ebf9
+	set pressedBg	#bcdcf4
+	set labelBd	4
+	set labelPadY	4
+	set arrowColor	#595959
 
-	    set labelBg		#f8f9fa
-	    set activeBg	#c3eeff
-	    set pressedBg	#95d8f7
-	    set labelBd		4
-	    set labelPadY	4
+	variable scalingpct
+	switch $scalingpct {
+	    100 { set arrowStyle	flatAngle7x4 }
+	    125 { set arrowStyle	flatAngle9x5 }
+	    150 { set arrowStyle	flatAngle11x6 }
+	    200 { set arrowStyle	flatAngle15x8 }
+	}
+
+	set treeStyle	win10
+
+    } elseif {[string compare [winfo rgb . SystemHighlight] \
+			      "13107 39321 65535"] == 0} {	;# Aero
+	set selectFg	SystemWindowText
+	set labelBd	4
+	set labelPadY	4
+
+	variable scalingpct
+	if {$::tcl_platform(osVersion) < 6.2} {			;# Win Vista/7
+	    set labelBg	#ffffff
+	    set activeBg	#e3f7ff
+	    set pressedBg	#Bce4f9
 	    set arrowColor	#569bc0
-	    set arrowStyle	flat7x4
 
-	    if {$::tcl_platform(osVersion) == 6.0} {		;# Win Vista
-		set treeStyle	vistaAero
-	    } else {						;# Win 7
-		set treeStyle	win7Aero
+	    switch $scalingpct {
+		100 { set arrowStyle	photo7x4 }
+		125 { set arrowStyle	photo9x5 }
+		150 { set arrowStyle	photo11x6 }
+		200 { set arrowStyle	photo15x8 }
+	    }
+	} else {						;# Win 8
+	    set labelBg		#fcfcfc
+	    set activeBg	#f4f9ff
+	    set pressedBg	#f9fafb
+	    set arrowColor	#569bc0
+
+	    switch $scalingpct {
+		100 { set arrowStyle	photo7x4 }
+		125 { set arrowStyle	photo9x5 }
+		150 { set arrowStyle	photo11x6 }
+		200 { set arrowStyle	photo15x8 }
 	    }
 	}
 
-	default {						;# Win Classic
-	    set labelBg		SystemButtonFace
-	    set activeBg	SystemButtonFace
-	    set pressedBg	SystemButtonFace
-	    set labelBd		2
-	    set labelPadY	0
-	    set arrowColor	SystemButtonShadow
-	    set arrowStyle	flat7x4
+	if {$::tcl_platform(osVersion) == 6.0} {		;# Win Vista
+	    set selectBg	#d8effb
+	    set treeStyle	vistaAero
+	} elseif {$::tcl_platform(osVersion) == 6.1} {		;# Win 7
+	    set selectBg	#cee2fc
+	    set treeStyle	win7Aero
+	} else {						;# Win 8
+	    set selectBg	#cbe8f6
+	    set treeStyle	win7Aero
+	}
 
-	    if {$::tcl_platform(osVersion) == 6.0} {		;# Win Vista
-		set treeStyle	vistaClassic
-	    } else {						;# Win 7
-		set treeStyle	win7Classic
-	    }
+    } else {							;# Win Classic
+	set selectBg	SystemHighlight
+	set selectFg	SystemHighlightText
+	set labelBg	SystemButtonFace
+	set activeBg	SystemButtonFace
+	set pressedBg	SystemButtonFace
+	set labelBd	2
+	set labelPadY	0
+	set arrowColor	SystemButtonShadow
+
+	variable scalingpct
+	switch $scalingpct {
+	    100 { set arrowStyle	flat7x4 }
+	    125 { set arrowStyle	flat9x5 }
+	    150 { set arrowStyle	flat11x6 }
+	    200 { set arrowStyle	flat15x8 }
+	}
+
+	if {$::tcl_platform(osVersion) == 6.0} {		;# Win Vista
+	    set treeStyle	vistaClassic
+	} else {						;# Win 7/8
+	    set treeStyle	win7Classic
 	}
     }
 
     array set themeDefaults [list \
-        -labelbackground	$labelBg \
+	-selectbackground	$selectBg \
+	-selectforeground	$selectFg \
+	-labelbackground	$labelBg \
+	-labeldeactivatedBg	$labelBg \
 	-labeldisabledBg	$labelBg \
 	-labelactiveBg		$activeBg \
 	-labelpressedBg		$pressedBg \
@@ -1374,7 +1680,8 @@ proc tablelist::winnativeTheme {} {
 	-selectforeground	SystemHighlightText \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
-        -labelbackground	SystemButtonFace \
+	-labelbackground	SystemButtonFace \
+	-labeldeactivatedBg	SystemButtonFace \
 	-labeldisabledBg	SystemButtonFace \
 	-labelactiveBg		SystemButtonFace \
 	-labelpressedBg		SystemButtonFace \
@@ -1405,7 +1712,8 @@ proc tablelist::winxpblueTheme {} {
 	-selectforeground	#ffffff \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
-        -labelbackground	#ece9d8 \
+	-labelbackground	#ece9d8 \
+	-labeldeactivatedBg	#ece9d8 \
 	-labeldisabledBg	#e3e1dd \
 	-labelactiveBg		#c1d2ee \
 	-labelpressedBg		#bab5ab \
@@ -1433,8 +1741,6 @@ proc tablelist::xpnativeTheme {} {
 	-foreground		SystemWindowText \
 	-disabledforeground	SystemDisabledText \
 	-stripebackground	"" \
-	-selectbackground	SystemHighlight \
-	-selectforeground	SystemHighlightText \
 	-selectborderwidth	0 \
 	-font			TkTextFont \
 	-labelforeground	SystemButtonText \
@@ -1444,98 +1750,164 @@ proc tablelist::xpnativeTheme {} {
 	-labelfont		TkDefaultFont \
     ]
 
-    switch [winfo rgb . SystemHighlight] {
-	"12593 27242 50629" {					;# Win XP Blue
-	    set xpStyle		1
-	    set labelBg		#ebeadb
-	    set activeBg	#faf8f3
-	    set pressedBg	#dedfd8
-	    set labelBd		4
-	    set labelPadY	4
-	    set arrowColor	#aca899
-	    set arrowStyle	flat9x5
-	    set treeStyle	winxpBlue
+    if {$::tcl_platform(osVersion) >= 10.0} {			;# Win 10
+	set xpStyle	0
+	set selectBg	#cce8ff
+	set selectFg	SystemWindowText
+	set labelBg	#ffffff
+	set activeBg	#d9ebf9
+	set pressedBg	#bcdcf4
+	set labelBd	4
+	set labelPadY	4
+	set arrowColor	#595959
 
-	    if {[info exists tile::version] &&
-		[string compare $tile::version 0.7] < 0} {
-		set labelBd 0
-	    }
+	variable scalingpct
+	switch $scalingpct {
+	    100 { set arrowStyle	flatAngle7x4 }
+	    125 { set arrowStyle	flatAngle9x5 }
+	    150 { set arrowStyle	flatAngle11x6 }
+	    200 { set arrowStyle	flatAngle15x8 }
 	}
 
-	"37779 41120 28784" {					;# Win XP Olive
-	    set xpStyle		1
-	    set labelBg		#ebeadb
-	    set activeBg	#faf8f3
-	    set pressedBg	#dedfd8
-	    set labelBd		4
-	    set labelPadY	4
-	    set arrowColor	#aca899
-	    set arrowStyle	flat9x5
-	    set treeStyle	winxpOlive
+	set treeStyle	win10
 
-	    if {[info exists tile::version] &&
-		[string compare $tile::version 0.7] < 0} {
-		set labelBd 0
+    } else {
+	switch [winfo rgb . SystemHighlight] {
+	    "12593 27242 50629" {				;# Win XP Blue
+		set xpStyle	1
+		set selectBg	SystemHighlight
+		set selectFg	SystemHighlightText
+		set labelBg	#ebeadb
+		set activeBg	#faf8f3
+		set pressedBg	#dedfd8
+		set labelBd	4
+		set labelPadY	4
+		set arrowColor	#aca899
+		set arrowStyle	flat9x5
+		set treeStyle	winxpBlue
+
+		if {[info exists ::tile::version] &&
+		    [string compare $::tile::version 0.7] < 0} {
+		    set labelBd 0
+		}
 	    }
-	}
 
-	"45746 46260 49087" {					;# Win XP Silver
-	    set xpStyle		1
-	    set labelBg		#f9fafd
-	    set activeBg	#fefefe
-	    set pressedBg	#ececf3
-	    set labelBd		4
-	    set labelPadY	4
-	    set arrowColor	#aca899
-	    set arrowStyle	flat9x5
-	    set treeStyle	winxpSilver
+	    "37779 41120 28784" {				;# Win XP Olive
+		set xpStyle	1
+		set selectBg	SystemHighlight
+		set selectFg	SystemHighlightText
+		set labelBg	#ebeadb
+		set activeBg	#faf8f3
+		set pressedBg	#dedfd8
+		set labelBd	4
+		set labelPadY	4
+		set arrowColor	#aca899
+		set arrowStyle	flat9x5
+		set treeStyle	winxpOlive
 
-	    if {[info exists tile::version] &&
-		[string compare $tile::version 0.7] < 0} {
-		set labelBd 0
+		if {[info exists ::tile::version] &&
+		    [string compare $::tile::version 0.7] < 0} {
+		    set labelBd 0
+		}
 	    }
-	}
 
-	"13107 39321 65535" {					;# Aero
-	    set themeDefaults(-selectbackground) #d8effb
-	    set themeDefaults(-selectforeground) SystemWindowText
+	    "45746 46260 49087" {				;# Win XP Silver
+		set xpStyle	1
+		set selectBg	SystemHighlight
+		set selectFg	SystemHighlightText
+		set labelBg	#f9fafd
+		set activeBg	#fefefe
+		set pressedBg	#ececf3
+		set labelBd	4
+		set labelPadY	4
+		set arrowColor	#aca899
+		set arrowStyle	flat9x5
+		set treeStyle	winxpSilver
 
-	    set xpStyle		0
-	    set labelBg		#f8f9fa
-	    set activeBg	#c3eeff
-	    set pressedBg	#95d8f7
-	    set labelBd		4
-	    set labelPadY	4
-	    set arrowColor	#569bc0
-	    set arrowStyle	flat7x4
-
-	    if {$::tcl_platform(osVersion) == 6.0} {		;# Win Vista
-		set treeStyle	vistaAero
-	    } else {						;# Win 7
-		set treeStyle	win7Aero
+		if {[info exists ::tile::version] &&
+		    [string compare $::tile::version 0.7] < 0} {
+		    set labelBd 0
+		}
 	    }
-	}
 
-	default {						;# Win Classic
-	    set xpStyle		0
-	    set labelBg		SystemButtonFace
-	    set activeBg	SystemButtonFace
-	    set pressedBg	SystemButtonFace
-	    set labelBd		2
-	    set labelPadY	0
-	    set arrowColor	SystemButtonShadow
-	    set arrowStyle	flat7x4
+	    "13107 39321 65535" {				;# Aero
+		set xpStyle	0
+		set selectFg	SystemWindowText
+		set labelBd	4
+		set labelPadY	4
 
-	    if {$::tcl_platform(osVersion) == 6.0} {		;# Win Vista
-		set treeStyle	vistaClassic
-	    } else {						;# Win 7
-		set treeStyle	win7Classic
+		variable scalingpct
+		if {$::tcl_platform(osVersion) < 6.2} {		;# Win Vista/7
+		    set labelBg	#ffffff
+		    set activeBg	#e3f7ff
+		    set pressedBg	#Bce4f9
+		    set arrowColor	#569bc0
+
+		    switch $scalingpct {
+			100 { set arrowStyle	photo7x4 }
+			125 { set arrowStyle	photo9x5 }
+			150 { set arrowStyle	photo11x6 }
+			200 { set arrowStyle	photo15x8 }
+		    }
+		} else {					;# Win 8
+		    set labelBg	#fcfcfc
+		    set activeBg	#f4f9ff
+		    set pressedBg	#f9fafb
+		    set arrowColor	#569bc0
+
+		    switch $scalingpct {
+			100 { set arrowStyle	photo7x4 }
+			125 { set arrowStyle	photo9x5 }
+			150 { set arrowStyle	photo11x6 }
+			200 { set arrowStyle	photo15x8 }
+		    }
+		}
+
+		if {$::tcl_platform(osVersion) == 6.0} {	;# Win Vista
+		    set selectBg	#d8effb
+		    set treeStyle	vistaAero
+		} elseif {$::tcl_platform(osVersion) == 6.1} {	;# Win 7
+		    set selectBg	#cee2fc
+		    set treeStyle	win7Aero
+		} else {					;# Win 8
+		    set selectBg	#cbe8f6
+		    set treeStyle	win7Aero
+		}
+	    }
+
+	    default {						;# Win Classic
+		set xpStyle	0
+		set selectBg	SystemHighlight
+		set selectFg	SystemHighlightText
+		set labelBg	SystemButtonFace
+		set activeBg	SystemButtonFace
+		set pressedBg	SystemButtonFace
+		set labelBd	2
+		set labelPadY	0
+		set arrowColor	SystemButtonShadow
+
+		variable scalingpct
+		switch $scalingpct {
+		    100 { set arrowStyle	flat7x4 }
+		    125 { set arrowStyle	flat9x5 }
+		    150 { set arrowStyle	flat11x6 }
+		    200 { set arrowStyle	flat15x8 }
+		}
+
+		if {$::tcl_platform(osVersion) == 6.0} {	;# Win Vista
+		    set treeStyle	vistaClassic
+		} else {					;# Win 7/8
+		    set treeStyle	win7Classic
+		}
 	    }
 	}
     }
 
     array set themeDefaults [list \
-        -labelbackground	$labelBg \
+	-selectbackground	$selectBg \
+	-selectforeground	$selectFg \
+	-labelbackground	$labelBg \
+	-labeldeactivatedBg	$labelBg \
 	-labeldisabledBg	$labelBg \
 	-labelactiveBg		$activeBg \
 	-labelpressedBg		$pressedBg \
@@ -1567,9 +1939,9 @@ proc tablelist::rgb2hsv {r g b} {
     #
     # Compute the value component
     #
-    set sortedLst [lsort -real [list $r $g $b]]
-    set v [lindex $sortedLst end]
-    set dist [expr {$v - [lindex $sortedLst 0]}]
+    set sortedList [lsort -real [list $r $g $b]]
+    set v [lindex $sortedList end]
+    set dist [expr {$v - [lindex $sortedList 0]}]
 
     #
     # Compute the saturation component
@@ -1676,6 +2048,12 @@ proc tablelist::getKdeConfigVal {group key} {
 proc tablelist::makeKdeDirList {} {
     variable kdeDirList {}
 
+    if {[info exists ::env(KDE_SESSION_VERSION)]} {
+	set ver $::env(KDE_SESSION_VERSION)
+    } else {
+	set ver ""
+    }
+
     if {[info exists ::env(USER)] && $::env(USER) eq "root"} {
 	set name "KDEROOTHOME"
     } else {
@@ -1684,7 +2062,7 @@ proc tablelist::makeKdeDirList {} {
     if {[info exists ::env($name)] && $::env($name) ne ""} {
 	set localKdeDir [file normalize $::env($name)]
     } elseif {[info exists ::env(HOME)] && $::env(HOME) ne ""} {
-	set localKdeDir [file normalize [file join $::env(HOME) ".kde"]]
+	set localKdeDir [file normalize [file join $::env(HOME) ".kde$ver"]]
     }
     if {[info exists localKdeDir] && $localKdeDir ne "-"} {
 	lappend kdeDirList $localKdeDir
@@ -1700,10 +2078,10 @@ proc tablelist::makeKdeDirList {} {
 	lappend kdeDirList $::env(KDEDIR)
     }
 
-    set prefix [exec kde-config --prefix]
+    set prefix [exec kde$ver-config --expandvars --prefix]
     lappend kdeDirList $prefix
 
-    set execPrefix [exec kde-config --expandvars --exec-prefix]
+    set execPrefix [exec kde$ver-config --expandvars --exec-prefix]
     if {$execPrefix ne $prefix} {
 	lappend kdeDirList $execPrefix
     }

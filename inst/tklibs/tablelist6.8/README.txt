@@ -7,14 +7,7 @@
                        csaba.nemethi@t-online.de 
 
 
-PLEASE NOTE: the version provided here does not include the large documentation
-and demos, in order to keep the R package distributed on CRAN into more
-reasonable limits. You are encouraged to download the full packages with doc
-and demos from http://www.nemethi.de/. The documentation is also accessible from
-there in HTML format. (Ph. Grosjean)
-
-
-What is Tablelist?
+What Is Tablelist?
 ------------------
 
 Tablelist is a library package for Tcl/Tk versions 8.0 or higher,
@@ -50,11 +43,11 @@ pixels).  The columns are, per default, resizable.  The alignment of
 each column can be specified as "left", "right", or "center".
 
 The columns, rows, and cells can be configured individually.  Several
-of the global and column-specific options refer to the headers,
+of the global and column-specific options refer to the header titles,
 implemented as label widgets.  For instance, the "-labelcommand" option
 specifies a Tcl command to be invoked when mouse button 1 is released
-over a label.  The most common value of this option sorts the items
-based on the respective column.
+over a header label.  The most common value of this option sorts the
+items based on the respective column.
 
 The Tablelist package provides a great variety of tree styles
 controlling the look & feel of the column that displays the tree
@@ -63,8 +56,8 @@ hierarchy with the aid of indentations and expand/collapse controls.
 Interactive editing of the elements of a tablelist widget can be
 enabled for individual cells and for entire columns.  A great variety
 of widgets from the Tk core and from the packages tile, BWidget,
-Iwidgets, combobox, and Mentry (or Mentry_tile) is supported for being
-used as embedded edit window.  In addition, a rich set of keyboard
+Iwidgets, combobox, ctext, and Mentry (or Mentry_tile) is supported for
+being used as embedded edit window.  In addition, a rich set of keyboard
 bindings is provided for a comfortable navigation between the editable
 cells.
 
@@ -89,24 +82,23 @@ and Wcb version 3.0 or higher also supports callbacks for the
 "activatecell", "cellselection set", and "cellselection clear"
 commands.  The download location of Wcb is
 
-    http://www.nemethi.de
+    https://www.nemethi.de
 
-How to get it?
+How to Get It?
 --------------
 
 Tablelist is available for free download from the same URL as Wcb.  The
-distribution file is "tablelist5.5.tar.gz" for UNIX and
-"tablelist5_5.zip" for Windows.  These files contain the same
+distribution file is "tablelist6.8.tar.gz" for UNIX and
+"tablelist6_8.zip" for Windows.  These files contain the same
 information, except for the additional carriage return character
 preceding the linefeed at the end of each line in the text files for
 Windows.
 
-Tablelist is also hosted on SourceForge, as part of tklib, which in
-turn is contained in the tcllib project, having the address
+Tablelist is also included in tklib, which has the address
 
-    http://sourceforge.net/projects/tcllib
+    https://core.tcl.tk/tklib
 
-How to install it?
+How to Install It?
 ------------------
 
 Install the package as a subdirectory of one of the directories given
@@ -116,15 +108,19 @@ locations of these library directories are given by the "tcl_library"
 and "tk_library" variables, respectively.
 
 To install Tablelist on UNIX, "cd" to the desired directory and unpack
-the distribution file "tablelist5.5.tar.gz":
+the distribution file "tablelist6.8.tar.gz":
 
-    gunzip -c tablelist5.5.tar.gz | tar -xf -
+    gunzip -c tablelist6.8.tar.gz | tar -xf -
 
-This command will create a directory named "tablelist5.5", with the
+On most UNIX systems this can be replaced with
+
+    tar -zxf tablelist6.8.tar.gz
+
+Both commands will create a directory named "tablelist6.8 with the
 subdirectories "demos", "doc", and "scripts".
 
 On Windows, use WinZip or some other program capable of unpacking the
-distribution file "tablelist5_5.zip" into the directory "tablelist5.5",
+distribution file "tablelist6_8.zip" into the directory "tablelist6.8",
 with the subdirectories "demos", "doc", and "scripts".
 
 The file "tablelistEdit.tcl" in the "scripts" directory is only needed
@@ -137,10 +133,10 @@ the package Tablelist_tile (see next section).
 Next, you should check the exact version number of your Tcl/Tk
 distribution, given by the "tcl_patchLevel" and "tk_patchLevel"
 variables.  If you are using Tcl/Tk version 8.2.X, 8.3.0 - 8.3.2, or
-8.4a1, then you should proceed as described in the "How to install it?"
+8.4a1, then you should proceed as described in the "How to Install It?"
 section of the file "tablelist.html", located in the "doc" directory.
 
-How to use it?
+How to Use It?
 --------------
 
 The Tablelist distribution provides two packages, called Tablelist and

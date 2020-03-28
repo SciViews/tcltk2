@@ -7,7 +7,7 @@
 #   - Public procedures related to sorting
 #   - Private procedures implementing the sorting
 #
-# Copyright (c) 2000-2011  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
+# Copyright (c) 2000-2019  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
 #==============================================================================
 
 #
@@ -18,7 +18,7 @@
 #------------------------------------------------------------------------------
 # tablelist::sortByColumn
 #
-# Sorts the contents of the tablelist widget win by its col'th column.  Returns
+# Sorts the content of the tablelist widget win by its col'th column.  Returns
 # the sort order (increasing or decreasing).
 #------------------------------------------------------------------------------
 proc tablelist::sortByColumn {win col} {
@@ -54,10 +54,12 @@ proc tablelist::sortByColumn {win col} {
     }
 
     #
-    # Sort the widget's contents based on the given column
+    # Sort the widget's content based on the given column
     #
     if {[catch {::$win sortbycolumn $col -$sortOrder} result] == 0} {
-	event generate $win <<TablelistColumnSorted>>
+	set userData [list $col $sortOrder]
+	genVirtualEvent $win <<TablelistColumnSorted>> $userData
+
 	return $sortOrder
     } else {
 	return -code error $result
@@ -68,7 +70,7 @@ proc tablelist::sortByColumn {win col} {
 # tablelist::addToSortColumns
 #
 # Adds the col'th column of the tablelist widget win to the latter's list of
-# sort columns and sorts the contents of the widget by the modified column
+# sort columns and sorts the content of the widget by the modified column
 # list.  Returns the specified column's sort order (increasing or decreasing).
 #------------------------------------------------------------------------------
 proc tablelist::addToSortColumns {win col} {
@@ -111,12 +113,14 @@ proc tablelist::addToSortColumns {win col} {
     }
 
     #
-    # Sort the widget's contents according to the
+    # Sort the widget's content according to the
     # modified lists of sort columns and orders
     #
     if {[catch {::$win sortbycolumnlist $sortColList $sortOrderList} result]
 	== 0} {
-	event generate $win <<TablelistColumnsSorted>>
+	set userData [list $sortColList $sortOrderList]
+	genVirtualEvent $win <<TablelistColumnsSorted>> $userData
+
 	return $sortOrder
     } else {
 	return -code error $result
@@ -139,13 +143,6 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
     upvar ::tablelist::ns${win}::data data
 
     set sortAllItems [expr {[string compare $parentKey "root"] == 0}]
-    if {[winfo viewable $win] && $sortAllItems} {
-	purgeWidgets $win
-	update idletasks
-	if {![winfo exists $win]} {		;# because of update idletasks
-	    return ""
-	}
-    }
 
     #
     # Make sure sortOrderList has the same length as sortColList
@@ -161,13 +158,11 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
     }
 
     #
-    # Save the keys corresponding to anchorRow and activeRow,
-    # as well as the indices of the selected cells
+    # Save the keys corresponding to anchorRow and activeRow
     #
     foreach type {anchor active} {
 	set ${type}Key [lindex $data(keyList) $data(${type}Row)]
     }
-    set selCells [curCellSelection $win 1]
 
     #
     # Save some data of the edit window if present
@@ -182,7 +177,7 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
     #
     set descItemList {}
     if {[llength $sortColList] == 1 && [lindex $sortColList 0] == -1} {
-	if {[string compare $data(-sortcommand) ""] == 0} {
+	if {[string length $data(-sortcommand)] == 0} {
 	    return -code error "value of the -sortcommand option is empty"
 	}
 
@@ -262,7 +257,7 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 		    -command $data($col-sortcommand)] descItemList
 	    } elseif {[string compare $data($col-sortmode) "asciinocase"]
 		== 0} {
-		if {$::tk_version >= 8.5} {
+		if {$::tcl_version >= 8.5} {
 		    sortChildren $win $parentKey [list lsort -$order \
 			-index $col -ascii -nocase] descItemList
 		} else {
@@ -342,8 +337,7 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 	    set item [lreplace $item $col $col $line]
 	    lappend newDescItemList $item
 	    set key [lindex $item end]
-	    if {![info exists data($key-elide)] &&
-		![info exists data($key-hide)]} {
+	    if {![info exists data($key-hide)]} {
 		incr line
 	    }
 	}
@@ -354,7 +348,7 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 	$firstDescRow $lastDescRow] $descItemList]
 
     #
-    # Replace the contents of the list variable if present
+    # Replace the content of the list variable if present
     #
     condUpdateListVar $win
 
@@ -363,9 +357,10 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
     # Interestingly, for a large number of items it is much more efficient
     # to empty each line individually than to invoke a global delete command.
     #
+    variable pu
     set w $data(body)
-    $w tag remove hiddenRow $firstDescLine.0 $lastDescLine.end
-    $w tag remove elidedRow $firstDescLine.0 $lastDescLine.end
+    $w tag remove elidedRow $firstDescLine.0 $lastDescLine.end+1$pu
+    $w tag remove hiddenRow $firstDescLine.0 $lastDescLine.end+1$pu
     for {set line $firstDescLine} {$line <= $lastDescLine} {incr line} {
 	$w delete $line.0 $line.end
     }
@@ -386,6 +381,9 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 	if {$data(hasFmtCmds)} {
 	    set dispItem [formatItem $win $key $row $dispItem]
 	}
+	if {[string match "*\t*" $dispItem]} {
+	    set dispItem [mapTabs $dispItem]
+	}
 
 	#
 	# Clip the elements if necessary and
@@ -400,7 +398,7 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 	if {$isSimple} {
 	    set insertArgs {}
 	    set multilineData {}
-	    foreach text [strToDispStr $dispItem] \
+	    foreach text $dispItem \
 		    colFont $data(colFontList) \
 		    colTags $data(colTagsList) \
 		    {pixels alignment} $data(colList) {
@@ -422,11 +420,6 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 		    if {[info exists data($key,$col-font)]} {
 			set cellFont $data($key,$col-font)
 			lappend cellTags cell-font-$data($key,$col-font)
-		    }
-		    foreach opt {-background -foreground} {
-			if {[info exists data($key,$col$opt)]} {
-			    lappend cellTags cell$opt-$data($key,$col$opt)
-			}
 		    }
 		}
 
@@ -460,7 +453,7 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 			}
 			set text [joinList $win $list $cellFont \
 				  $pixels $snipSide $snipStr]
-		    } else {
+		    } elseif {!$data(-displayondemand)} {
 			set text [strRange $win $text $cellFont \
 				  $pixels $snipSide $snipStr]
 		    }
@@ -468,7 +461,10 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 
 		if {$multiline} {
 		    lappend insertArgs "\t\t" $cellTags
-		    lappend multilineData $col $text $colFont $pixels $alignment
+		    lappend multilineData \
+			    $col $text $cellFont $pixels $alignment
+		} elseif {$data(-displayondemand)} {
+		    lappend insertArgs "\t\t" $cellTags
 		} else {
 		    lappend insertArgs "\t$text\t" $cellTags
 		}
@@ -487,14 +483,16 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 	    # Embed the message widgets displaying multiline elements
 	    #
 	    foreach {col text font pixels alignment} $multilineData {
-		findTabs $win $line $col $col tabIdx1 tabIdx2
+		findTabs $win $w $line $col $col tabIdx1 tabIdx2
 		set msgScript [list ::tablelist::displayText $win $key \
 			       $col $text $font $pixels $alignment]
-		$w window create $tabIdx2 -pady $padY -create $msgScript
+		$w window create $tabIdx2 \
+			  -align top -pady $padY -create $msgScript
+		$w tag add elidedWin $tabIdx2
 	    }
 
 	} else {
-	    foreach text [strToDispStr $dispItem] \
+	    foreach text $dispItem \
 		    colFont $data(colFontList) \
 		    colTags $data(colTagsList) \
 		    {pixels alignment} $data(colList) {
@@ -517,11 +515,6 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 			set cellFont $data($key,$col-font)
 			lappend cellTags cell-font-$data($key,$col-font)
 		    }
-		    foreach opt {-background -foreground} {
-			if {[info exists data($key,$col$opt)]} {
-			    lappend cellTags cell$opt-$data($key,$col$opt)
-			}
-		    }
 		}
 
 		#
@@ -536,18 +529,16 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 	}
 
 	if {$rowTagRefCount != 0} {
-	    foreach opt {-background -foreground -font} {
-		if {[info exists data($key$opt)]} {
-		    $w tag add row$opt-$data($key$opt) $line.0 $line.end
-		}
+	    if {[info exists data($key-font)]} {
+		$w tag add row-font-$data($key-font) $line.0 $line.end
 	    }
 	}
 
 	if {[info exists data($key-elide)]} {
-	    $w tag add elidedRow $line.0 $line.end+1c
+	    $w tag add elidedRow $line.0 $line.end+1$pu
 	}
 	if {[info exists data($key-hide)]} {
-	    $w tag add hiddenRow $line.0 $line.end+1c
+	    $w tag add hiddenRow $line.0 $line.end+1$pu
 	}
     }
 
@@ -571,14 +562,6 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
     set data(viewableRowList) {-1}
 
     #
-    # Select the cells that were selected before
-    #
-    foreach {key col} $selCells {
-	set row [keyToRow $win $key]
-	cellSelection $win set $row $col $row $col
-    }
-
-    #
     # Disable the body text widget if it was disabled before
     #
     if {$data(isDisabled)} {
@@ -591,7 +574,7 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
     #
     foreach type {anchor active} {
 	upvar 0 ${type}Key key2
-	if {[string compare $key2 ""] != 0} {
+	if {[string length $key2] != 0} {
 	    set data(${type}Row) [keyToRow $win $key2]
 	}
     }
@@ -608,12 +591,16 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 	set selRows [curSelection $win]
 	if {[llength $selRows] == 1} {
 	    set selRow [lindex $selRows 0]
-	    if {$selRow >= $firstDescRow && $selRow <= $lastDescRow} {
+	    set selKey [lindex $data(keyList) $selRow]
+	    if {$selRow >= $firstDescRow && $selRow <= $lastDescRow &&
+		![info exists data($selKey-elide)]} {
 		seeRow $win $selRow
 	    }
 	} elseif {[string compare [focus -lastfor $w] $w] == 0} {
+	    set activeKey [lindex $data(keyList) $data(activeRow)]
 	    if {$data(activeRow) >= $firstDescRow &&
-		$data(activeRow) <= $lastDescRow} {
+		$data(activeRow) <= $lastDescRow &&
+		![info exists data($activeKey-elide)]} {
 		seeRow $win $data(activeRow)
 	    }
 	}
@@ -623,8 +610,8 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
     # Adjust the elided text and restore the stripes in the body text widget
     #
     adjustElidedText $win
+    redisplayVisibleItems $win
     makeStripes $win
-    updateColorsWhenIdle $win
     adjustSepsWhenIdle $win
     updateVScrlbarWhenIdle $win
 
@@ -634,7 +621,7 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
     variable winSys
     if {[string compare $winSys "aqua"] == 0} {
 	foreach col $data(arrowColList) {
-	    set canvas [list $data(hdrTxtFrCanv)$col]
+	    set canvas [list $data(hdrTxtFrmCanv)$col]
 	    after idle [list lower $canvas]
 	    after idle [list raise $canvas]
 	}
@@ -652,7 +639,7 @@ proc tablelist::sortItems {win parentKey sortColList sortOrderList} {
 proc tablelist::sortChildren {win parentKey sortCmd itemListName} {
     upvar $itemListName itemList ::tablelist::ns${win}::data data
 
-    set childKeyList $data($parentKey-children)
+    set childKeyList $data($parentKey-childList)
     if {[llength $childKeyList] == 0} {
 	return ""
     }
@@ -669,11 +656,11 @@ proc tablelist::sortChildren {win parentKey sortCmd itemListName} {
     #
     # Update the lists and invoke the procedure recursively for the children
     #
-    set data($parentKey-children) {}
+    set data($parentKey-childList) {}
     foreach item $childItemList {
 	lappend itemList $item
 	set childKey [lindex $item end]
-	lappend data($parentKey-children) $childKey
+	lappend data($parentKey-childList) $childKey
 
 	sortChildren $win $childKey $sortCmd itemList
     }
@@ -694,7 +681,7 @@ proc tablelist::sortList {win list} {
     }
 
     if {[llength $sortColList] == 1 && [lindex $sortColList 0] == -1} {
-	if {[string compare $data(-sortcommand) ""] == 0} {
+	if {[string length $data(-sortcommand)] == 0} {
 	    return -code error "value of the -sortcommand option is empty"
 	}
 
@@ -722,7 +709,7 @@ proc tablelist::sortList {win list} {
 			  $data($col-sortcommand) $list]
 	    } elseif {[string compare $data($col-sortmode) "asciinocase"]
 		== 0} {
-		if {$::tk_version >= 8.5} {
+		if {$::tcl_version >= 8.5} {
 		    set list [lsort -$order -index $col -ascii -nocase $list]
 		} else {
 		    set list [lsort -$order -index $col -command \

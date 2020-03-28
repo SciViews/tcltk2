@@ -1,15 +1,37 @@
 #==============================================================================
 # Main Tablelist and Tablelist_tile package module.
 #
-# Copyright (c) 2000-2011  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
+# Copyright (c) 2000-2019  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
 #==============================================================================
 
 namespace eval ::tablelist {
     #
+    # Gets the scaling percentage (100, 125, 150, or 200).
+    #
+    proc scalingPercentage {} {
+	set factor [tk scaling]
+	if {$factor < 1.50} {
+	    return 100 
+	} elseif {$factor < 1.83} {
+	    return 125 
+	} elseif {$factor < 2.33} {
+	    return 150 
+	} else {
+	    return 200
+	}
+    }
+
+    #
     # Public variables:
     #
-    variable version	5.5
-    variable library	[DIR]
+    variable version	6.8
+    variable library
+    if {$::tcl_version >= 8.4} {
+	set library	[file normalize [DIR]]
+    } else {
+	set library	[DIR]			;# no "file normalize" yet
+    }
+    variable scalingpct	[scalingPercentage]
 
     #
     # Creates a new tablelist widget:
@@ -24,7 +46,8 @@ namespace eval ::tablelist {
     #
     # Helper procedures used in binding scripts:
     #
-    namespace export	convEventFields getTablelistPath getTablelistColumn
+    namespace export	convEventFields getTablelistPath getTablelistColumn \
+			delaySashPosUpdates
 
     #
     # Register various widgets for interactive cell editing:
@@ -32,7 +55,7 @@ namespace eval ::tablelist {
     namespace export	addBWidgetEntry addBWidgetSpinBox addBWidgetComboBox
     namespace export    addIncrEntryfield addIncrDateTimeWidget \
 			addIncrSpinner addIncrSpinint addIncrCombobox
-    namespace export	addOakleyCombobox
+    namespace export	addCtext addOakleyCombobox
     namespace export	addDateMentry addTimeMentry addDateTimeMentry \
 			addFixedPointMentry addIPAddrMentry addIPv6AddrMentry
 }
@@ -58,7 +81,7 @@ proc ::tablelist::restoreUsingTile {origVal varName index op} {
     variable usingTile $origVal
     switch $op {
 	w {
-	    return -code error "it is not allowed to use both Tablelist and\
+	    return -code error "it is not supported to use both Tablelist and\
 				Tablelist_tile in the same application"
 	}
 	u {
@@ -68,8 +91,14 @@ proc ::tablelist::restoreUsingTile {origVal varName index op} {
     }
 }
 
-interp alias {} ::tk::frame {} ::frame
-interp alias {} ::tk::label {} ::label
+proc ::tablelist::createTkAliases {} {
+    foreach cmd {frame label} {
+	if {[llength [info commands ::tk::$cmd]] == 0} {
+	    interp alias {} ::tk::$cmd {} ::$cmd
+	}
+    }
+}
+::tablelist::createTkAliases
 
 #
 # Everything else needed is lazily loaded on demand, via the dispatcher

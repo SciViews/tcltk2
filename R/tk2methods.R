@@ -41,7 +41,7 @@ state <- function (x, ...)
 	UseMethod("state")
 
 state.tk2widget <- function (x, ...)
-	return(as.character(tcl(x, "state")))
+	as.character(tkcget(x, "-state", ...))
 
 ## TODO: a state.tk2listbox, because there is no state property defined for it!
 

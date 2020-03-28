@@ -4,16 +4,20 @@
 .onLoad <- function(libname, pkgname) {
 	libdir <- file.path(libname, pkgname, "tklibs")
 
-	## A slightly modified version of addTclPath() that works also within SciViews
-	addTclPath <- function (path = ".") {
-		if (.Platform$OS.type == "windows") 
-		    path <- gsub("\\\\", "/", path)
-		a <- tclvalue(tcl("set", "::auto_path"))
-		paths <- strsplit(a, " ", fixed = TRUE)[[1L]]
-		if (!path %in% paths) 
-		    tcl("lappend", "::auto_path", path)
-	}
-    res <- addTclPath(libdir)	# extend the Tcl/Tk path
+  # A slightly modified version of addTclPath() that works also within SciViews
+  addTclPath <- function(path = ".") {
+    if (.Platform$OS.type == "windows")
+      path <- gsub("\\\\", "/", path)
+    paths <- as.character(tcl("set", "::auto_path"))
+    if (!path %in% paths) {
+      tcl("lappend", "::auto_path", path)
+    } else {
+      # To have a consistent output is the path is not changed:
+      tcl("set", "::auto_path")
+    }
+  }
+
+  res <- addTclPath(libdir)	 # extend the Tcl/Tk path
 
     ## Load Tcl and Tk translation catalogs
 	res <- tclRequire("msgcat")

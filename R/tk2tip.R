@@ -8,39 +8,42 @@
 ### To do:
 ### - add and check catch instructions here
 
-tk2tip <- function (widget, message)
-{
-	if (!is.tk()) stop("Package Tk is required but not loaded")
-	if (is.null(message)) message <- ""
-	res <- tclRequire("tooltip")
-	if (inherits(res, "tclObj")) {
-		res <- tcl("tooltip::tooltip", widget, message)
-		## Store tip text in the object (use NULL instead of "" for no tip)
-		if (message == "") message <- NULL
-		widget$env$tip <- message
-	} else stop("cannot find tcl package 'tooltip'")
-	return(invisible(res))
+tk2tip <- function(widget, message) {
+  if (!is.tk())
+    stop("Package Tk is required but not loaded")
+  if (is.null(message))
+    message <- ""
+  res <- tclRequire("tooltip")
+  if (inherits(res, "tclObj")) {
+    res <- tcl("tooltip::tooltip", widget, message)
+    # Store tip text in the object (use NULL instead of "" for no tip)
+    if (message == "")
+      message <- NULL
+    widget$env$tip <- message
+  } else {
+    stop("cannot find tcl package 'tooltip'")
+  }
+  invisible(res)
 }
 
-tk2killtip <- function ()
-{
-	if (!is.tk()) stop("Package Tk is required but not loaded")
-	return(invisible(tcl("tooltip::hide")))
+tk2killtip <- function() {
+  if (!is.tk())
+    stop("Package Tk is required but not loaded")
+  invisible(tcl("tooltip::hide"))
 }
 
-## Get tip method
-tip <- function (x, ...)
-	UseMethod("tip")
+# Get tip method
+tip <- function(x, ...)
+  UseMethod("tip")
 
-tip.tk2widget <- function (x, ...)
-	return(x$env$tip)
+tip.tk2widget <- function(x, ...)
+  x$env$tip
 
-## Chenge tip method
-`tip<-` <- function (x, value)
-	UseMethod("tip<-")
+# Change tip method
+`tip<-` <- function(x, value)
+  UseMethod("tip<-")
 
-`tip<-.tk2widget` <- function (x, value)
-{
-	tk2tip(x, value)
-	return(x)
+`tip<-.tk2widget` <- function(x, value) {
+  tk2tip(x, value)
+  x
 }

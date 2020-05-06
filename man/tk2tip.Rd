@@ -48,10 +48,10 @@ lb <- tklabel(tt, text = "Move mouse over me, or over the button to see tooltip"
 tkgrid(lb)
 tk2tip(lb, "A tooltip for the label \ndisplayed on two lines")
 but <- tkbutton(tt, text = "Exit", width = 10,
-    command = function() tkdestroy(tt2))
+    command = function() tkdestroy(tt))
 tkgrid(but)
 tk2tip(but, "Exit from this dialog box")
-    
+
 ## To test tk2killtip(), move mouse on top of a widget
 ## so that the tip is visible, and force killing it manually using:
 tk2killtip()

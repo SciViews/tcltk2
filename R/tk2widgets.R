@@ -14,6 +14,15 @@
 ### To do:
 ### - Rework all this and add new widgets like sizegrip, tkplot, ...
 
+### autoscroll
+#tclRequire("autoscroll")
+#tt <- tktoplevel()
+#scrl <- tkscrollbar(tt, orient = "v", command = function(...) tkyview(txt, ...))
+#txt <- tktext(tt, highlightthickness = 0, yscrollcommand = function(...) tkset(scrl, ...))
+#tkpack(scrl, side = "right", fill = "y")
+#tkpack(txt, side = "left", fill = "both", expand = 1)
+#tcl("::autoscroll::autoscroll", scrl)
+
 tk2button <- function(parent, tip = "", ...) {
   if (!is.ttk())
     stop("Tcl/Tk >= 8.5 is required")

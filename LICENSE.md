@@ -1,30 +1,28 @@
-There are different licenses for different parts of this package:
+# Licenses thja apply for tctlk2
+
+There are different licenses for different parts of this package.
 
 - For the R code and most Tcl code license is:
 
-GNU Lesser General Public License Version 3
+| GNU Lesser General Public License Version 3
 
 
 - For the combobox2.3 and mclistbox1.2 Tk Widgets:
 
-Combobox version 2.3
-Copyright (c) 1998-2003, Bryan Douglas Oakley
-All Rights Reserved.
+| Combobox version 2.3
+| Copyright (c) 1998-2003, Bryan Douglas Oakley
+| All Rights Reserved.
+| 
+| Mclistbox version 1.2
+| Copyright (c) 1999, Bryan Douglas Oakley
+| All Rights Reserved.
 
-Mclistbox version 1.2
-Copyright (c) 1999, Bryan Douglas Oakley
-All Rights Reserved.
-
-This software is provided AS-IS with no waranty expressed or
-implied. This software may be used free of charge, though I would
-appreciate it if you give credit where credit is due and mention my
-name when you use it.
+This software is provided AS-IS with no waranty expressed or implied. This software may be used free of charge, though I would appreciate it if you give credit where credit is due and mention my name when you use it.
 
 
 - For the bwidget1.7 Tk Widgets, Tcllib and Tklib items:
 
-The following terms apply to all files associated with the software
-unless explicitly disclaimed in individual files.
+The following terms apply to all files associated with the software unless explicitly disclaimed in individual files.
 
 The authors hereby grant permission to use, copy, modify, distribute,
 and license this software and its documentation for any purpose, provided

@@ -14,6 +14,7 @@
 #' @seealso [tk2listbox()], [tk2tablelist()]
 #'
 #' @examples
+#' \dontrun{
 #' library(tcltk2)
 #' # tk2swaplist() makes its use super-easy
 #' tk2swaplist(1:9, selection = c(1, 3, 5))
@@ -25,6 +26,7 @@
 #' sl <- tcl("swaplist::swaplist", tt, opts, 1:9, c(1, 3, 5))
 #' cat("You choose:", tclvalue(opts), "\n")
 #' rm(opts, sl, tt)
+#' }
 tk2swaplist <- function(items, selection, title = "Select items", ...) {
   win <- tktoplevel()
   res <- try(tclRequire("swaplist"), silent = TRUE)

@@ -1,14 +1,51 @@
-### tk2Fonts.R - Manage Tk fonts
-### Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
-### Licensed under LGPL 3 or above
-###
-### Changes:
-### - 2009-04-23: fix of a bug in fntl$family, $ operator not allowed (thanks Brian Ripley)
-### - 2007-01-11: fisrt version (for tcltk2_1.0-0)
-###
-### To do:
-### -
-
+#' Manipulate Tk fonts
+#'
+#' Get or set fonts used by Tk widgets from within R.
+#'
+#' @param font The name of one or several cached Tk font.
+#' @param what A list of font characteristics to get: 'family', 'size', 'bold',
+#' italic', 'underline' and/or 'overstrike'. By default, everything except
+#' underline' and 'overstrike'.
+#' @param settings Settings of fonts. There are two possible forms: (1) a vector
+#' of character strings of same length as font with Tk fonts description like
+#' -family Times -size 12 -weight bold', for instance, or (2) a list of
+#' font characteristics (list with components 'family', 'size', 'bold', 'italic',
+#' 'underline' and 'overstrike').
+#' @param text Do we synchronise text Tk fonts (text, titles, and fixed-font
+#' text) with current settings in `.Fonts` inside the `SciViews:TempEnv`
+#' environment?
+#' @param system Do we synchronise system Tk fonts (widgets, window caption,
+#' menus, tooltips, ...) with current system configuration? This is highly
+#' platform dependent. Currently, system settings are gathered only under
+#' Windows, thanks to the `winSystemFonts()` function.
+#' @param default.styles Do we add `.fontsStyleXXX` in the `SciViews:TempEnv`
+#' environment, where `XXX` is one of the four default styles: 'Classic',
+#' 'Alternate', 'Presentation' or 'Fancy'.
+#'
+#' @return
+#' [tk2font.get()] retrieves a list with font characteristics (same format
+#' as the `settings =` argument) for the first Tk font found in its `font =`
+#' argument, or `""` if the font is not found. [tk2font.set()] changes current
+#' font settings or, possibly, create the Tk font.
+#' [tk2font.setstyle()] changes the current Tk fonts settings according to
+#' actual system and/or text configuration fonts.
+#'
+#' @export
+#' @rdname tk2fonts
+#' @author Philippe Grosjean
+#' @seealso [tk2chooseFont()]
+#' @keywords utilities
+#' @concept Tcl/Tk fonts
+#'
+#' @examples
+#' \dontrun{
+#' # These cannot be run by examples() but should be OK when pasted
+#' # into an interactive R session with the tcltk package loaded
+#' # Refresh both text and system Tk fonts
+#' tk2font.setstyle(system = TRUE)
+#' # Get characteristics of the default font
+#' tk2font.get("TkDefaultFont")
+#' }
 tk2font.get <- function(font, what = c("family", "size", "bold", "italic")) {
   # font is the TkFont name to use, in case of several items, other ones
   # are secondary, tertiary, ... options
@@ -48,6 +85,8 @@ tk2font.get <- function(font, what = c("family", "size", "bold", "italic")) {
   res
 }
 
+#' @export
+#' @rdname tk2fonts
 tk2font.set  <- function(font, settings) {
   ### TODO: allow for multiple fonts specifications => take first one available
   # font is the name of the TkFont to create/change
@@ -123,6 +162,8 @@ tk2font.set  <- function(font, settings) {
   res
 }
 
+#' @export
+#' @rdname tk2fonts
 tk2font.setstyle <- function(text = TRUE, system = FALSE, default.styles = FALSE) {
   # Set default fonts according to currently defined style
   # .SystemFonts and .Fonts must be defined in SciViews:TempEnv!

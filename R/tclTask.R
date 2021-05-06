@@ -1,10 +1,91 @@
-### tclTask.R - Functions to schedule task to be executed later using Tcl after
-### Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
-### Licensed under LGPL 3 or above
-###
-### Changes:
-### - 2009-07-02: fisrt version (for tcltk2_1.1-0)
-
+#' Schedule and manage delayed tasks
+#'
+#' Tcl allows fo scheduling execution of code on the next event loop or after a
+#' given time (`after` Tcl command). `tclTaskXxx()` functions use it to schedule
+#' execution of R code with much control from within R (central management of
+#' scheduled tasks, possibility to define redoable tasks, use of S3 objects to
+#' keep track of tasks information. The `tclAfterXxx()` functions are low-level
+#' access to the Tcl `after` command.
+#'
+#' @param wait Time in ms to delay the task (take care: approximate value,
+#' depends on when event loops are triggered). Using a value lower or equal to
+#' zero, the task is scheduled on the next event loop.
+#' @param fun Name of the R function to run (you may not supply arguments to
+#' this function, otherwise it is not scheduled properly; take care of scoping,
+#' since a copy of the function will be run from within Tcl).
+#' @param expr An expression to run after 'wait'.
+#' @param id The R identifier of the task to schedule, if this id contains `#`,
+#' then, it is replaced by next available number, but you cannot schedule more
+#' than a thousand tasks with the same name (the system will give up well
+#' before, anyway). If `NULL` in [tclTaskGet()], retrieve the list of all
+#' existing tasks.
+#' @param all If `id = NULL`, `all = TRUE` indicate to list all tasks, including
+#' hidden ones (with id starting with a dot).
+#' @param redo Should the task be rescheduled n times, indefinitely
+#' (`redo = TRUE`) or not (`redo = FALSE`, default, or a value <= 0).
+#' @param task A Tcl task timer, or its name in Tcl (in the form of
+#' 'after#xxx').
+#' @param x A 'tclTask' object.
+#' @param ... Further argument to the `print()` method.
+#'
+#' @return
+#' The `tclAfterXxx()` functions return a 'tclObj' with the result of the
+#' corresponding Tcl function. [tclAfter()] returns the created Tcl timer in
+#' this object. If 'task' does not exists, [tclAfterInfo()] returns `NULL`.
+#'
+#' [tclTaskGet()] returns a 'tclTask' object, a list of such objects, or `NULL`
+#' if not found.
+#'
+#' The four remaining `tclTaskXxx()` functions return invisibly `TRUE` if the
+#' process is done successfully, `FALSE` otherwise.
+#' [tclTaskRun()] forces running a task now, even if it is scheduled later.
+#'
+#' @export
+#' @rdname tclTask
+#' @author Philippe Grosjean
+#' @seealso [tclFun()], [base::addTaskCallback()], [base::Sys.sleep()]
+#' @keywords utilities
+#' @concept Delayed task execution
+#'
+#' @examples
+#' \dontrun{
+#' # These cannot be run by examples() but should be OK when pasted
+#' # into an interactive R session with the tcltk package loaded
+#'
+#' # Run just once, after 1 sec
+#' test <- function () cat("==== Hello from Tcl! ====\n")
+#' tclTaskSchedule(1000, test())
+#' Sys.sleep(2)
+#'
+#' # Run ten times a task with a specified id
+#' test2 <- function () cat("==== Hello again from Tcl! ====\n")
+#' tclTaskSchedule(1000, test2(), id = "test2", redo = 10)
+#' Sys.sleep(1)
+#'
+#' # Run a function with arguments (will be evaluated in global environment)
+#' test3 <- function (txt) cat(txt, "\n")
+#' msg <- "==== First message ===="
+#' tclTaskSchedule(1000, test3(msg), id = "test3", redo = TRUE)
+#' Sys.sleep(2)
+#' msg <- "==== Second message ===="
+#' Sys.sleep(2)
+#'
+#' # Get info on pending tasks
+#' tclTaskGet() # List all (non hidden) tasks
+#' tclTaskGet("test2")
+#' # List all active Tcl timers
+#' tclAfterInfo()
+#'
+#' # Change a task (run 'test3' only once more, after 60 sec)
+#' tclTaskChange("test3", wait = 60000, redo = 1)
+#' Sys.sleep(1)
+#' # ... but don't wait so long and force running 'test3' right now
+#' tclTaskRun("test3")
+#'
+#' Sys.sleep(3)
+#' # finally, delete all pending tasks
+#' tclTaskDelete(NULL)
+#' }
 tclAfter <- function(wait, fun) {
   # This is the basic Tcl command, do prefer tclTaskSchedule()!
   wait <- as.integer(wait)[1]
@@ -16,11 +97,15 @@ tclAfter <- function(wait, fun) {
   tcl("after", wait, fun)
 }
 
+#' @export
+#' @rdname tclTask
 tclAfterCancel <- function(task) {
   # Cancel a Tcl timer (no effect if the timer does not exist)
   tcl("after", "cancel", as.character(task)[1])
 }
 
+#' @export
+#' @rdname tclTask
 tclAfterInfo <- function(task = NULL) {
   # Get info about a Tcl timer, or list all current ones (using task = NULL)
   if (is.null(task)) {
@@ -35,6 +120,8 @@ tclAfterInfo <- function(task = NULL) {
   }
 }
 
+#' @export
+#' @rdname tclTask
 print.tclTask <- function(x, ...) {
   # Look when the task is run
   if (x$wait == "idle") {
@@ -65,6 +152,8 @@ print.tclTask <- function(x, ...) {
   invisible(x)
 }
 
+#' @export
+#' @rdname tclTask
 tclTaskSchedule <- function(wait, expr, id = "task#", redo = FALSE) {
   # Schedule a task to be executed after 'wait' ms
   # If 'wait' is <= 0, schedule for execution on the next event loop
@@ -116,6 +205,8 @@ tclTaskSchedule <- function(wait, expr, id = "task#", redo = FALSE) {
   invisible(res)
 }
 
+#' @export
+#' @rdname tclTask
 tclTaskRun <- function(id) {
   # Execute the code associated with a given task and detemine if the task
   # should be rescheduled again (repeat argument)
@@ -153,6 +244,8 @@ tclTaskRun <- function(id) {
   invisible(TRUE)
 }
 
+#' @export
+#' @rdname tclTask
 tclTaskGet <- function(id = NULL, all = FALSE) {
   # If id is NULL, list all scheduled tasks, otherwise, give info about a
   # particular scheduled task
@@ -164,6 +257,8 @@ tclTaskGet <- function(id = NULL, all = FALSE) {
   }
 }
 
+#' @export
+#' @rdname tclTask
 tclTaskChange <- function(id, expr, wait, redo) {
   # Change a characteristic of a scheduled task
   # Is there something to change?
@@ -199,6 +294,8 @@ tclTaskChange <- function(id, expr, wait, redo) {
   invisible(TRUE)
 }
 
+#' @export
+#' @rdname tclTask
 tclTaskDelete <- function(id) {
   Tasks <- .getTclTasks()
   # Remove a previously scheduled task (if id s NULL, then, remove all tasks)
@@ -206,7 +303,7 @@ tclTaskDelete <- function(id) {
     # Delete all current tasks
     for (Task in ls(Tasks, all.names = TRUE))
       tclAfterCancel(Tasks[[Task]]$task)
-    # Eliminate .tclTasks environment from Sciviews:TempEnv
+    # Eliminate .tclTasks environment from SciViews:TempEnv
     rm(list = ".tclTasks", envir = .TempEnv())
   } else {
     # Delete only one task

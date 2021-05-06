@@ -1,13 +1,68 @@
-### tk2dialogs.R - Support for additional Tk dialogs
-### Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
-### Licensed under LGPL 3 or above
-###
-### Changes:
-### - 2007-02-07: fisrt version (for tcltk2_1.0-2)
-###
-### To do:
-### - A good dialog box for choosing R colors (by number, name or RGB value)
-
+#' Additional Tk dialog boxes
+#'
+#' Tk dialog boxes to select a font, unicode characters or a list of ordered
+#' items.
+#'
+#' @param ... Further arguments passed to the dialog box.
+#' @param parent The Tk toplevel dialog box that will be the parent of the
+#' configuration dialog box.
+#' @param widget A widget that can accept a unicode character. For
+#' `tk2unicode_bind()` it must be a `tk2text` or a `tk2entry` widget.
+#'
+#' @return
+#' The selection made in the dialog box if `OK` is clicked, `""` otherwise for
+#' [tk2chooseFont()].
+#'
+#' The [tk2unicode_select()] dialog pastes the selected unicode character in the
+#' designed widget, but returns nothing. The [tk2unicode_config()] changes the
+#' configuration for the unicode composer, but returns nothing. If you decide to
+#' do so, it saves the config on a file. This is done app-by-app, and the
+#' default app name is `"R"`. You can change it by setting a different
+#' value in the option `"tk2app"`, i.e., `options(tk2app = "myApp")`.
+#' The `tk2unicode_bind()` is also invoked for its side-effect to install
+#' required bindings to enable the unicode composer engine for the given widget
+#' and it returns nothing.
+#'
+#' @export
+#' @rdname tk2dialogfonts
+#' @author Philippe Grosjean
+#' @seealso [tk2text()], [tk2listbox()], [tk2list.insert()]
+#' @keywords utilities
+#' @concept Fonts and dialog boxes
+#'
+#' @examples
+#' \dontrun{
+#' library(tcltk2)
+#' # These cannot be run by examples() but should be OK when pasted
+#' # into an interactive R session with the tcltk package loaded
+#'
+#' # Font selection
+#' tk2chooseFont()
+#' tk2chooseFont(font = "{courier} 9", title = "Choose a fixed font",
+#'   fonttype = "fixed", style = 4, sizetype = "all")
+#' tk2chooseFont(font = "Verdana 12 bold italic underline overstrike",
+#'   fonttype = "prop", style = 2, sizetype = "point")
+#'
+#' # Easy unicode character entry
+#' tt <- tktoplevel()
+#' txt <- tk2text(tt, width = 60, height = 20)
+#' tkpack(txt)
+#' e <- tk2entry(tt, width = 50)
+#' tkpack(e)
+#' # Get an unicode character for the text widget
+#' tk2unicode_select(txt)
+#' # and for the entry widget
+#' tk2unicode_select(e)
+#'
+#' # Bind the composer to both the text and the entry widgets
+#' # and display the configuration box
+#' # Once done, try the compose key + m + u, or compose + " + a
+#' # or any othert sequence in both widgets
+#' # or hit the compose key twice
+#' tk2unicode_bind(txt)
+#' tk2unicode_bind(e)
+#' tk2unicode_config(tt)
+#' }
 tk2chooseFont <- function(...) {
   if (!is.tk())
     stop("Package Tk is required but not loaded")
@@ -43,6 +98,8 @@ tk2chooseFont <- function(...) {
   tclvalue(cfg)
 }
 
+#' @export
+#' @rdname tk2dialogfonts
 tk2unicode_config <- function(parent) {
   if (!inherits(parent, "tkwin"))
     stop("'parent' must be a 'tkwin' object")
@@ -68,11 +125,15 @@ tk2unicode_config <- function(parent) {
   }
 }
 
+#' @export
+#' @rdname tk2dialogfonts
 tk2unicode_select <- function(widget) {
   .tk2unicode_load()
   tcl("::khim::FocusAndInsertSymbol", widget$ID)
 }
 
+#' @export
+#' @rdname tk2dialogfonts
 tk2unicode_bind <- function(widget) {
   if (!inherits(widget, c("tk2text", "tk2entry")))
     stop("You can bind the unicode composer to tk2text() or tk2entry() widgets only")

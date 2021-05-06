@@ -1,7 +1,7 @@
 Package: tcltk2
 Type: Package
 Version: 1.5.0
-Date: 2020-05-12
+Date: 2020-06-19
 Title: Tcl/Tk Additions
 Description: A series of additional Tcl commands and Tk widgets to supplement the tcltk package.
 Authors@R: c(person("Philippe", "Grosjean", role = c("aut", "cre"),
@@ -14,7 +14,6 @@ SystemRequirements: Tcl/Tk (>= 8.5), Tktable (>= 2.9, optional)
 License: LGPL-3 + file LICENSE 
 URL: https://github.com/SciViews/tcltk2/
 BugReports: https://github.com/SciViews/tcltk2/issues/
-LazyData: yes
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr

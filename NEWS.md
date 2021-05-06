@@ -1,6 +1,6 @@
 # tcltk2 1.5.0
 
-- Documentation reworked using Ropxygen2 and pkgdown.
+- Documentation reworked using Roxygen2 and pkgdown.
 
 - ctext upgraded from 3.2 to 3.3.
 

@@ -18,4 +18,4 @@ knitr::opts_chunk$set(
 )
 ```
 
-> The **tcltk2** package provides many supplements to R through Tcl functions and Tk widgets.
+> The {tcltk2} package provides many supplements to R through Tcl functions and Tk widgets.

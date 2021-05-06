@@ -1,21 +1,41 @@
-### tk2edit.R - A data frame editor using TkTable
-### Copyright (c), Jeffrey J. Hallman
-### Licensed under LGPL 3 or above
-###
-### Changes:
-### - 2007-01-01: fisrt version (for tcltk2_1.0-0)
-###
-### To do:
-### - Rework all this!!!
+# TODO: Rework all this!!!
 
-###dim.tclArray <- function (ta)
-###{
-###  nms <- grep(",", names(ta), value = TRUE)
-###  if (length(nms) == 0) return(c(0, 0))
-###  c(max(as.numeric(gsub(",.*", "", nms))),
-###      max(as.numeric(gsub(".*,", "", nms)))) + 1
-###}
+#dim.tclArray <- function (ta)
+#{
+#  nms <- grep(",", names(ta), value = TRUE)
+#  if (length(nms) == 0) return(c(0, 0))
+#  c(max(as.numeric(gsub(",.*", "", nms))),
+#      max(as.numeric(gsub(".*,", "", nms)))) + 1
+#}
 
+
+#' Edit a matrix or data frame in spreadsheet-like editor
+#'
+#' A tkTable widget is used to display and edit a matrix or data frame. One
+#' can edit entries, add or delete rows and columns, ...
+#'
+#' @param x A matrix or data frame to edit.
+#' @param title The title of the editor window.
+#' @param header Do we display a header?
+#' @param maxHeight The maximum height of the editor window.
+#' @param maxWidth The maximum width of the editor window.
+#' @param fontsize The size of the font to use in the editor window.
+#' @param ... Further arguments to pass to the function.
+#'
+#' @return The function is used for its side-effet, that is, to modify a matrix or data
+#' frame in a spreadsheet-like editor.
+#' @note You need the tkTable widget to use this function.
+#' @export
+#' @author Jeffrey J. Hallman
+#' @seealso [tclSetValue()]
+#'
+#' @examples
+#' \dontrun{
+#' # These cannot be run by examples() but should be OK when pasted
+#' # into an interactive R session with the tcltk package loaded
+#' data(iris)
+#' tk2edit(iris)
+#' }
 tk2edit <- function(x, title = "Matrix Editor", header = NULL,
 maxHeight = 600, maxWidth = 800, fontsize = 9, ...) {
   if (!is.tk())

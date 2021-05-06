@@ -1,9 +1,30 @@
-## Various methods for tk2widgets
-## See also tk2tip.R for methods tip(w) and tip(w) <- value
-
+#' A series of methods applicable to tk2widget or tk2cfglist objects
+#'
+#' Tk2widgets can be used as tcltk widgets, but they propose also an
+#' object-oriented interaction through these different methods.
+#'
+#' @param x A tk2widget object.
+#' @param ... A series of named arguments corresponding to parameters and values
+#' to use for the configuration for `tk2cfglist()`, or reserved arguments for
+#' future use for the other function (not used yet).
+#' @param value A value to assign to the object's method.
+#'
+#' @return
+#' Depends on the function. The `is.xxx()` function return `TRUE` or `FALSE` if
+#' the object is of the right class or not. The assignations form return the
+#' assigned value. The direct form return the item.
+#'
+#' @export
+#' @rdname tk2methods
+#' @author Philippe Grosjean
+#' @seealso [tk2button()], [tk2tip()]
+#' @keywords utilities
+#' @concept Tcl/Tk widgets notebook, combobox, paned window, progress bar, text area, tree
 is.tk2widget <- function(x)
   return(inherits(x, "tk2widget"))
 
+#' @export
+#' @rdname tk2methods
 print.tk2widget <- function(x, ...) {
   if (disabled(x)) txt <- " (disabled)" else txt <- ""
   cat("A tk2widget of class '", class(x)[1], "'", txt, "\n", sep = "")
@@ -19,12 +40,16 @@ print.tk2widget <- function(x, ...) {
   invisible(x)
 }
 
+#' @export
+#' @rdname tk2methods
 tk2cfglist <- function(...) {
   res <- list(...)
   class(res) <- c("tk2cfglist", class(res))
   res
 }
 
+#' @export
+#' @rdname tk2methods
 print.tk2cfglist <- function(x, ...) {
   if (!length(x)) {
     cat("An empty tk2widget cfglist\n")
@@ -35,73 +60,117 @@ print.tk2cfglist <- function(x, ...) {
   invisible(x)
 }
 
+#' @export
+#' @rdname tk2methods
 state <- function(x, ...)
   UseMethod("state")
 
-state.tk2widget <- function(x, ...)
-  as.character(tcl(x, "state")) # Or as.character(tkcget(x, "-state", ...)) as GegznaV suggests?
+#' @export
+#' @rdname tk2methods
+state.tk2widget <- function(x, ...) {
+  if (any(grepl("-state ", as.character(tkconfigure(x))))) {
+    as.character(tkcget(x, "-state", ...))
+  } else {
+    "normal"
+  }
+}
 
 # TODO: a state.tk2listbox, because there is no state property defined for it!
 
+#' @export
+#' @rdname tk2methods
 label <- function(x, ...)
   UseMethod("label")
 
+#' @export
+#' @rdname tk2methods
 label.tk2widget <- function(x, ...)
   x$env$label
 
+#' @export
+#' @rdname tk2methods
 `label<-` <- function(x, value)
   UseMethod("label<-")
 
+#' @export
+#' @rdname tk2methods
 `label<-.tk2widget` <- function(x, value) {
   x$env$label <- as.character(value)[1]
   x
 }
 
+#' @export
+#' @rdname tk2methods
 tag <- function(x, ...)
   UseMethod("tag")
 
+#' @export
+#' @rdname tk2methods
 tag.tk2widget <- function(x, ...)
   x$env$tag
 
+#' @export
+#' @rdname tk2methods
 `tag<-` <- function(x, value)
   UseMethod("tag<-")
 
+#' @export
+#' @rdname tk2methods
 `tag<-.tk2widget` <- function(x, value) {
   x$env$tag <- value
   x
 }
 
+#' @export
+#' @rdname tk2methods
 disabled <- function(x, ...)
   UseMethod("disabled")
 
+#' @export
+#' @rdname tk2methods
 disabled.tk2widget <- function(x, ...)
-  (tclvalue(tkcget(x, "-state")) == "disabled")
+  (state(x) == "disabled")
 
+#' @export
+#' @rdname tk2methods
 `disabled<-` <- function(x, value)
   UseMethod("disabled<-")
 
-`disabled<-.tk2widget` <- function(x, value)
-{
+#' @export
+#' @rdname tk2methods
+`disabled<-.tk2widget` <- function(x, value) {
   if (isTRUE(value)) state <- "disabled" else state <- "normal"
   tkconfigure(x, state = state)
   x
 }
 
+#' @export
+#' @rdname tk2methods
 values <- function(x, ...)
   UseMethod("values")
 
+#' @export
+#' @rdname tk2methods
 values.tk2widget <- function(x, ...)
   NULL # Default value, for widgets that do not support this!
 
+#' @export
+#' @rdname tk2methods
 values.tk2listbox <- function(x, ...)
   as.character(tkget(x, 0, "end"))
 
+#' @export
+#' @rdname tk2methods
 `values<-` <- function(x, value)
   UseMethod("values<-")
 
+#' @export
+#' @rdname tk2methods
 `values<-.tk2widget` <- function(x, value)
   stop("This tk2widget does not seem to support values")
 
+#' @export
+#' @rdname tk2methods
 `values<-.tk2listbox` <- function(x, value) {
   # Save current selection
   cursel <- selection(x)
@@ -121,18 +190,28 @@ values.tk2listbox <- function(x, ...)
   x
 }
 
+#' @export
+#' @rdname tk2methods
 value <- function(x, ...)
   UseMethod("value")
 
+#' @export
+#' @rdname tk2methods
 value.tk2widget <- function(x, ...)
   NULL # Default value is NULL for tk2widgets
 
+#' @export
+#' @rdname tk2methods
 value.tk2listbox <- function(x, ...)
   values(x)[selection(x)]
 
+#' @export
+#' @rdname tk2methods
 `value<-` <- function(x, value)
   UseMethod("value<-")
 
+#' @export
+#' @rdname tk2methods
 `value<-.tk2widget` <- function(x, value)
   stop("This tk2widget does not seem to support setting its value")
 
@@ -194,8 +273,7 @@ visibleItem <- function(x, index, ...)
 visibleItem.tk2widget <- function(x, index, ...)
   stop("This tk2widget does not seems to support the visibleItem method")
 
-visibleItem.tk2listbox <- function(x, index, ...)
-{
+visibleItem.tk2listbox <- function(x, index, ...) {
   # Index must be a positive integer
   index <- as.integer(round(index))
   if (is.null(index) || length(index) < 1 || index[1] < 1)

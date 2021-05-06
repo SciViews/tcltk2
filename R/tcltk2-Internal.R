@@ -1,6 +1,3 @@
-### tcltk2-Internal.R - Hidden functions for tcltk2
-### Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
-
 .onLoad <- function(libname, pkgname) {
   libdir <- file.path(libname, pkgname, "tklibs")
 
@@ -33,8 +30,8 @@
     # Here is how we could install the supplementary material in Tcl/Tk
 
     # This is for a better management of scrollbars in listbox, text, canvas
-    tclRequire("autoscroll") # Version 1.1
-    tcl("source", file.path(libdir, "scrolledWidget.tcl"))
+    try(tclRequire("autoscroll"), silent = TRUE) # Version 1.1
+    try(tcl("source", file.path(libdir, "scrolledWidget.tcl")), silent = TRUE)
 
     #tclRequire("choosefont")      # Version 0.2
     #tclRequire("ctext")      # Version 3.1
@@ -45,8 +42,8 @@
     #Not provided any more -> tclRequire("Tktable")       # Version 2.9
 
     # The following code is not implemented as Tcl package... just source it
-    tcl("source", file.path(libdir, "notebook1.3", "notebook.tcl"))
-    tcl("source", file.path(libdir, "tree1.7", "tree.tcl"))
+    try(tcl("source", file.path(libdir, "notebook1.3", "notebook.tcl")), silent = TRUE)
+    try(tcl("source", file.path(libdir, "tree1.7", "tree.tcl")), silent = TRUE)
 
     # Do we try to load the tile widgets? (only if Tcl./Tk < 8.5)
     if (as.numeric(tclvalue("::tcl_version")) < 8.5) {

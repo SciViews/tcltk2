@@ -1,21 +1,158 @@
-### tk2commands.R - Additional tk commands to manipulate tk2 widgets
-### Copyright (c), Philippe Grosjean (phgrosjean@sciviews.org)
-### Licensed under LGPL 3 or above
-###
-### Changes:
-### - 2007-01-01: fisrt version (for tcltk2_1.0-0)
-###
-### To do:
-### - Rework all this...
-### - Style option of Tile widgets?
-### - Implement style element options ...
+# TODO:
+# - Rework all this...
+# - Style option of Tile widgets?
+# - Implement style element options ...
 
+#' Tk commands associated with the tk2XXX widgets
+#'
+#' These commands supplement those available in the tcltk package to ease
+#' manipulation of tk2XXX widgets.
+#'
+#' @param widget The widget to which these actions apply.
+#' @param action Which kind of action?
+#' @param ... Further arguments to the action.
+#' @param where Where are these item added in the list (by default, at the end).
+#' @param items The items to add (either a vector for a single line, or a matrix
+#' for more items).
+#' @param first The 0-based first index to consider in the list.
+#' @param last The 0-based last index to consider in the list, or `"end"` for
+#' using the last element of the list.
+#' @param index The 0-based index where to insert items in the list.
+#' @param nb A tk2notebook widget ('tclObj' object).
+#' @param tab The name (text) of a tab in a notebook.
+#' @param state The new state of the widget, or the state to inquiry.
+#' @param theme A theme to use (character string).
+#' @param class The class of the tk2widget (either the Tk class, like `TButton`,
+#' or the name of the function that creates it, like [tk2button()].
+#' @param style A character string with the name of the style to retrieve.
+#' @param default The default value to return in case this style is not found.
+#' @param x Either a tk2widget object, or a character string with its class
+#' name.
+#'
+#' @details
+#' [tk2column()] manipulate columns of a tk2mclistbox widget,
+#' [tk2insert.multi()] is used to insert multiple field entries in a
+#' tk2mclistbox widget,
+#' [is.tk()] determines if the tk package is loaded (on some platforms it is
+#' possible to load the tcltk package without tk, for instance, in batch mode).
+#' [is.ttk()] determines if 'ttk' widgets (styled widgets) used by the
+#' `tk2XXX()` functions are available (you need Tk >= 8.5).
+#'
+#' @return
+#' Nothing, these functions are used for their side-effect of changing the state
+#' of Tk widgets
+#'
+#' @note
+#' In comparison with traditional Tk widgets, ttk proposes an advances mechanism
+#' for styling the widgets with \"themes\". By default, it adapts to the current
+#' platform (for instance, under Windows, all widgets take the appearance of
+#' Windows themed widgets (even with custom themes applied!). Usual Tk widgets
+#' are ALWAYS displayed in old-looking fashion under Windows. If you want, you
+#' can switch dynamically to a different theme among those available (list them
+#' using [tk2theme.list()], and switch to another one with `tk2theme(newtheme)`.
+#' This is most useful to see how your GUI elements and dialog boxes look like
+#' on foreign systems. If you prefer, let's say, a Unix look of the R GUI
+#' elements under Windows, these functions are also useful. If you are more
+#' adventurous, you can even design your own themes (see the tile documentation
+#' on the Tcl wiki).
+#'
+#' @export
+#' @rdname tk2commands
+#' @author Philippe Grosjean
+#' @seealso [tk2button()], [tk2tip()]
+#' @keywords utilities
+#' @concept Tcl/Tk widgets commands
+#'
+#' @examples
+#' \dontrun{
+#' # These cannot be run by examples() but should be OK when pasted
+#' # into an interactive R session with the tcltk package loaded
+#'
+#' tt <- tktoplevel()
+#' # A label with a image and some text
+#' file <- system.file("gui", "SciViews.gif", package = "tcltk2")
+#'
+#' # Make this a tk2image function...
+#' Image <- tclVar()
+#' tkimage.create("photo", Image, file = file)
+#'
+#' tlabel <- tk2label(tt, image = Image,
+#'   text = "A label with an image")
+#' tkpack(tlabel)
+#' config(tlabel, compound = "left")
+#'
+#' tlabel2 <- tk2label(tt, text = "A disabled label")
+#' tkpack(tlabel2)
+#' disabled(tlabel2) <- TRUE
+#'
+#' fruits <- c("Apple", "Orange", "Banana")
+#' tcombo <- tk2combobox(tt, values = fruits)
+#' tkpack(tcombo)
+#' tkinsert(tcombo, 0, "Apple")
+#'
+#' # Buttons
+#' tbut <- tk2button(tt, text = "Enabled")
+#' tbut2 <- tk2button(tt, text = "Disabled")
+#' tkpack(tbut, tbut2)
+#' tkconfigure(tbut2, state = "disabled")
+#'
+#' tcheck <- tk2checkbutton(tt, text = "Some checkbox")
+#' tcheck2 <- tk2checkbutton(tt, text = "Disabled checkbox")
+#' tkconfigure(tcheck2, state = "disabled")
+#' tcheck3 <- tk2checkbutton(tt, text = "Disabled and selected")
+#' tkpack(tcheck, tcheck2, tcheck3)
+#' cbValue <- tclVar("1")
+#' tkconfigure(tcheck3, variable = cbValue)
+#' tkconfigure(tcheck3, state = "disabled")
+#'
+#' tradio <- tk2radiobutton(tt, text = "Some radiobutton")
+#' tradio2 <- tk2radiobutton(tt, text = "Disabled and checked")
+#' tkpack(tradio, tradio2)
+#' tkconfigure(tradio2, state = "checked")
+#' tkconfigure(tradio2, state = "disabled")
+#'
+#' # Menu allowing to change ttk theme
+#' topMenu <- tkmenu(tt)           # Create a menu
+#' tkconfigure(tt, menu = topMenu) # Add it to the 'tt' window
+#' themes <- tk2theme.list()
+#' themeMenu <- tkmenu(topMenu, tearoff = FALSE)
+#' if ("alt" \%in\% themes) tkadd(themeMenu, "command", label = "alt",
+#'   command = function() tk2theme("alt"))
+#' if ("aqua" \%in\% themes) tkadd(themeMenu, "command", label = "aqua",
+#'   command = function() tk2theme("aqua"))
+#' if ("clam" \%in\% themes) tkadd(themeMenu, "command", label = "clam",
+#'   command = function() tk2theme("clam"))
+#' tkadd(themeMenu, "command", label = "clearlooks",
+#'   command = function() tk2theme("clearlooks"))
+#' if ("classic" \%in\% themes) tkadd(themeMenu, "command", label = "classic",
+#'   command = function() tk2theme("classic"))
+#' if ("default" \%in\% themes) tkadd(themeMenu, "command", label = "default",
+#'   command = function() tk2theme("default"))
+#' tkadd(themeMenu, "command", label = "keramik",
+#'   command = function() tk2theme("keramik"))
+#' tkadd(themeMenu, "command", label = "plastik",
+#'   command = function() tk2theme("plastik"))
+#' tkadd(themeMenu, "command", label = "radiance (fonts change too)!",
+#'   command = function() tk2theme("radiance"))
+#' if ("vista" \%in\% themes) tkadd(themeMenu, "command", label = "vista",
+#'   command = function() tk2theme("vista"))
+#' if ("winnative" \%in\% themes) tkadd(themeMenu, "command", label = "winnative",
+#'   command = function() tk2theme("winnative"))
+#' if ("xpnative" \%in\% themes) tkadd(themeMenu, "command", label = "xpnative",
+#'   command = function() tk2theme("xpnative"))
+#' tkadd(themeMenu, "separator")
+#' tkadd(themeMenu, "command", label = "Quit", command = function() tkdestroy(tt))
+#' tkadd(topMenu, "cascade", label = "Theme", menu = themeMenu)
+#' tkfocus(tt)
+#' }
 tk2column <- function(widget, action = c("add", "configure", "delete", "names",
 "cget", "nearest"), ...) {
   Action <- action[1]
   tcl(widget, "column", Action, ...)
 }
 
+#' @export
+#' @rdname tk2commands
 tk2list.set <- function(widget, items) {
   # Set a list of values for a widget (e.g., combobox)
   if (inherits(widget, "tk2combobox")) {
@@ -32,6 +169,8 @@ tk2list.set <- function(widget, items) {
   }
 }
 
+#' @export
+#' @rdname tk2commands
 tk2list.insert <- function(widget, index = "end", ...) {
   # Insert one or more items in a list
   if (inherits(widget, "tk2combobox")) {
@@ -59,6 +198,8 @@ tk2list.insert <- function(widget, index = "end", ...) {
   }
 }
 
+#' @export
+#' @rdname tk2commands
 tk2list.delete <- function(widget, first, last = first) {
   # Delete one or more items from a list
   if (inherits(widget, "tk2combobox")) {
@@ -75,6 +216,8 @@ tk2list.delete <- function(widget, first, last = first) {
   }
 }
 
+#' @export
+#' @rdname tk2commands
 tk2list.get <- function(widget, first = 0, last = "end") {
   # Get the list of elements in a widget (e.g., combobox)
   if (inherits(widget, "tk2combobox")) {
@@ -89,6 +232,8 @@ tk2list.get <- function(widget, first = 0, last = "end") {
   }
 }
 
+#' @export
+#' @rdname tk2commands
 tk2list.size <- function(widget) {
   # Get the length of the list of elements in a widget (e.g., combobox)
   if (inherits(widget, "tk2combobox")) {
@@ -100,12 +245,16 @@ tk2list.size <- function(widget) {
   }
 }
 
+#' @export
+#' @rdname tk2commands
 tk2state.set <- function(widget, state = c("normal", "disabled", "readonly")) {
   # Change the state of a widget
   state <- as.character(state[1])
   tkconfigure(widget, state = state)
 }
 
+#' @export
+#' @rdname tk2commands
 tk2insert.multi <- function(widget, where = "end", items) {
   # We insert one or several lines in a multicolumn widget
   items <- as.matrix(items)
@@ -118,9 +267,13 @@ tk2insert.multi <- function(widget, where = "end", items) {
   .Tcl(paste(widget, "insert", where, TclList))
 }
 
+#' @export
+#' @rdname tk2commands
 tk2notetraverse <- function(nb)
   invisible(tcl("ttk::notebook::enableTraversal", nb))
 
+#' @export
+#' @rdname tk2commands
 tk2notetab <- function(nb, tab) {
   if (inherits(nb, "tk2notebook")) {
     # We need the tab index, so, look for it
@@ -148,6 +301,8 @@ tk2notetab <- function(nb, tab) {
   } else stop("'nb' must be a 'tk2notebook' object")
 }
 
+#' @export
+#' @rdname tk2commands
 tk2notetab.select <- function(nb, tab) {
   # Select a tab in a notebook
   if (inherits(nb, "tk2notebook")) {
@@ -170,6 +325,8 @@ tk2notetab.select <- function(nb, tab) {
   } else stop("'nb' must be a 'tk2notebook' object")
 }
 
+#' @export
+#' @rdname tk2commands
 tk2notetab.text <- function(nb) {
   # Select a tab in a notebook
   if (inherits(nb, "tk2notebook")) {
@@ -178,12 +335,18 @@ tk2notetab.text <- function(nb) {
 }
 
 # Themes management
+#' @export
+#' @rdname tk2commands
 tk2theme.elements <- function()
   as.character(.Tcl("ttk::style element names"))
 
+#' @export
+#' @rdname tk2commands
 tk2theme.list <- function()
   as.character(.Tcl("ttk::style theme names"))
 
+#' @export
+#' @rdname tk2commands
 tk2theme <- function(theme = NULL) {
   if (is.null(theme)) {# Get it
     res <- getOption("tk2theme")
@@ -251,16 +414,18 @@ tk2theme <- function(theme = NULL) {
   }
   res
 }
-### Note: to change a style element: .Tcl('ttk::style configure TButton -font "helvetica 24"')
-### Create a derived style: ttk::style configure Emergency.TButton -font "helvetica 24" -foreground red -padding 10
-### Changing different states:
-###ttk::style map TButton \
-###  -background [list disabled #d9d9d9  active #ececec] \
-###  -foreground [list disabled #a3a3a3] \
-###  -relief [list {pressed !disabled} sunken] \
-###  ;
+# Note: to change a style element: .Tcl('ttk::style configure TButton -font "helvetica 24"')
+# Create a derived style: ttk::style configure Emergency.TButton -font "helvetica 24" -foreground red -padding 10
+# Changing different states:
+#ttk::style map TButton \
+#  -background [list disabled #d9d9d9  active #ececec] \
+#  -foreground [list disabled #a3a3a3] \
+#  -relief [list {pressed !disabled} sunken] \
+#  ;
 
 # Function to look for a ttk style
+#' @export
+#' @rdname tk2commands
 tk2style <- function(class, style, state = c("default", "active",
 "disabled", "focus", "!focus", "pressed", "selected", "background", "readonly",
 "alternate", "invalid", "hover", "all"), default = NULL) {
@@ -336,6 +501,8 @@ tk2style <- function(class, style, state = c("default", "active",
   } else return(res)
 }
 
+#' @export
+#' @rdname tk2commands
 tk2dataList <- function(x) {
   # List data parameters for a given tk2widget
   # Data manage the content of the widgets
@@ -391,6 +558,8 @@ tk2dataList <- function(x) {
   res
 }
 
+#' @export
+#' @rdname tk2commands
 tk2configList <- function(x) {
   # List config parameters for a given tk2widget
   # Note: most of the appearance is controlled by the theme, we keep here
@@ -434,78 +603,14 @@ tk2configList <- function(x) {
   res
 }
 
-
-# Management of locales and message translation using msgcat
-setLanguage <- function(lang) {
-  # Change locale for both R and Tcl/Tk
-  Sys.setenv(language = lang)
-  Sys.setenv(LANG = lang)
-  #try(Sys.setlocale("LC_MESSAGES", lang), silent = TRUE)  # Fails on Windows!
-  res <- tclRequire("msgcat")
-  if (inherits(res, "tclObj")) {
-    .Tcl("namespace import msgcat::*")
-    # If the tcl.language attribute is defined, use it
-    tcllang <- attr(lang, "tcl.language")
-    if (!is.null(tcllang) && tcllang[1] != "") {
-      lang <- tcllang[1] # Use only first item
-    } else {
-      # Tcl does not accept locales like en_US.UF-8: must be en_us only
-      lang <- tolower(sub("^([^.]+)\\..*$", "\\1", lang))
-    }
-    tclmclocale(lang)
-    TRUE
-  } else {
-    FALSE
-  }
-}
-
-getLanguage <- function() {
-  # Try to recover current language used for messages and GUI stuff in R
-  lang <- Sys.getenv("language")
-  if (lang == "")
-    lang <- Sys.getlocale("LC_MESSAGES")
-  # This is a bad hack that probably does not work all the time, but at least,
-  # it works under Windows for getting "fr" for French language
-  if (lang == "")
-    lang <- tolower(substr(Sys.getlocale("LC_COLLATE"), 1, 2))
-
-  # Try to get language information from Tcl
-  tcllang <- try(as.character(tcl("mcpreferences")), silent = TRUE)
-  attr(lang, "tcl.language") <- tcllang
-
-  lang
-}
-
-tclmclocale <- function(lang) {
-  if (missing(lang)) {
-    as.character(tcl("mclocale"))
-  } else {
-    # Make sure lang is made compatible to Tcl
-    lang <- tolower(sub("^([^.]+)\\..*$", "\\1", lang))
-    as.character(tcl("mclocale", lang))
-  }
-}
-
-tclmcset <- function(lang, msg, translation)
-  invisible(tclvalue(tcl("mcset", lang, msg, translation)))
-
-tclmc <- function(fmt, ..., domain = NULL) {
-  if (is.null(domain) || domain == "") {
-    # Simpler form
-    tclvalue(tcl("mc", fmt, ...))
-  } else {
-    # Need to evaluate in 'domain' Tcl namespace
-    transl <- .Tcl(paste0("namespace eval ", domain, " {set ::Rtransl [mc {",
-      fmt, "}]}"))
-    sprintf(tclvalue(transl), ...)
-  }
-}
-
-
 # Check if Tk or Ttk are available
+#' @export
+#' @rdname tk2commands
 is.tk <- function()
   (tclvalue(.Tcl("catch { package present Tk }")) == "0")
 
+#' @export
+#' @rdname tk2commands
 is.ttk <- function() {
   (is.tk() && as.numeric(tcl("set", "::tk_version")) >= 8.5)
 }

@@ -1,3 +1,7 @@
+# tcltk2 1.5.1
+
+- More robust code for addTclPath(), thank to GegznaV.
+
 # tcltk2 1.5.0
 
 - Documentation reworked using Roxygen2 and pkgdown.

@@ -1,7 +1,7 @@
 Package: tcltk2
 Type: Package
-Version: 1.5.0
-Date: 2020-06-19
+Version: 1.5.1
+Date: 2021-12-23
 Title: Tcl/Tk Additions
 Description: A series of additional Tcl commands and Tk widgets to supplement the tcltk package.
 Authors@R: c(person("Philippe", "Grosjean", role = c("aut", "cre"),

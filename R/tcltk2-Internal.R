@@ -5,10 +5,17 @@
   addTclPath <- function(path = ".") {
     if (.Platform$OS.type == "windows")
       path <- gsub("\\\\", "/", path)
-    a <- tclvalue(tcl("set", "::auto_path"))
-    paths <- strsplit(a, " ", fixed = TRUE)[[1L]]
-    if (!path %in% paths)
+    # Modified by GregznaV (Pull Request #2)
+    #a <- tclvalue(tcl("set", "::auto_path"))
+    #paths <- strsplit(a, " ", fixed = TRUE)[[1L]]
+    paths <- as.character(tcl("set", "::auto_path"))
+    if (!path %in% paths) {
       tcl("lappend", "::auto_path", path)
+    } else {
+      # Added by GregznaV (Pull Request #2)
+      # To have a consistent output if the path is not changed:
+      tcl("set", "::auto_path")
+    }
   }
   res <- addTclPath(libdir)  # extend the Tcl/Tk path
 

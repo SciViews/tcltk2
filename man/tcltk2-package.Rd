@@ -9,7 +9,7 @@
 A series of additional Tcl commands and Tk widgets to supplement the tcltk package.
 }
 \details{
-The {tcltk2} package provides additions to the {tcltk} base package.
+The \{tcltk2\} package provides additions to the \{tcltk\} base package.
 
 Many Tk widgets are added. Also, features of the Tcl language that can be
 useful also in R are made accessible through R functions.

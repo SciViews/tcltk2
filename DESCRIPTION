@@ -15,7 +15,7 @@ License: LGPL-3 + file LICENSE
 URL: https://github.com/SciViews/tcltk2/
 BugReports: https://github.com/SciViews/tcltk2/issues/
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Encoding: UTF-8
 Language: en-US

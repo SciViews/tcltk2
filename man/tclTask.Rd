@@ -121,7 +121,7 @@ tclTaskDelete(NULL)
 }
 }
 \seealso{
-\code{\link[=tclFun]{tclFun()}}, \code{\link[base:addTaskCallback]{base::addTaskCallback()}}, \code{\link[base:Sys.sleep]{base::Sys.sleep()}}
+\code{\link[=tclFun]{tclFun()}}, \code{\link[base:taskCallback]{base::addTaskCallback()}}, \code{\link[base:Sys.sleep]{base::Sys.sleep()}}
 }
 \author{
 Philippe Grosjean

@@ -92,8 +92,14 @@
 #'   setLanguage(oldlang)
 #' }
 setLanguage <- function(lang) {
+  # Special case for lang == "C"
+  if (lang == "C") {
+    # Set English for Tcl/Tk
+    tclmclocale("en")
+    return(TRUE)
+  }
   # Change locale for both R and Tcl/Tk
-  Sys.setenv(language = lang)
+  Sys.setLanguage(lang) #Sys.setenv(LANGUAGE = lang)
   Sys.setenv(LANG = lang)
   #try(Sys.setlocale("LC_MESSAGES", lang), silent = TRUE)  # Fails on Windows!
   res <- tclRequire("msgcat")
@@ -118,7 +124,7 @@ setLanguage <- function(lang) {
 #' @rdname setLanguage
 getLanguage <- function() {
   # Try to recover current language used for messages and GUI stuff in R
-  lang <- Sys.getenv("language")
+  lang <- Sys.getenv("LANGUAGE")
   if (lang == "")
     lang <- Sys.getlocale("LC_MESSAGES")
   # This is a bad hack that probably does not work all the time, but at least,

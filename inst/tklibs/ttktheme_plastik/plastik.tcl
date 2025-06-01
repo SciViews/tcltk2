@@ -7,7 +7,9 @@
 #
 # $Id: plastik.tcl,v 1.11 2010/02/16 21:14:55 sbron Exp $
 
-package require Tk 8.4
+# Also works with Tcl/Tk 9.0
+#package require Tk 8.4
+package require Tk
 package require tile 0.8.0
 
 namespace eval ttk::theme::plastik {

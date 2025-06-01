@@ -9,7 +9,8 @@
 # $Id: pkgIndex.tcl,v 1.7 2009/01/24 13:26:16 sbron Exp $
 
 if {![file isdirectory [file join $dir plastik]]} { return }
-if {![package vsatisfies [package provide Tcl] 8.4]} { return }
+# Also works with Tcl/Tk 9.0
+#if {![package vsatisfies [package provide Tcl] 8.4]} { return }
 
 package ifneeded ttk::theme::plastik 0.6.1 \
     [list source [file join $dir plastik.tcl]]

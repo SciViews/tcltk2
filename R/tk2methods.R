@@ -23,7 +23,7 @@
 is.tk2widget <- function(x)
   return(inherits(x, "tk2widget"))
 
-#' @export
+#' @exportS3Method
 #' @rdname tk2methods
 print.tk2widget <- function(x, ...) {
   if (disabled(x)) txt <- " (disabled)" else txt <- ""
@@ -48,7 +48,7 @@ tk2cfglist <- function(...) {
   res
 }
 
-#' @export
+#' @exportS3Method
 #' @rdname tk2methods
 print.tk2cfglist <- function(x, ...) {
   if (!length(x)) {
@@ -65,7 +65,7 @@ print.tk2cfglist <- function(x, ...) {
 state <- function(x, ...)
   UseMethod("state")
 
-#' @export
+#' @exportS3Method
 #' @rdname tk2methods
 state.tk2widget <- function(x, ...) {
   if (any(grepl("-state ", as.character(tkconfigure(x))))) {
@@ -82,7 +82,7 @@ state.tk2widget <- function(x, ...) {
 label <- function(x, ...)
   UseMethod("label")
 
-#' @export
+#' @exportS3Method
 #' @rdname tk2methods
 label.tk2widget <- function(x, ...)
   x$env$label
@@ -104,7 +104,7 @@ label.tk2widget <- function(x, ...)
 tag <- function(x, ...)
   UseMethod("tag")
 
-#' @export
+#' @exportS3Method
 #' @rdname tk2methods
 tag.tk2widget <- function(x, ...)
   x$env$tag
@@ -126,7 +126,7 @@ tag.tk2widget <- function(x, ...)
 disabled <- function(x, ...)
   UseMethod("disabled")
 
-#' @export
+#' @exportS3Method
 #' @rdname tk2methods
 disabled.tk2widget <- function(x, ...)
   (state(x) == "disabled")
@@ -149,12 +149,12 @@ disabled.tk2widget <- function(x, ...)
 values <- function(x, ...)
   UseMethod("values")
 
-#' @export
+#' @exportS3Method
 #' @rdname tk2methods
 values.tk2widget <- function(x, ...)
   NULL # Default value, for widgets that do not support this!
 
-#' @export
+#' @exportS3Method
 #' @rdname tk2methods
 values.tk2listbox <- function(x, ...)
   as.character(tkget(x, 0, "end"))
@@ -195,12 +195,12 @@ values.tk2listbox <- function(x, ...)
 value <- function(x, ...)
   UseMethod("value")
 
-#' @export
+#' @exportS3Method
 #' @rdname tk2methods
 value.tk2widget <- function(x, ...)
   NULL # Default value is NULL for tk2widgets
 
-#' @export
+#' @exportS3Method
 #' @rdname tk2methods
 value.tk2listbox <- function(x, ...)
   values(x)[selection(x)]
@@ -215,6 +215,8 @@ value.tk2listbox <- function(x, ...)
 `value<-.tk2widget` <- function(x, value)
   stop("This tk2widget does not seem to support setting its value")
 
+#' @export
+#' @rdname tk2methods
 `value<-.tk2listbox` <- function(x, value) {
   items <- items(x)
   if (length(items) > 0)
@@ -222,21 +224,33 @@ value.tk2listbox <- function(x, ...)
   x
 }
 
+#' @export
+#' @rdname tk2methods
 selection <- function(x, ...)
   UseMethod("selection")
 
+#' @exportS3Method
+#' @rdname tk2methods
 selection.tk2widget <- function(x, ...)
   NULL # For tk2widgets that do not support selection
 
+#' @exportS3Method
+#' @rdname tk2methods
 selection.tk2listbox <- function(x, ...)
   (as.integer(tkcurselection(x)) + 1)
 
+#' @export
+#' @rdname tk2methods
 `selection<-` <- function(x, value)
   UseMethod("selection<-")
 
+#' @export
+#' @rdname tk2methods
 `selection<-.tk2widget` <- function(x, value)
   stop("This tk2widget does not seem to support setting its selection")
 
+#' @export
+#' @rdname tk2methods
 `selection<-.tk2listbox` <- function(x, value) {
   # Prepare
   tclServiceMode(FALSE)
@@ -267,12 +281,19 @@ selection.tk2listbox <- function(x, ...)
   x
 }
 
+#' @export
+#' @rdname tk2methods
+#' @param index The zero-based index of the item to make visible.
 visibleItem <- function(x, index, ...)
   UseMethod("visibleItem")
 
+#' @exportS3Method
+#' @rdname tk2methods
 visibleItem.tk2widget <- function(x, index, ...)
   stop("This tk2widget does not seems to support the visibleItem method")
 
+#' @exportS3Method
+#' @rdname tk2methods
 visibleItem.tk2listbox <- function(x, index, ...) {
   # Index must be a positive integer
   index <- as.integer(round(index))
@@ -282,18 +303,30 @@ visibleItem.tk2listbox <- function(x, index, ...) {
   return(NULL)
 }
 
+#' @export
+#' @rdname tk2methods
 size <- function(x, ...)
   UseMethod("size")
 
+#' @exportS3Method
+#' @rdname tk2methods
 size.tk2widget <- function(x, ...)
   0L # By default, a tk2widget has values of zero size (NULL)
 
+#' @exportS3Method
+#' @rdname tk2methods
 size.tk2listbox <- function(x, ...)
   as.integer(tksize(x))
 
+#' @export
+#' @rdname tk2methods
 config <- function(x, ...)
   UseMethod("config")
 
+#' @exportS3Method
+#' @rdname tk2methods
+#' @param cfglist a list containing one or more named items, with the name
+#'   being a Tcl/Tk property and items being the new value for the property.
 config.tk2widget <- function(x, cfglist, ...) {
   # Compile a list of arguments
   args <- list(...)
@@ -334,6 +367,8 @@ config.tk2widget <- function(x, cfglist, ...) {
   res
 }
 
+#' @exportS3Method
+#' @rdname tk2methods
 config.tk2label <- function(x, cfglist, ...) {
   # wrap is special here... => how to deal with it???
   # TODO...
@@ -342,9 +377,13 @@ config.tk2label <- function(x, cfglist, ...) {
 
 # TODO: config.tk2listbox()
 
+#' @export
+#' @rdname tk2methods
 `config<-` <- function(x, value)
   UseMethod("config<-")
 
+#' @export
+#' @rdname tk2methods
 `config<-.tk2widget` <- function(x, value) {
   # The default function deleguates to tkconfigure, except for a few things
   value <- .configStd(x, value)
@@ -353,6 +392,8 @@ config.tk2label <- function(x, cfglist, ...) {
   x
 }
 
+#' @export
+#' @rdname tk2methods
 `config<-.tk2label` <- function(x, value) {
   # Standard treatment
   value <- .configStd(x, value)

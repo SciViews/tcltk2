@@ -30,6 +30,25 @@
 \alias{value.tk2listbox}
 \alias{value<-}
 \alias{value<-.tk2widget}
+\alias{value<-.tk2listbox}
+\alias{selection}
+\alias{selection.tk2widget}
+\alias{selection.tk2listbox}
+\alias{selection<-}
+\alias{selection<-.tk2widget}
+\alias{selection<-.tk2listbox}
+\alias{visibleItem}
+\alias{visibleItem.tk2widget}
+\alias{visibleItem.tk2listbox}
+\alias{size}
+\alias{size.tk2widget}
+\alias{size.tk2listbox}
+\alias{config}
+\alias{config.tk2widget}
+\alias{config.tk2label}
+\alias{config<-}
+\alias{config<-.tk2widget}
+\alias{config<-.tk2label}
 \title{A series of methods applicable to tk2widget or tk2cfglist objects}
 \usage{
 is.tk2widget(x)
@@ -89,6 +108,44 @@ value(x, ...)
 value(x) <- value
 
 \method{value}{tk2widget}(x) <- value
+
+\method{value}{tk2listbox}(x) <- value
+
+selection(x, ...)
+
+\method{selection}{tk2widget}(x, ...)
+
+\method{selection}{tk2listbox}(x, ...)
+
+selection(x) <- value
+
+\method{selection}{tk2widget}(x) <- value
+
+\method{selection}{tk2listbox}(x) <- value
+
+visibleItem(x, index, ...)
+
+\method{visibleItem}{tk2widget}(x, index, ...)
+
+\method{visibleItem}{tk2listbox}(x, index, ...)
+
+size(x, ...)
+
+\method{size}{tk2widget}(x, ...)
+
+\method{size}{tk2listbox}(x, ...)
+
+config(x, ...)
+
+\method{config}{tk2widget}(x, cfglist, ...)
+
+\method{config}{tk2label}(x, cfglist, ...)
+
+config(x) <- value
+
+\method{config}{tk2widget}(x) <- value
+
+\method{config}{tk2label}(x) <- value
 }
 \arguments{
 \item{x}{A tk2widget object.}
@@ -98,6 +155,11 @@ to use for the configuration for \code{tk2cfglist()}, or reserved arguments for
 future use for the other function (not used yet).}
 
 \item{value}{A value to assign to the object's method.}
+
+\item{index}{The zero-based index of the item to make visible.}
+
+\item{cfglist}{a list containing one or more named items, with the name
+being a Tcl/Tk property and items being the new value for the property.}
 }
 \value{
 Depends on the function. The \code{is.xxx()} function return \code{TRUE} or \code{FALSE} if

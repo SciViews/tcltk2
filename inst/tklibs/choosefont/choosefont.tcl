@@ -12,11 +12,11 @@
 # by schlenk, 2005
 #
 # Adaptation to R and further enhancements
-# by Philippe Grosjean, 2007, GNU GPL 2 or above license
+# by Philippe Grosjean, 2007-2025, GNU GPL 2 or above license
 ###############################
 
-package require Tcl 8.4
-package require Tk 8.4
+package require Tcl
+package require Tk
 package require msgcat
 #package require tile 0.7.2 ;# The dialog displays tile widgets if package loaded
 
@@ -35,14 +35,14 @@ namespace eval ::choosefont {
   variable overstrike
   variable ok
   variable lock 1
-  
+
   variable defaultopts
-  
+
   variable usetile
   variable locale
   set usetile 0
   set locale [::msgcat::mclocale]
-  
+
   variable mnemonics
   variable mnemopaths
   set mnemonics {}
@@ -50,22 +50,22 @@ namespace eval ::choosefont {
 
   # Get internationalization string
   ::msgcat::mcload [file join [file dirname [info script]] msgs]
-  
+
   # This is for correct handling of amperstand as mnemonic indicators (Alt-Key)
   proc mca {widget text} {
     variable mnemonics
     variable mnemopaths
-    
+
 	foreach {newtext under} [::tk::UnderlineAmpersand [mc $text]] {
       $widget configure -text $newtext -underline $under
     }
     # Add this info to the list of mnemonics
 	if {$under > -1} {
       lappend mnemonics [string tolower [string index $newtext $under]]
-      lappend mnemopaths $widget 
+      lappend mnemopaths $widget
     }
   }
-  
+
   # This font is inspired from tile
   # Make sure that TkDefaultFont is defined
   if {[lsearch [font names] TkDefaultFont] == -1} {
@@ -86,7 +86,7 @@ namespace eval ::choosefont {
         if {![catch {tk::pkgconfig get fontsystem} fs] && $fs eq "xft"} {
           font configure TkDefaultFont -family "sans-serif" -size -12
         } else {
-          font configure TkDefaultFont -family "Helvetica" -size -12	    
+          font configure TkDefaultFont -family "Helvetica" -size -12
         }
       }
     }
@@ -112,14 +112,14 @@ namespace eval ::choosefont {
   #       namespace import ::choosefont::choosefont
   #       choosefont "Courier 10 italic" "new font"
 
-  proc choosefont {args} { 
+  proc choosefont {args} {
     if {[llength $args] & 1} {
       return -code error "invalid number of arguments given to choosefont (uneven number) : $args"
     }
-  
+
     global tcl_platform
     global tile_use
-    
+
     # ------------------
     # get choosefont env
     # ------------------
@@ -149,13 +149,13 @@ namespace eval ::choosefont {
     variable opts
     # Initialize de fault fonts (done only once)
     if {![info exists defaultopts]} {
-      set defaultopts {-font "" -title "" -fonttype all -style 4 -sizetype all}    
+      set defaultopts {-font "" -title "" -fonttype all -style 4 -sizetype all}
     }
     # Create an array (easier to work with)
     array set opts $defaultopts
     # Override options provided as arguments
     array set opts $args
-    
+
     # ------------------
     # current font
     # ------------------
@@ -176,7 +176,7 @@ namespace eval ::choosefont {
     if {$opts(-fonttype) == "prop" & [font metrics $font -fixed]  == 1 } {
       catch { set font "helvetica" }
     }
- 
+
     # ------------------
     # dialog
     # ------------------
@@ -194,18 +194,18 @@ namespace eval ::choosefont {
 	}
 	set usetile $notile
 	set locale [::msgcat::mclocale]
-	 
+
     if {[winfo exists $w]} {
       # show the dialog
       wm deiconify $w
-      
+
       # Switch to the corresponding list of fonts ('all', 'prop' or 'fixed')
       switch -exact -- [string tolower $opts(-fonttype)] {
         fixed    { set listvar $listvarfixed }
         prop     { set listvar $listvarprop }
         default  { set listvar $listvarall }
       }
-      
+
       # Possibly reconfigure the size selector
       if {$notile} {
         switch $opts(-sizetype) {
@@ -228,7 +228,7 @@ namespace eval ::choosefont {
           }
           pixel {
             $w.fa.f.esize configure -values [list -20 -15 -14 -13 -12 -11 \
-              -10 -9 -8]              
+              -10 -9 -8]
           }
           default {
             $w.fa.f.esize configure -values [list -20 -15 -14 -13 -12 -11 \
@@ -262,7 +262,7 @@ namespace eval ::choosefont {
       wm title $w [mc "Choose a font"]
       wm iconname $w Dialog
       wm protocol $w WM_DELETE_WINDOW { }
-      
+
       # PhG: under Windows, make it topmost, so that it is always visible
       if { [regexp topmost [wm attributes $w]] == 1 } {
         wm attributes $w -topmost 1
@@ -275,7 +275,7 @@ namespace eval ::choosefont {
       # the dialog transient if the parent is viewable.
       if {[winfo viewable [winfo toplevel [winfo parent $w]]] } {
         wm transient $w [winfo toplevel [winfo parent $w]]
-      }    
+      }
 
       if {[string equal $tcl_platform(platform) "macintosh"]
         || [string equal [tk windowingsystem] "aqua"]} {
@@ -305,7 +305,7 @@ namespace eval ::choosefont {
           listbox $w.fl.lb -listvar ::choosefont::listvar -width 30 -bd 0 \
             -font TkDefaultFont -yscrollcommand [list $w.fl.sb set] \
             -selectmode single -exportselection 0
-          ttk::scrollbar $w.fl.sb -orient vertical -command [list $w.fl.lb yview]            
+          ttk::scrollbar $w.fl.sb -orient vertical -command [list $w.fl.lb yview]
       }
       mca $w.fl.la &Family:
 
@@ -348,7 +348,7 @@ namespace eval ::choosefont {
               }
               pixel {
                 $w.fa.f.esize configure -values [list -20 -15 -14 -13 -12 -11 \
-			      -10 -9 -8]              
+			      -10 -9 -8]
               }
               default {
                 $w.fa.f.esize configure -values [list -20 -15 -14 -13 -12 -11 \
@@ -365,7 +365,7 @@ namespace eval ::choosefont {
       mca $w.fa.f.italic &Italic
 	  mca $w.fa.f.under &Underline
 	  mca $w.fa.f.over &Overstrike
-      
+
       if {$notile} {
         frame $w.fb
           button $w.fb.ok -text [mc OK] -width 10 \
@@ -380,7 +380,7 @@ namespace eval ::choosefont {
             -command { set ::choosefont::ok 0 }
       }
       wm protocol $w WM_DELETE_WINDOW { $::choosefont::w.fb.cancel invoke }
-      
+
       # bind events
 	  bind $w.fl.lb <ButtonRelease-1> {
 	    set ::choosefont::family [%W get [%W cursel]]
@@ -399,7 +399,7 @@ namespace eval ::choosefont {
       # buttons handling
 	  bind $w <Escape> [list $w.fb.cancel invoke]
       bind $w <Return> [list $w.fb.ok invoke]
-      
+
       # Alt-key navigation
       if {[llength $mnemonics] > 0} {
         bind $w <Alt-Key> {
@@ -425,12 +425,12 @@ namespace eval ::choosefont {
 
       set lock 1
 
-      trace variable ::choosefont::family     w ::choosefont::createfont
-      trace variable ::choosefont::size       w ::choosefont::createfont
-      trace variable ::choosefont::bold       w ::choosefont::createfont
-      trace variable ::choosefont::italic     w ::choosefont::createfont
-      trace variable ::choosefont::underline  w ::choosefont::createfont
-      trace variable ::choosefont::overstrike w ::choosefont::createfont
+      trace add variable ::choosefont::family     {write} ::choosefont::createfont
+      trace add variable ::choosefont::size       {write} ::choosefont::createfont
+      trace add variable ::choosefont::bold       {write} ::choosefont::createfont
+      trace add variable ::choosefont::italic     {write} ::choosefont::createfont
+      trace add variable ::choosefont::underline  {write} ::choosefont::createfont
+      trace add variable ::choosefont::overstrike {write} ::choosefont::createfont
 
       # place widgets
       grid $w.f           -row 0 -column 0 -columnspan 2 -sticky nsew -pady {2 5}
@@ -457,27 +457,27 @@ namespace eval ::choosefont {
     # Reconfigure the dialog box with current font
     set family      [font actual $font -family]
     set size        [font actual $font -size]
-    set bold        [expr {[font actual $font -weight] == "bold"}] 
+    set bold        [expr {[font actual $font -weight] == "bold"}]
 	if {$opts(-style) > 0} { # Allow bold
 	  $w.fa.f.bold configure -state normal
     } else {
       $w.fa.f.bold configure -state disabled
     }
     set italic      [expr {[font actual $font -slant] == "italic"}]
-	if {$opts(-style) > 1} { # Allow italic  
+	if {$opts(-style) > 1} { # Allow italic
 	  $w.fa.f.italic configure -state normal
     } else {
 	  $w.fa.f.italic configure -state disabled
     }
     set underline   [font actual $font -underline]
 	if {$opts(-style) > 2} {	# Allow underline
-      $w.fa.f.under configure -state normal	  
+      $w.fa.f.under configure -state normal
     } else {
 	  $w.fa.f.under configure -state disabled
     }
     set overstrike  [font actual $font -overstrike]
-	if {$opts(-style) > 3} {	# Allow overstrike  
-      $w.fa.f.over configure -state normal      
+	if {$opts(-style) > 3} {	# Allow overstrike
+      $w.fa.f.over configure -state normal
     } else {
 	  $w.fa.f.over configure -state disabled
     }
@@ -549,7 +549,7 @@ namespace eval ::choosefont {
       set m [string tolower $mode]
       set oldFamily  [string tolower [lindex $::choosefont::listvar $oldIndex]]
       set families [string tolower $::choosefont::listvar]
-      if {[string match $m* $oldFamily]} {  
+      if {[string match $m* $oldFamily]} {
         set newIndex  [expr {$oldIndex + 1}]
         set newFamily [lindex $::choosefont::listvar $newIndex]
         if {![string match $m* [string tolower $newFamily]]} {
@@ -568,7 +568,7 @@ namespace eval ::choosefont {
     $w activate $newIndex
     $w see $newIndex
     focus $w
-    
+
     return
   }
 
@@ -601,7 +601,7 @@ namespace eval ::choosefont {
 
 	eval [linsert $f 0 font create TkChooseFont]
 	$w.f.l config -font TkChooseFont
-    
+
     return $f
   }
 }

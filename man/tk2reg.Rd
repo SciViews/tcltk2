@@ -54,22 +54,22 @@ registry.
 \code{\link[=tk2reg.set]{tk2reg.set()}} and \code{\link[=tk2reg.setkey]{tk2reg.setkey()}} return \code{TRUE} in case of success and
 \code{FALSE} otherwise.
 
-\code{\link[=tk2reg.get]{tk2reg.get()}} should handle correctly the types 'sz', 'expand\_sz' and
-multi\_sz' (note that 'expand\_sz' string is NOT expanded!), as well as
-dword' and 'dword\_big\_endian' that are converted into numeric values. Other
-types are not converted and the Tcl expression is returned ('objTcl' class)
-untransformed.
+\code{\link[=tk2reg.get]{tk2reg.get()}} should handle correctly the types 'sz', 'expand\\\\_sz' and
+multi\\\\_sz' (note that 'expand\\\\_sz' string is NOT expanded!), as well as
+dword' and 'dword\\\\_big\\\\_endian' that are converted into numeric values.
+Other types are not converted and the Tcl expression is returned ('objTcl'
+class) untransformed.
 
-\code{\link[=tk2reg.set]{tk2reg.set()}} currently works with 'sz', 'expand\_sz', 'multi\_sz',
-dword' and 'dword\_big\_endian' types. A couple of other types are accepted
-by the function... but they are not tested ('binary', 'link',
-resource\_list').
+\code{\link[=tk2reg.set]{tk2reg.set()}} currently works with 'sz', 'expand\\\\_sz', 'multi\\\\_sz',
+dword' and 'dword\\\\_big\\\\_endian' types. A couple of other types are
+accepted by the function... but they are not tested ('binary', 'link',
+resource\\\\_list').
 }
 \description{
 These functions access the Windows registry in a secure way (most errors
 are handled gracefully), and ensures correct conversion back and forth
-for atomic strings ('sz' and 'expand\_') and numbers ('dword' and
-'dword\_big\_endian'), and for vectors of strings ('multi\_sz').
+for atomic strings ('sz' and 'expand\\\\_') and numbers ('dword' and
+'dword\\\\_big\\\\_endian'), and for vectors of strings ('multi\\\\_sz').
 }
 \note{
 For Windows only. These functions issue an error when they are called

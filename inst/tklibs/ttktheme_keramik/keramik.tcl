@@ -7,7 +7,9 @@
 #
 # $Id: keramik.tcl,v 1.12 2009/01/24 13:26:16 sbron Exp $
 
-package require Tk 8.4;                 # minimum version for Tile
+# Also works with Tcl/Tk 9.0
+package require Tk;
+#package require Tk 8.4;                 # minimum version for Tile
 package require tile 0.8.0;             # depends upon tile 0.8.0
 
 namespace eval ttk {

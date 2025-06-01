@@ -1,3 +1,11 @@
+# tcltk2 1.6.0
+
+- `setLanguage()` now correctly defines the language for translated messages in R, as it does for Tcl/Tk. It uses the `Sys.setLanguage()` base function that was first defined R 4.2.0. Consequently, this version of tcltk2 has a dependency to R >= 4.2.0 now.
+
+- Various changes and Tcl/Tk package update to make tcltk2 compatible with Tcl/Tk 9.0. Among the Tcl/Tk packages upgrade: cursor 0.1 -> 0.3.1, history 0.1 -> 0.3, ntext 1.0b3 -> 1.0, snit 1.0 -> 2.3.4, struct (only matrix and list structs) 2.1 -> 2.2, tablelist 6.9 -> 7.6, tooltip 1.4.5 -> 2.0.1 and widget 3.1 -> 3.2. The following tcl files were also adapted to be compatible with Tcl/Tk: choosefont.tcl, keramik.tcl zand plastik.tcl. New tcl packages needed by struct 2.2 are added: cmdline1.5.3 and textutil 0.10.
+
+- More generics and methods for **tk2widget** objects are exported: `config`, `config <-`, `selection`, `selection<-`, `size`, and `visibleItem`.
+
 # tcltk2 1.5.2
 
 - A bug in `setLanguage()` caused a crash on Windows. Fixed.
@@ -6,7 +14,7 @@
 
 # tcltk2 1.5.1
 
-- More robust code for addTclPath(), thank to GegznaV.
+- More robust code for `addTclPath()`, thank to GegznaV.
 
 # tcltk2 1.5.0
 

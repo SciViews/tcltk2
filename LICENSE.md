@@ -1,4 +1,4 @@
-# Licenses thja apply for tctlk2
+# Licenses that apply for tctlk2
 
 There are different licenses for different parts of this package.
 
@@ -7,20 +7,20 @@ There are different licenses for different parts of this package.
 | GNU Lesser General Public License Version 3
 
 
-- For the combobox2.3 and mclistbox1.2 Tk Widgets:
+- For the combobox2.3 and mclistbox1.02 Tk Widgets:
 
 | Combobox version 2.3
 | Copyright (c) 1998-2003, Bryan Douglas Oakley
 | All Rights Reserved.
 | 
-| Mclistbox version 1.2
+| Mclistbox version 1.02
 | Copyright (c) 1999, Bryan Douglas Oakley
 | All Rights Reserved.
 
 This software is provided AS-IS with no waranty expressed or implied. This software may be used free of charge, though I would appreciate it if you give credit where credit is due and mention my name when you use it.
 
 
-- For the bwidget1.7 Tk Widgets, Tcllib and Tklib items:
+- For the Tk Widgets, Tcllib and Tklib items:
 
 The following terms apply to all files associated with the software unless explicitly disclaimed in individual files.
 
@@ -99,7 +99,7 @@ it into the public domain.
 
 - For tablelist:
 
-Multi-column listbox and tree widget package Tablelist, version 6.8
+Multi-column listbox and tree widget package Tablelist, version 7.6
 Copyright (c) 2000-2019  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
 
 This library is free software; you can use, modify, and redistribute it

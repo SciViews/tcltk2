@@ -1,7 +1,7 @@
 Package: tcltk2
 Type: Package
-Version: 1.6.0
-Date: 2025-05-30
+Version: 1.6.1
+Date: 2025-06-01
 Title: Tcl/Tk Additions
 Description: A series of additional Tcl commands and Tk widgets to supplement the tcltk package.
 Authors@R: c(person("Philippe", "Grosjean", role = c("aut", "cre"),
@@ -11,7 +11,7 @@ Maintainer: Philippe Grosjean <phgrosjean@sciviews.org>
 Depends: R (>= 4.2.0), tcltk
 Suggests: utils, covr, knitr, rmarkdown
 SystemRequirements: Tcl/Tk (>= 8.5), Tktable (>= 2.9, optional)
-License: LGPL-3 + file LICENSE 
+License: LGPL-3 
 URL: https://github.com/SciViews/tcltk2/
 BugReports: https://github.com/SciViews/tcltk2/issues/
 Roxygen: list(markdown = TRUE)

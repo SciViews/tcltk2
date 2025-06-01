@@ -1,3 +1,9 @@
+# tcltk2 1.5.2
+
+- A bug in `setLanguage()` caused a crash on Windows. Fixed.
+
+- On Unix/Linux/Mac system, an error was generated when the package loads due to the inaccessibility of the `tk_library`. This is now fixed (in this case, it is simply not loaded).
+
 # tcltk2 1.5.1
 
 - More robust code for addTclPath(), thank to GegznaV.

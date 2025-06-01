@@ -55,7 +55,7 @@ function from within tcl. These features are provided in the tcltk package,
 but Tcl variable usually have different internal names as R equivalents.
 }
 \details{
-These functions are similar to \code{\link[tcltk:tclVar]{tcltk::tclVar()}} from package tcltk, except
+These functions are similar to \code{\link[tcltk:TclInterface]{tcltk::tclVar()}} from package tcltk, except
 for the following change: here, it is possible to propose a name for the
 created tcl variable, or to set or retrieve the content of a tcl variable
 that is not mirrored in R.
@@ -94,7 +94,7 @@ tclGetValue("Another_Variable") # Get its content in R (no conversion!)
 }
 }
 \seealso{
-\code{\link[=tk2edit]{tk2edit()}}, \code{\link[tcltk:tclVar]{tcltk::tclVar()}}
+\code{\link[=tk2edit]{tk2edit()}}, \code{\link[tcltk:TclInterface]{tcltk::tclVar()}}
 }
 \author{
 Philippe Grosjean

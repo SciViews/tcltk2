@@ -24,7 +24,8 @@
   if (inherits(res, "tclObj")) {
     .Tcl("namespace import msgcat::*")
     .Tcl("mcload [file join $::tcl_library msgs]")
-    .Tcl("mcload [file join $::tk_library msgs]")
+    # In case there is no display available, this fails -> fail silently
+    try(.Tcl("mcload [file join $::tk_library msgs]"), silent = TRUE)
 
     # Make sure that Tcl/Tk locale is the same one as current R locale
     lang <- getLanguage()

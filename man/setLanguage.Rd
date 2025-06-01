@@ -27,7 +27,7 @@ German, \"it\" for Italian, etc. Facultative argument for \code{\link[=tclmcloca
 
 \item{translation}{The corresponding version in \code{lang}. Substitutions markers
 like \\%s for strings, or \\%d for numbers are allowed (same syntax as
-\code{\link[base:gettextf]{base::gettextf()}}). These translations are added in the Tcl catalog in the
+\code{\link[base:sprintf]{base::gettextf()}}). These translations are added in the Tcl catalog in the
 main domain, i.e., you don't need to give a domain name with \code{\link[=tclmc]{tclmc()}} to
 retrieve the translation.}
 

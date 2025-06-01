@@ -1,7 +1,7 @@
 Package: tcltk2
 Type: Package
-Version: 1.5.1
-Date: 2021-12-23
+Version: 1.5.2
+Date: 2024-08-12
 Title: Tcl/Tk Additions
 Description: A series of additional Tcl commands and Tk widgets to supplement the tcltk package.
 Authors@R: c(person("Philippe", "Grosjean", role = c("aut", "cre"),
@@ -15,7 +15,7 @@ License: LGPL-3 + file LICENSE
 URL: https://github.com/SciViews/tcltk2/
 BugReports: https://github.com/SciViews/tcltk2/issues/
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Encoding: UTF-8
 Language: en-US

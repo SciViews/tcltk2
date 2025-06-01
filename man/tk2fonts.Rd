@@ -65,5 +65,4 @@ tk2font.get("TkDefaultFont")
 \author{
 Philippe Grosjean
 }
-\concept{Tcl/Tk fonts}
 \keyword{utilities}

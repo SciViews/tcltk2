@@ -93,5 +93,4 @@ rm(tt2)
 \author{
 Philippe Grosjean
 }
-\concept{icons, windows}
 \keyword{utilities}

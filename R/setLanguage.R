@@ -91,14 +91,8 @@
 #'   setLanguage(oldlang)
 #' }
 setLanguage <- function(lang) {
-  # Special case for lang == "C"
-  if (lang == "C") {
-    # Set English for Tcl/Tk
-    tclmclocale("en")
-    return(TRUE)
-  }
   # Change locale for both R and Tcl/Tk
-  Sys.setLanguage(lang) #Sys.setenv(LANGUAGE = lang)
+  Sys.setLanguage(substring(lang, 1, 2)) #Sys.setenv(LANGUAGE = lang)
   Sys.setenv(LANG = lang)
   #try(Sys.setlocale("LC_MESSAGES", lang), silent = TRUE)  # Fails on Windows!
   res <- tclRequire("msgcat")
@@ -112,7 +106,11 @@ setLanguage <- function(lang) {
       # Tcl does not accept locales like en_US.UF-8: must be en_us only
       lang <- tolower(sub("^([^.]+)\\..*$", "\\1", lang))
     }
-    tclmclocale(lang)
+    if (lang == "c") {
+      tclmclocale("en") # Use English by default
+    } else {
+      tclmclocale(lang)
+    }
     TRUE
   } else {
     FALSE

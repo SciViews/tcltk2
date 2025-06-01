@@ -81,5 +81,4 @@ tip(lb2) <- NULL # To eliminate the tooltip for this widget
 \author{
 Philippe Grosjean
 }
-\concept{Tcl/Tk widget tooltip}
 \keyword{utilities}

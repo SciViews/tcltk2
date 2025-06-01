@@ -82,5 +82,4 @@ tk2unicode_config(tt)
 \author{
 Philippe Grosjean
 }
-\concept{Fonts and dialog boxes}
 \keyword{utilities}

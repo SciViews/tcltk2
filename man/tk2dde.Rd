@@ -151,5 +151,4 @@ as.numeric(Res)
 \author{
 Philippe Grosjean
 }
-\concept{Interprocess communication, DDE}
 \keyword{utilities}

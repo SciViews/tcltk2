@@ -113,5 +113,4 @@ if (oldlang != "") {
 \author{
 Philippe Grosjean
 }
-\concept{Tcl/Tk language translation}
 \keyword{utilities}

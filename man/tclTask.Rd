@@ -126,5 +126,4 @@ tclTaskDelete(NULL)
 \author{
 Philippe Grosjean
 }
-\concept{Delayed task execution}
 \keyword{utilities}

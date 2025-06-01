@@ -144,5 +144,4 @@ rm(list = c("Rkey", "Rsubkey"))
 \author{
 Philippe Grosjean
 }
-\concept{Windows registry, keys, hives, permanent storage of configuration parameters}
 \keyword{utilities}

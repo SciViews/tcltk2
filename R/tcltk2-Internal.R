@@ -40,7 +40,7 @@
     # Here is how we could install the supplementary material in Tcl/Tk
 
     # This is for a better management of scrollbars in listbox, text, canvas
-    try(tclRequire("autoscroll"), silent = TRUE) # Version 1.1
+    suppressWarnings(try(tclRequire("autoscroll"), silent = TRUE)) # Version 1.1
     try(tcl("source", file.path(libdir, "scrolledWidget.tcl")), silent = TRUE)
 
     #tclRequire("choosefont")     # Version 0.2
@@ -138,7 +138,7 @@
               "-relief solid -bd 1 -background black -fg white]"))
           }
         } else {# A modern "default" theme that fits not too bad in many situations
-          try(tk2theme("clearlooks"), silent = TRUE)
+          suppressWarnings(try(tk2theme("clearlooks"), silent = TRUE))
         }
       }
    }

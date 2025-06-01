@@ -230,5 +230,4 @@ tkfocus(tt)
 \author{
 Philippe Grosjean
 }
-\concept{Tcl/Tk widgets commands}
 \keyword{utilities}

@@ -278,5 +278,4 @@ tkpack(tbut)
 \author{
 Philippe Grosjean
 }
-\concept{Tcl/Tk widgets}
 \keyword{utilities}

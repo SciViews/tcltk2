@@ -176,5 +176,4 @@ object-oriented interaction through these different methods.
 \author{
 Philippe Grosjean
 }
-\concept{Tcl/Tk widgets notebook, combobox, paned window, progress bar, text area, tree}
 \keyword{utilities}

@@ -99,5 +99,4 @@ tclGetValue("Another_Variable") # Get its content in R (no conversion!)
 \author{
 Philippe Grosjean
 }
-\concept{TclTk varaibles and proc, function callback}
 \keyword{utilities}

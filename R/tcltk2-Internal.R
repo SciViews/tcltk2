@@ -4,18 +4,20 @@
   # A slightly modified version of addTclPath() that works also within SciViews
   addTclPath <- function(path = ".") {
     if (.Platform$OS.type == "windows")
-      path <- gsub("\\\\", "/", path)
+      path <- gsub("\\", "/", path, fixed = TRUE)
     # Modified by GregznaV (Pull Request #2)
     #a <- tclvalue(tcl("set", "::auto_path"))
     #paths <- strsplit(a, " ", fixed = TRUE)[[1L]]
-    paths <- as.character(tcl("set", "::auto_path"))
+    #paths <- as.character(tcl("set", "::auto_path"))
+    paths <- as.character(tcl("set", "auto_path"))
     if (!path %in% paths) {
-      tcl("lappend", "::auto_path", path)
+      tcl("lappend", "auto_path", path)
     } else {
       # Added by GregznaV (Pull Request #2)
       # To have a consistent output if the path is not changed:
-      tcl("set", "::auto_path")
+      tcl("set", "auto_path")
     }
+    invisible(paths)
   }
   res <- addTclPath(libdir)  # extend the Tcl/Tk path
 
@@ -40,12 +42,12 @@
     try(tclRequire("autoscroll"), silent = TRUE) # Version 1.1
     try(tcl("source", file.path(libdir, "scrolledWidget.tcl")), silent = TRUE)
 
-    #tclRequire("choosefont")      # Version 0.2
-    #tclRequire("ctext")      # Version 3.1
-    #tclRequire("cursor")         # Version 0.1
+    #tclRequire("choosefont")     # Version 0.2
+    #tclRequire("ctext")          # Version 3.1
+    #tclRequire("cursor")         # Version 0.3.1
     #tclRequire("mclistbox")      # Version 1.2
-    #tclRequire("swaplist")      # Version 0.2
-    #tclRequire("tablelist")      # Version 6.8
+    #tclRequire("swaplist")       # Version 0.2
+    #tclRequire("tablelist")      # Version 7.6
     #Not provided any more -> tclRequire("Tktable")       # Version 2.9
 
     # The following code is not implemented as Tcl package... just source it

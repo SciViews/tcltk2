@@ -42,7 +42,7 @@
 #' # These cannot be run by examples() but should be OK when pasted
 #' # into an interactive R session with the tcltk package loaded
 #' # Refresh both text and system Tk fonts
-#' tk2font.setstyle(system = TRUE)
+#' tk2font.setstyle(system = TRUE, default.styles = TRUE)
 #' # Get characteristics of the default font
 #' tk2font.get("TkDefaultFont")
 #' }
@@ -205,8 +205,11 @@ tk2font.setstyle <- function(text = TRUE, system = FALSE, default.styles = FALSE
 
   if (system) {# Set system fonts
     # We collect back system fonts settings (other values may be imposed by Tk)
+    defaultclassic <- tk2font.get("TkClassicDefaultFont")
+    if (defaultclassic == "")
+      defaultclassic <- tk2font.get("TkDefaultFont")
     sysfonts <- list(
-      defaultclassic = tk2font.get("TkClassicDefaultFont"),
+      defaultclassic = defaultclassic,
       default = tk2font.get("TkDefaultFont"),
       caption = tk2font.get("TkCaptionFont"),
       smallcaption = tk2font.get(c("TkSmallCaptionFont", "TkCaptionFont")),

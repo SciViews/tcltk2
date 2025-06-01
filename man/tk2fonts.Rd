@@ -54,7 +54,7 @@ Get or set fonts used by Tk widgets from within R.
 # These cannot be run by examples() but should be OK when pasted
 # into an interactive R session with the tcltk package loaded
 # Refresh both text and system Tk fonts
-tk2font.setstyle(system = TRUE)
+tk2font.setstyle(system = TRUE, default.styles = TRUE)
 # Get characteristics of the default font
 tk2font.get("TkDefaultFont")
 }

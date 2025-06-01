@@ -44,7 +44,7 @@
 #'
 #' @note
 #' In comparison with traditional Tk widgets, ttk proposes an advances mechanism
-#' for styling the widgets with \"themes\". By default, it adapts to the current
+#' for styling the widgets with "themes". By default, it adapts to the current
 #' platform (for instance, under Windows, all widgets take the appearance of
 #' Windows themed widgets (even with custom themes applied!). Usual Tk widgets
 #' are ALWAYS displayed in old-looking fashion under Windows. If you want, you
@@ -116,17 +116,17 @@
 #' tkconfigure(tt, menu = topMenu) # Add it to the 'tt' window
 #' themes <- tk2theme.list()
 #' themeMenu <- tkmenu(topMenu, tearoff = FALSE)
-#' if ("alt" \%in\% themes) tkadd(themeMenu, "command", label = "alt",
+#' if ("alt" %in% themes) tkadd(themeMenu, "command", label = "alt",
 #'   command = function() tk2theme("alt"))
-#' if ("aqua" \%in\% themes) tkadd(themeMenu, "command", label = "aqua",
+#' if ("aqua" %in% themes) tkadd(themeMenu, "command", label = "aqua",
 #'   command = function() tk2theme("aqua"))
-#' if ("clam" \%in\% themes) tkadd(themeMenu, "command", label = "clam",
+#' if ("clam" %in% themes) tkadd(themeMenu, "command", label = "clam",
 #'   command = function() tk2theme("clam"))
 #' tkadd(themeMenu, "command", label = "clearlooks",
 #'   command = function() tk2theme("clearlooks"))
-#' if ("classic" \%in\% themes) tkadd(themeMenu, "command", label = "classic",
+#' if ("classic" %in% themes) tkadd(themeMenu, "command", label = "classic",
 #'   command = function() tk2theme("classic"))
-#' if ("default" \%in\% themes) tkadd(themeMenu, "command", label = "default",
+#' if ("default" %in% themes) tkadd(themeMenu, "command", label = "default",
 #'   command = function() tk2theme("default"))
 #' tkadd(themeMenu, "command", label = "keramik",
 #'   command = function() tk2theme("keramik"))
@@ -134,11 +134,11 @@
 #'   command = function() tk2theme("plastik"))
 #' tkadd(themeMenu, "command", label = "radiance (fonts change too)!",
 #'   command = function() tk2theme("radiance"))
-#' if ("vista" \%in\% themes) tkadd(themeMenu, "command", label = "vista",
+#' if ("vista" %in% themes) tkadd(themeMenu, "command", label = "vista",
 #'   command = function() tk2theme("vista"))
-#' if ("winnative" \%in\% themes) tkadd(themeMenu, "command", label = "winnative",
+#' if ("winnative" %in% themes) tkadd(themeMenu, "command", label = "winnative",
 #'   command = function() tk2theme("winnative"))
-#' if ("xpnative" \%in\% themes) tkadd(themeMenu, "command", label = "xpnative",
+#' if ("xpnative" %in% themes) tkadd(themeMenu, "command", label = "xpnative",
 #'   command = function() tk2theme("xpnative"))
 #' tkadd(themeMenu, "separator")
 #' tkadd(themeMenu, "command", label = "Quit", command = function() tkdestroy(tt))
@@ -391,8 +391,7 @@ tk2theme <- function(theme = NULL) {
       "highlightBackground", "white",
         #tclvalue(.Tcl("ttk::style lookup TLabel -background focus")),
       "highlightColor", ffg,
-      "insertBackground",
-        tclvalue(.Tcl("ttk::style lookup TLabel -foreground active")),
+      "insertBackground", afg,
       "selectBackground",
         tclvalue(.Tcl("ttk::style lookup TText -selectbackground")),
       "selectForeground",

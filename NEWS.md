@@ -1,3 +1,7 @@
+# tcltk2 1.6.1
+
+- LICENSE file changed into LICENSE.note, as suggested by CRAN.
+
 # tcltk2 1.6.0
 
 - `setLanguage()` now correctly defines the language for translated messages in R, as it does for Tcl/Tk. It uses the `Sys.setLanguage()` base function that was first defined R 4.2.0. Consequently, this version of tcltk2 has a dependency to R >= 4.2.0 now.

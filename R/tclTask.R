@@ -45,7 +45,6 @@
 #' @author Philippe Grosjean
 #' @seealso [tclFun()], [base::addTaskCallback()], [base::Sys.sleep()]
 #' @keywords utilities
-#' @concept Delayed task execution
 #'
 #' @examples
 #' \dontrun{

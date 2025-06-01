@@ -32,7 +32,7 @@
     # Make sure that Tcl/Tk locale is the same one as current R locale
     lang <- getLanguage()
     if (lang != "") {  # Set the same language for Tcl/Tk
-      setLanguage(lang)
+      try(setLanguage(lang), silent = TRUE)
     }
   }
 

@@ -20,7 +20,6 @@
 #' @author Philippe Grosjean
 #' @seealso [tk2button()], [label()]
 #' @keywords utilities
-#' @concept Tcl/Tk widget tooltip
 #'
 #' @examples
 #' \dontrun{

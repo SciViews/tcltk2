@@ -33,7 +33,6 @@
 #' @author Philippe Grosjean
 #' @seealso [tk2reg.get()]
 #' @keywords utilities
-#' @concept Interprocess communication, DDE
 #'
 #' @examples
 #' \dontrun{

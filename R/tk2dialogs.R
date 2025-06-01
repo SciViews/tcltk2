@@ -28,7 +28,6 @@
 #' @author Philippe Grosjean
 #' @seealso [tk2text()], [tk2listbox()], [tk2list.insert()]
 #' @keywords utilities
-#' @concept Fonts and dialog boxes
 #'
 #' @examples
 #' \dontrun{

@@ -55,7 +55,6 @@
 #' @author Philippe Grosjean
 #' @seealso [tk2dde.exec()], [tk2ico.create()]
 #' @keywords utilities
-#' @concept Windows registry, keys, hives, permanent storage of configuration parameters
 #'
 #' @examples
 #' \dontrun{

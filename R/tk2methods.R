@@ -19,7 +19,6 @@
 #' @author Philippe Grosjean
 #' @seealso [tk2button()], [tk2tip()]
 #' @keywords utilities
-#' @concept Tcl/Tk widgets notebook, combobox, paned window, progress bar, text area, tree
 is.tk2widget <- function(x)
   return(inherits(x, "tk2widget"))
 

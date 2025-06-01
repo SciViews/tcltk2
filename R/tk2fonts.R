@@ -35,7 +35,6 @@
 #' @author Philippe Grosjean
 #' @seealso [tk2chooseFont()]
 #' @keywords utilities
-#' @concept Tcl/Tk fonts
 #'
 #' @examples
 #' \dontrun{

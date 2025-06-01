@@ -36,7 +36,6 @@
 #' @author Philippe Grosjean
 #' @seealso [tk2dde.exec()], [tk2reg.get()]
 #' @keywords utilities
-#' @concept icons, windows
 #'
 #' @examples
 #' \dontrun{

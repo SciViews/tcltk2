@@ -75,7 +75,6 @@
 #' @rdname tk2widgets
 #' @seealso [is.ttk()]
 #' @keywords utilities
-#' @concept Tcl/Tk widgets
 #'
 #' @examples
 #' \dontrun{

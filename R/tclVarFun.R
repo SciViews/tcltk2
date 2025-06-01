@@ -36,7 +36,6 @@
 #' @author Philippe Grosjean
 #' @seealso [tk2edit()], [tcltk::tclVar()]
 #' @keywords utilities
-#' @concept TclTk varaibles and proc, function callback
 #' @export
 #' @rdname tclVarFun
 #'

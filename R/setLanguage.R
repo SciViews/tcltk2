@@ -44,7 +44,6 @@
 #' @author Philippe Grosjean
 #' @export
 #' @keywords utilities
-#' @concept Tcl/Tk language translation
 #'
 #' @examples
 #' # What is the language used by Tcl?

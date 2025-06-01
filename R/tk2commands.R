@@ -61,7 +61,6 @@
 #' @author Philippe Grosjean
 #' @seealso [tk2button()], [tk2tip()]
 #' @keywords utilities
-#' @concept Tcl/Tk widgets commands
 #'
 #' @examples
 #' \dontrun{

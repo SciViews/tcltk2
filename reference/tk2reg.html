@@ -168,7 +168,65 @@ of your registry first before experimenting with these function!!!</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co"># These cannot be run by examples() but should be OK when pasted</span></span></span>
+<span class="r-in"><span><span class="co"># into an interactive R session with the tcltk package loaded</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### Examples of tk2reg - registry manipulation under Windows</span></span></span>
+<span class="r-in"><span><span class="co"># Rem: HKEY_LOCAL_MACHINE, HKEY_USERS, HKEY_CLASSES_ROOT, HKEY_CURRENT_USER,</span></span></span>
+<span class="r-in"><span><span class="co">#      HKEY_CURRENT_CONFIG, HKEY_PERFORMANCE_DATA, HKEY_DYN_DATA</span></span></span>
+<span class="r-in"><span><span class="va">Rkey</span> <span class="op">&lt;-</span> <span class="st">"HKEY_CURRENT_USER\\\\Software\\\\R-core\\\\R"</span>   <span class="co"># The R key</span></span></span>
+<span class="r-in"><span><span class="va">Rkey</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">Rkey</span>, <span class="st">"\\\\"</span>, <span class="va">R.version</span><span class="op">$</span><span class="va">major</span>, <span class="st">"."</span>, <span class="va">R.version</span><span class="op">$</span><span class="va">minor</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Rsubkey</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">Rkey</span>, <span class="st">"subkey"</span>, sep <span class="op">=</span> <span class="st">"\\\\"</span><span class="op">)</span>        <span class="co"># A subkey</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get all subkeys for Software in the local machine</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.keys</span><span class="op">(</span><span class="st">"HKEY_LOCAL_MACHINE\\\\Software"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get all names in the R key</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.values</span><span class="op">(</span><span class="va">Rkey</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get the path for the current R version</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.get</span><span class="op">(</span><span class="va">Rkey</span>, <span class="st">"InstallPath"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Create a subkey (explore the registry with regedit.exe to see it)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.setkey</span><span class="op">(</span><span class="va">Rsubkey</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Add a couple of keys in it</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.set</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test"</span>, <span class="st">"a key added in the registry!"</span>, type <span class="op">=</span> <span class="st">"sz"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">#tk2reg.set(Rsubkey, "test exp", "\</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.set</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test multi"</span>, <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, type <span class="op">=</span> <span class="st">"multi_sz"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.set</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test dword"</span>, <span class="fl">1024</span>, type <span class="op">=</span> <span class="st">"dword"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.set</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test big end"</span>, <span class="fl">1024</span>, type <span class="op">=</span> <span class="st">"dword_big_endian"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get the type of a value</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.type</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.type</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test exp"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.type</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test multi"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.type</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test dword"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.type</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test big end"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get a value in a key</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.get</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.get</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test exp"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.get</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test multi"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.get</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test dword"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.get</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test big end"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Delete a name in a key (take care: dangerous!)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.delete</span><span class="op">(</span><span class="va">Rsubkey</span>, <span class="st">"test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Delete a whole key (take care: very dangerous!)</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.deletekey</span><span class="op">(</span><span class="va">Rsubkey</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># An alternate way to get the path</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.get</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"HKEY_LOCAL_MACHINE"</span>, <span class="st">"SYSTEM"</span>, <span class="st">"CurrentControlSet"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"Control"</span>, <span class="st">"Session Manager"</span>, <span class="st">"Environment"</span>, sep <span class="op">=</span> <span class="st">"\\\\"</span><span class="op">)</span>, <span class="st">"path"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Make sure that currently running apps are warned of your changes in the registry</span></span></span>
+<span class="r-in"><span><span class="fu">tk2reg.broadcast</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Delete temporary variables</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Rkey"</span>, <span class="st">"Rsubkey"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
     </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

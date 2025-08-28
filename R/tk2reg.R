@@ -81,7 +81,7 @@
 #' tk2reg.setkey(Rsubkey)
 #' # Add a couple of keys in it
 #' tk2reg.set(Rsubkey, "test", "a key added in the registry!", type = "sz")
-#' tk2reg.set(Rsubkey, "test exp", "\%SystemRoot\%\\\\system32", type = "expand_sz")
+#' #tk2reg.set(Rsubkey, "test exp", "\%SystemRoot\%\\\\system32", type = "expand_sz")
 #' tk2reg.set(Rsubkey, "test multi", LETTERS[1:5], type = "multi_sz")
 #' tk2reg.set(Rsubkey, "test dword", 1024, type = "dword")
 #' tk2reg.set(Rsubkey, "test big end", 1024, type = "dword_big_endian")

@@ -28,6 +28,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      R_DONT_USE_TK: 1
 
     steps:
       - uses: actions/checkout@v4
@@ -39,6 +40,11 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+
+      - name: Install X11 dependencies on MacOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install --cask xquartz
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:

@@ -7,9 +7,9 @@
 #' @keywords internal
 "_PACKAGE"
 
-#' @importFrom tcltk tcl .Tcl tclRequire tclObj as.tclObj tclVar tclArray tclvalue tclvalue<- tclServiceMode .Tcl.callback tktoplevel tkwidget tkfont.names tkfont.configure tkfont.families tkfont.measure tkfont.actual tkconfigure tkcget tkcurselection tkselection.clear tkselection.set tksee tkset tksize tkwm.title tkxview tkyview tkindex tkdestroy tkinsert tkactivate tkbutton tkgrid tklabel tkgrid.configure tkgrid.columnconfigure tkgrid.rowconfigure tktag.configure tkgrab.set tkfocus tkwait.window tkwm.iconbitmap tkbind tkadd tkmessageBox tkscrollbar tkdelete tkselect tkbindtags tkget
 # The following block is used by usethis to automatically manage
 # roxygen namespace tags. Modify with care!
 ## usethis namespace: start
+#' @importFrom tcltk tcl .Tcl tclRequire tclObj as.tclObj tclVar tclArray tclvalue tclvalue<- tclServiceMode .Tcl.callback tktoplevel tkwidget tkfont.names tkfont.configure tkfont.families tkfont.measure tkfont.actual tkconfigure tkcget tkcurselection tkselection.clear tkselection.set tksee tkset tksize tkwm.title tkxview tkyview tkindex tkdestroy tkinsert tkactivate tkbutton tkgrid tklabel tkgrid.configure tkgrid.columnconfigure tkgrid.rowconfigure tktag.configure tkgrab.set tkfocus tkwait.window tkwm.iconbitmap tkbind tkadd tkmessageBox tkscrollbar tkdelete tkselect tkbindtags tkget
 ## usethis namespace: end
 NULL

@@ -34,7 +34,7 @@
 #' @param parent The parent window.
 #' @param tip A tooltip to display for this widget (optional).
 #' @param label A single character string used to label that widget (optional).
-#' @param tag Ay object that you would like to associate with this widget
+#' @param tag An object that you would like to associate with this widget
 #' (optional).
 #' @param cfglist A named list with configuration parameters and values to
 #' apply.

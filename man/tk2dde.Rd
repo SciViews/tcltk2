@@ -30,7 +30,7 @@ returned, otherwise, only available topics for a given service are listed.}
 \item{command}{A string with the command to run in the external application
 (syntax depends on the server).}
 
-\item{async}{Is a command run asynchroneously (returns immediately, before
+\item{async}{Is a command run asynchronously (returns immediately, before
 the command is processed), or not?}
 
 \item{item}{The concerned item (usually a variable name, a range in a
@@ -42,7 +42,7 @@ worksheet, etc...).}
 }
 \description{
 DDE is the first Microsoft's attempt to make an inter-application mechanism.
-It is now superseeded by (D)Com, but it is still available (although declared
+It is now superseded by (D)Com, but it is still available (although declared
 as unsupported). Being simpler than Com, DDE is interesting for simple tasks.
 Applications like Word or Excel provide services one can access through DDE
 (see examples). This code if left for backward compatibility, and also, just

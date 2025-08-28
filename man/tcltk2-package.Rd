@@ -6,6 +6,8 @@
 \alias{tcltk2-package}
 \title{tcltk2: Tcl/Tk Additions}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 A series of additional Tcl commands and Tk widgets to supplement the tcltk package.
 }
 \details{
@@ -18,6 +20,8 @@ useful also in R are made accessible through R functions.
 Useful links:
 \itemize{
   \item \url{https://github.com/SciViews/tcltk2/}
+  \item \url{https://www.sciviews.org/tcltk2/}
+  \item \url{https://sciviews.r-universe.dev/tcltk2}
   \item Report bugs at \url{https://github.com/SciViews/tcltk2/issues/}
 }
 

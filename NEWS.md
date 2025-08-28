@@ -46,7 +46,7 @@
 
 - Message translation is completed. `setLanguage()`/`getLanguage()` work now in a more robust way. `getLanguage()` separately reports the language used by R and by Tcl/Tk, and translation catalogs for Tcl and Tk are automatically loaded when the **tcltk2** package is loaded. The new functions `tclmclocale()`, `tclmc()` and `tclmcset()` complete the functions available to manage message translation in Tcl from within R.
 
-- A dialog box to enter uncode characters in tk2entry or tk2text widgets and to configure a composer to enter such unicode character on the keyboard are added (functions `tk2unicode_xxx()`).
+- A dialog box to enter unicode characters in tk2entry or tk2text widgets and to configure a composer to enter such unicode character on the keyboard are added (functions `tk2unicode_xxx()`).
 
 - All old 'ttk2xxx' widget classes are now converted into 'tk2xxx' classes.
 

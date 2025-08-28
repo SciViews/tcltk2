@@ -110,7 +110,7 @@ tk2tablelist(parent, ...)
 
 \item{label}{A single character string used to label that widget (optional).}
 
-\item{tag}{Ay object that you would like to associate with this widget
+\item{tag}{An object that you would like to associate with this widget
 (optional).}
 
 \item{cfglist}{A named list with configuration parameters and values to

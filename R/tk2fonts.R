@@ -11,10 +11,10 @@
 #' -family Times -size 12 -weight bold', for instance, or (2) a list of
 #' font characteristics (list with components 'family', 'size', 'bold', 'italic',
 #' 'underline' and 'overstrike').
-#' @param text Do we synchronise text Tk fonts (text, titles, and fixed-font
+#' @param text Do we synchronize text Tk fonts (text, titles, and fixed-font
 #' text) with current settings in `.Fonts` inside the `SciViews:TempEnv`
 #' environment?
-#' @param system Do we synchronise system Tk fonts (widgets, window caption,
+#' @param system Do we synchronize system Tk fonts (widgets, window caption,
 #' menus, tooltips, ...) with current system configuration? This is highly
 #' platform dependent. Currently, system settings are gathered only under
 #' Windows, thanks to the `winSystemFonts()` function.

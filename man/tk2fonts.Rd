@@ -25,11 +25,11 @@ of character strings of same length as font with Tk fonts description like
 font characteristics (list with components 'family', 'size', 'bold', 'italic',
 'underline' and 'overstrike').}
 
-\item{text}{Do we synchronise text Tk fonts (text, titles, and fixed-font
+\item{text}{Do we synchronize text Tk fonts (text, titles, and fixed-font
 text) with current settings in \code{.Fonts} inside the \code{SciViews:TempEnv}
 environment?}
 
-\item{system}{Do we synchronise system Tk fonts (widgets, window caption,
+\item{system}{Do we synchronize system Tk fonts (widgets, window caption,
 menus, tooltips, ...) with current system configuration? This is highly
 platform dependent. Currently, system settings are gathered only under
 Windows, thanks to the \code{winSystemFonts()} function.}

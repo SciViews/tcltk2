@@ -73,7 +73,7 @@ process is done successfully, \code{FALSE} otherwise.
 \code{\link[=tclTaskRun]{tclTaskRun()}} forces running a task now, even if it is scheduled later.
 }
 \description{
-Tcl allows fo scheduling execution of code on the next event loop or after a
+Tcl allows for scheduling execution of code on the next event loop or after a
 given time (\code{after} Tcl command). \code{tclTaskXxx()} functions use it to schedule
 execution of R code with much control from within R (central management of
 scheduled tasks, possibility to define redoable tasks, use of S3 objects to
